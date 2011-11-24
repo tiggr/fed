@@ -302,6 +302,21 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 		$packed = $packer->pack();
 		return (string) $packed;
 	}
+
+	/**
+	* Check client browser
+	* @param array $browser
+	* return boolean
+	*/
+	public function checkClientBrowser(array $browser) {
+		foreach($browser as $value) {
+			$find = stripos(t3lib_div::getIndpEnv('HTTP_USER_AGENT'), $value);
+			if($find) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 }
 
 ?>

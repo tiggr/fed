@@ -42,6 +42,7 @@ class Tx_Fed_ViewHelpers_StyleViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		$this->registerArgument('compress', 'boolean', 'If true, files are compressed using JSPacker', FALSE, FALSE);
 		$this->registerArgument('index', 'int', 'Which index to take in additionalHeaderData - pushes current resident DOWN', FALSE, -1);
 		$this->registerArgument('media', 'string', 'Attributes of the stylesheet file', FALSE, NULL);
+		$this->registerArgument('browser', 'mixed', 'Comma seperated list of allowed browsers for file inclusion', FALSE, NULL);
 	}
 
 	/**
@@ -51,6 +52,10 @@ class Tx_Fed_ViewHelpers_StyleViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 	 * @return string
 	 */
 	public function render() {
+		$browser = t3lib_div::trimExplode(',', $this->arguments['browser'], TRUE);
+		if(!empty($browser)) {
+			if(!$this->documentHead->checkClientBrowser($browser)) return NULL;
+		}
 		$href = $this->arguments['href'];
 		$cache = $this->arguments['cache'];
 		$concat = $this->arguments['concat'];
