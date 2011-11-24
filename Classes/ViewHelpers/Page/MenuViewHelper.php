@@ -121,16 +121,15 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 
 		foreach ($menu as $key => $page) {
 			if($key == 0 && $classFirst) {
-				array_push($page['class'], $classFirst);
+				$class = $classFirst . ' ' . $page['class'];
+			}elseif($key+1 == count($menu) && $classLast) {
+				$class = $classLast . ' ' . $page['class'];
+			}else {
+				$class = $page['class'];
 			}
-
-			if($key+1 == count($menu) && $classLast) {
-				array_push($page['class'], $classLast);
-			}
-			$navigationTitle = $this->getNavigationTitle($page['uid']);
-			$class = $page['class'] ? ' class="' . implode(' ', $page['class']) . '"' : '';
+			$class = trim($class)!='' ? ' class="' . $class . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
-			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . '>' . $navigationTitle . '</a></' . $tagName . '>';
+			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
 			$i++;
 		}
 		return implode(LF, $html);
@@ -254,7 +253,8 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 				$page['current'] = $this->isCurrent($pageUid, $rootLine);
 				$page['hasSubPages'] = (count($this->pageSelect->getMenu($pageUid)) > 0) ? 1 : 0;
 				$page['link'] = $this->getItemLink($pageUid, $rootLine, $shortcut, $doktype);
-				$page['class'] = $this->getItemClass($page);
+				$page['class'] = implode(' ', $this->getItemClass($page));
+				$page['title'] = $this->getNavigationTitle($pageUid);
 				$filtered[] = $page;
 			}
 		}
