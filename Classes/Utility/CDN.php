@@ -92,7 +92,7 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	 * @return void
 	 * @api
 	 */
-	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion='1', $jQueryUITheme=FALSE, $compatibility=FALSE, $return=FALSE) {
+	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion=FALSE, $jQueryUITheme=FALSE, $compatibility=FALSE, $return=FALSE) {
 		$file = $this->buildPackageUri('jquery', $jQueryVersion, 'jquery.min.js');
 		$returns = array();
 		$returns[] = $this->documentHead->includeFileAt($file);
