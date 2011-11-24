@@ -178,6 +178,12 @@ class Tx_Fed_Backend_TCEMain {
 	 */
 	public function processDatamap_preProcessFieldArray(array &$incomingFieldArray, $table, $id, t3lib_TCEmain &$reference) {
 		if ($table === 'tt_content') {
+			foreach ($incomingFieldArray['pi_flexform']['data']['options']['lDEF'] as $key=>$value) {
+				if (strpos($key, 'tt_content') === 0) {
+					$realKey = array_pop(explode('.', $key));
+					$incomingFieldArray[$realKey] = $value['vDEF'];
+				}
+			}
 			$area = $this->contentService->getFlexibleContentElementArea($incomingFieldArray);
 			$incomingFieldArray['tx_fed_fcecontentarea'] = $area;
 		}
