@@ -128,7 +128,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	protected function renderTabs() {
 		$html = "";
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
-			$html .= '<h3><a href="#">' . $tab['title'] . '</a></h3>' . LF;
+			$html .= '<h3><a href="javacript:;">' . $tab['title'] . '</a></h3>' . LF;
 			$html .= '<div>' . $tab['content'] . '</div>' . LF;
 		}
 		return $html;
@@ -197,16 +197,6 @@ jQuery(document).ready(function() {
 		"clearStyle" : {$clearStyle},
 		"fillSpace" : {$fillSpace}
 	};
-	jQuery("#{$this->uniqId}").accordion(options).bind("accordionchange", function(event, Element) {
-		/*
-		if (google.maps) {
-			current=maps[Element.options.active];
-			google.maps.event.trigger(current.map, 'resize');    //resize
-			current.map.setZoom( current.map.getZoom() );        //force redrawn
-			current.map.setCenter(current.marker.getPosition()); //recenter on marker
-		};
-		*/
-    });
 });
 SCRIPT;
 		$this->includeHeader($script, 'js');
