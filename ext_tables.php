@@ -56,9 +56,8 @@ if (TYPO3_MODE == 'BE') {
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 		t3lib_div::loadTCA('pages');
-		$before = '--div--;Fluid,--palette--;Fluid layout;fluid,tx_fed_page_flexform,--div--;LLL:EXT:cms/locallang_tca.xml:pages.tabs.options,';
+		$before = '--div--;Page Template,tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,--div--;LLL:EXT:cms/locallang_tca.xml:pages.tabs.options,';
 		$TCA['pages']['types'][1]['showitem'] = $before . $TCA['pages']['types'][1]['showitem'];
-		$TCA['pages']['palettes']['fluid']['showitem'] = 'tx_fed_page_controller_action,tx_fed_page_controller_action_sub';
 		t3lib_extMgm::addTCAcolumns('pages', array(
 			'tx_fed_page_controller_action' => Array (
 				'exclude' => 1,

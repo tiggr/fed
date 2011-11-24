@@ -55,6 +55,7 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 		$this->registerArgument('tagNameChildren', 'string', 'Tag name to use for child nodes surrounding links', FALSE, 'li');
 		$this->registerArgument('entryLevel', 'integer', 'Optional entryLevel TS equivalent of the breadcrumb trail', FALSE, 0);
 		$this->registerArgument('pageUid', 'integer', 'Optional parent page UID to use as start of breadcrumbtrail/rootline - if left out, $GLOBALS[TSFE]->id is used', FALSE, NULL);
+		$this->registerArgument('bullet', 'string', 'Piece of text/html to insert before each item', FALSE);
 	}
 
 	/**
@@ -104,7 +105,7 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 		foreach ($rootLine as $page) {
 			$link = $this->getItemLink($page['uid']);
 			$class = $page['class'] ? ' class="' . $page['class'] . '"' : '';
-			$html[] = '<' . $tagName . $class .'><a href="' . $link . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
+			$html[] = '<' . $tagName . $class .'>' . $this->arguments['bullet'] . '<a href="' . $link . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
 		}
 		return implode(LF, $html);
 	}

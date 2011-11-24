@@ -83,13 +83,15 @@ class Tx_Fed_Backend_DynamicFlexForm {
 				$paths = $this->configurationManager->getPageConfiguration($extensionName);
 				$templatePath = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath']);
 				$templateFile = $templatePath . '/Page/' . $action . '.html';
-				if (file_exists($templateFile) === FALSE) {
-					throw new Exception('Invalid template file selected - file does not exist: ' . $templateFile, 1318783138);
-				}
-				$pageFlexFormSource = $this->pageService->getPageFlexFormSource($row['uid']);
-				$values = $this->flexform->convertFlexFormContentToArray($pageFlexFormSource);
-				$this->flexform->convertFlexFormContentToDataStructure($templateFile, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
+			} else {
+				$templateFile = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
 			}
+			if (file_exists($templateFile) === FALSE) {
+				throw new Exception('Invalid template file selected - file does not exist: ' . $templateFile, 1318783138);
+			}
+			$pageFlexFormSource = $this->pageService->getPageFlexFormSource($row['uid']);
+			$values = $this->flexform->convertFlexFormContentToArray($pageFlexFormSource);
+			$this->flexform->convertFlexFormContentToDataStructure($templateFile, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
 		} elseif ($row['CType'] == 'fed_fce') {
 			list ($extensionName, $filename) = explode(':', $row['tx_fed_fcefile']);
 			$values = $this->flexform->convertFlexFormContentToArray($row['pi_flexform']);
