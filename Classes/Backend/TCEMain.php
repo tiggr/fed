@@ -134,9 +134,19 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 * @access	public
 	 */
-	public function processCmdmap_preProcess (&$command, $table, $id, $relativeTo, t3lib_TCEmain &$reference) {
+	public function processCmdmap_preProcess(&$command, $table, $id, $relativeTo, t3lib_TCEmain &$reference) {
 		if ($table === 'tt_content') {
 			switch ($command) {
+				case 'delete':
+					$rows = $this->contentService->getChildContentElementUids($id);
+					foreach ($rows as $row) {
+						$reference->deleteAction($table, $row['uid']);
+					}
+					break;
+				case 'copy':
+					$children = $this->contentService->getChildContentElementUids($id);
+					$reference->addRemapAction($table, $id, array('Tx_Fed_Backend_TCEMain', 'remapCallback'), array($table, $id, $children));
+					break;
 				case 'move':
 					$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => $area));
@@ -144,6 +154,18 @@ class Tx_Fed_Backend_TCEMain {
 				default:
 			}
 		}
+	}
+
+	/**
+	 * @param	string		$command: The TCEmain operation status, fx. 'update'
+	 * @param	string		$table: The table TCEmain is currently processing
+	 * @param	string		$id: The records id (if any)
+	 * @param	array		$relativeTo: Filled if command is relative to another element
+	 * @param	object		$reference: Reference to the parent object (TCEmain)
+	 * @return	void
+	 * @access	public
+	 */
+	public function processCmdmap_postProcess(&$command, $table, $id, $relativeTo, t3lib_TCEmain &$reference) {
 	}
 
 	/**
@@ -155,14 +177,14 @@ class Tx_Fed_Backend_TCEMain {
 	 * @access	public
 	 */
 	public function processDatamap_preProcessFieldArray(array &$incomingFieldArray, $table, $id, t3lib_TCEmain &$reference) {
+		if ($table === 'tt_content') {
+			$area = $this->contentService->getFlexibleContentElementArea($incomingFieldArray);
+			$incomingFieldArray['tx_fed_fcecontentarea'] = $area;
+		}
 		if ($incomingFieldArray['uid'] > 0) {
 			$action = 'read';
 		} else {
 			$action = 'create';
-		}
-		if ($table === 'tt_content') {
-			$area = $this->contentService->getFlexibleContentElementArea($incomingFieldArray);
-			$incomingFieldArray['tx_fed_fcecontentarea'] = $area;
 		}
 		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
 	}
@@ -191,41 +213,22 @@ class Tx_Fed_Backend_TCEMain {
 	 * @param	object		$reference: A reference to the TCEmain instance
 	 * @return	void
 	 */
-	public function processDatamap_afterDatabaseOperations ($status, $table, $id, $fieldArray, &$reference) {
+	public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
 
 	}
 
 	/**
-	 * This function is called by TCEmain after a record has been moved to the first position of
-	 * the page. We make sure that this is also reflected in the pages references.
 	 *
-	 * @param	string		$table:	The table we're dealing with
-	 * @param	integer		$uid: The record UID
-	 * @param	integer		$destPid: The page UID of the page the element has been moved to
-	 * @param	array		$sourceRecordBeforeMove: (A part of) the record before it has been moved (and thus the PID has possibly been changed)
-	 * @param	array		$updateFields: The updated fields of the record row in question (we don't use that)
-	 * @param	object		$reference: A reference to the TCEmain instance
-	 * @return	void
+	 * @param string $table
+	 * @param integer $id
+	 * @param array $children
 	 */
-	public function moveRecord_firstElementPostProcess ($table, $uid, $destPid, $sourceRecordBeforeMove, $updateFields, &$reference) {
-
-	}
-
-	/**
-	 * This function is called by TCEmain after a record has been moved to after another record on some
-	 * the page. We make sure that this is also reflected in the pages references.
-	 *
-	 * @param	string		$table:	The table we're dealing with
-	 * @param	integer		$uid: The record UID
-	 * @param	integer		$destPid: The page UID of the page the element has been moved to
-	 * @param	integer		$origDestPid: The "original" PID: This tells us more about after which record our record wants to be moved. So it's not a page uid but a tt_content uid!
-	 * @param	array		$sourceRecordBeforeMove: (A part of) the record before it has been moved (and thus the PID has possibly been changed)
-	 * @param	array		$updateFields: The updated fields of the record row in question (we don't use that)
-	 * @param	object		$reference: A reference to the TCEmain instance
-	 * @return	void
-	 */
-	public function moveRecord_afterAnotherElementPostProcess ($table, $uid, $destPid, $origDestPid, $sourceRecordBeforeMove, $updateFields, &$reference) {
-
+	public static function remapCallback($table, $id, $children) {
+		foreach ($children as $child) {
+			$areaAndUid = explode(':', $child['tx_fed_fcecontentarea']);
+			$areaAndUid[1] = $fieldArray['uid']; // re-assign parent UID
+			#$reference->copyRecord($table, $child['uid'], $fieldArray['pid'], 0, array('tx_fed_fcecontentarea' => implode(':', $areaAndUid)));
+		}
 	}
 
 }

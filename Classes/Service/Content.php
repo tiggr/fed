@@ -33,6 +33,16 @@
 class Tx_Fed_Service_Content implements t3lib_Singleton {
 
 	/**
+	 * @param integer $id
+	 * @return array
+	 */
+	public function getChildContentElementUids($id) {
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,tx_fed_fcecontentarea', 'tt_content', "tx_fed_fcecontentarea LIKE '%:" . $id . "'");
+		return (array) $rows;
+	}
+
+	/**
+	 * @param array $record
 	 * @return string
 	 */
 	public function getFlexibleContentElementArea($record) {
