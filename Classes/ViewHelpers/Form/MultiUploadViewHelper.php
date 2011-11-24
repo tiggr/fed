@@ -241,7 +241,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		);
 		$optionsJson = $this->jsonService->encode($options);
 		$this->documentHead->includeHeader("
-			jQuery(document).ready(function() { jQuery('#{$this->uniqueId}').fileListEditor({$optionsJson}); });", 'js'
+			var {$this->uniqueId} = null;
+			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$optionsJson}); });", 'js'
 		);
 	}
 
