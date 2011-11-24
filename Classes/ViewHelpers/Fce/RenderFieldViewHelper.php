@@ -178,7 +178,7 @@ XML;
 		$added = <<< XML
 	<allowed>{$config['allowed']}</allowed>
 	<internal_type>{$config['internal_type']}</internal_type>
-	<uploadfolder>{$config['internal_type']}</uploadfolder>
+	<uploadfolder>{$config['uploadfolder']}</uploadfolder>
 XML;
 		$xml = $this->getSelectConfiguration($config, $added);
 		return $xml;
