@@ -87,6 +87,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * Render method
 	 */
 	public function render() {
+		$this->uniqId = uniqid('fedjqueryaccordion');
 		if ($this->templateVariableContainer->exists('tabs') === TRUE) {
 			// render one tab
 			$index = $this->getCurrentIndex();
@@ -111,7 +112,6 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$content = $this->renderChildren();
 
 		// uniq DOM id for this accordion
-		$this->uniqId = uniqid('fedjqueryaccordion');
 		$tabs = $this->renderTabs();
 		$html = ($tabs . LF . $content . LF);
 		$this->addScript();
@@ -128,7 +128,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	protected function renderTabs() {
 		$html = "";
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
-			$html .= '<h3><a href="javacript:;">' . $tab['title'] . '</a></h3>' . LF;
+			$html .= '<h3><a href="javascript:;">' . $tab['title'] . '</a></h3>' . LF;
 			$html .= '<div>' . $tab['content'] . '</div>' . LF;
 		}
 		return $html;
@@ -186,25 +186,9 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$clearStyle = $this->getBooleanForJavascript('clearStyle');
 		$fillSpace = $this->getBooleanForJavascript('fillSpace');
 		$csvOfDisabledTabIndices = implode(',' ,$this->templateVariableContainer->get('disabledIndices'));
-		$script = <<< SCRIPT
+		$init = <<< INITSCRIPT
 jQuery(document).ready(function() {
-	var options = {
-		{$animation}
-		"collapsible" : {$collapsible},
-		"active" : {$selectedIndex},
-		"disabled" : {$disabled},
-		"autoHeight" : {$autoHeight},
-		"clearStyle" : {$clearStyle},
-		"fillSpace" : {$fillSpace}
-	};
-});
-SCRIPT;
-		$this->includeHeader($script, 'js');
-
-
-				$init = <<< INITSCRIPT
-jQuery(document).ready(function() {
-	var options = {
+	jQuery('#{$this->uniqId}').accordion({
 		disabled : {$disabled},
 		animated : '{$this->arguments['animated']}',
 		autoHeight : {$autoHeight},
@@ -213,10 +197,10 @@ jQuery(document).ready(function() {
 		fillSpace : {$fillSpace},
 		header : '> :first-child',
 		active : ''
-	};
-	jQuery('.fed-accordion').accordion(options);
+	});
 });
 INITSCRIPT;
+		$this->documentHead->includeHeader($init, 'js');
 	}
 
 

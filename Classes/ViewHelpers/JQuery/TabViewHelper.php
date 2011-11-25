@@ -124,7 +124,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 		$html = "<ul>" . LF;
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
 			$lid = md5($tab['title']);
-			$html .= '<li><a href="javascript:;">' . $tab['title'] . '</a></li>' . LF;
+			$html .= '<li><a href="javascript:;" title="' . $lid . '">' . $tab['title'] . '</a></li>' . LF;
 		}
 		$html .= "</ul>" . LF;
 		return $html;
@@ -185,23 +185,13 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 		}
 		$script = <<< SCRIPT
 jQuery(document).ready(function() {
-	var options = {
+	jQuery("#{$this->uniqId}").tabs({
 		"selected" : {$selectedIndex},
 		"disabled" : [{$csvOfDisabledTabIndices}],
 		{$animation}
 		"deselectable" : {$deselectable},
 		"cookie" : {$cookie},
 		"collapsible" : {$collapsible}
-	};
-	jQuery("#{$this->uniqId}").tabs(options).bind("tabchange", function(event, Element) {
-		/*
-		if (google.maps) {
-			current=maps[Element.options.active];
-			google.maps.event.trigger(current.map, 'resize');
-			current.map.setZoom( current.map.getZoom() );
-			current.map.setCenter(current.marker.getPosition());
-		};
-		*/
 	});
 });
 SCRIPT;
