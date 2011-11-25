@@ -103,12 +103,6 @@ class Tx_Fed_Backend_DynamicFlexForm {
 				$filename = $row['tx_fed_fcefile'];
 			}
 			$this->flexform->convertFlexFormContentToDataStructure($filename, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
-		} elseif ($row['CType'] == 'fed_template') {
-			$templateFile = t3lib_extMgm::extPath('fed', 'Configuration/FlexForms/Template.xml');
-			$dataStructArray = t3lib_div::xml2array(file_get_contents($templateFile));
-		} elseif ($row['CType'] == 'fed_datasource') {
-			$templateFile = t3lib_extMgm::extPath('fed', 'Configuration/FlexForms/DataSource.xml');
-			$dataStructArray = t3lib_div::xml2array(file_get_contents($templateFile));
 		} else {
 				// check for registered Fluid FlexForms based on cType first, then plugin list_type
 			$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['cType']);

@@ -24,8 +24,13 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'FED Hasher'
 );
 
-t3lib_extMgm::addPlugin(array('Fluid Template Display', 'fed_template'), 'CType');
-t3lib_extMgm::addPlugin(array('DataSource Display', 'fed_datasource'), 'CType');
+$pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Template.xml');
+
+$pluginSignature = str_replace('_','',$_EXTKEY) . '_datasource';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/DataSource.xml');
 
 if (TYPO3_MODE == 'BE') {
 	$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_sandbox'] = 'pi_flexform';

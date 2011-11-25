@@ -146,37 +146,6 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/class.db_list.inc']['makeQueryArray']['fed'] = 'EXT:fed/Classes/Backend/MakeQueryArray.php:Tx_Fed_Backend_MakeQueryArray';
 	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['templavoila']['mod1']['renderPreviewContent']['fed_fce'] = 'EXT:fed/Classes/Backend/TemplaVoilaPreview.php:&Tx_Fed_Backend_TemplaVoilaPreview';
 
-	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
-		'[GLOBAL]
-		tt_content.fed_template = COA
-		tt_content.fed_template.10 =< lib.stdHeader
-		tt_content.fed_template.20 < tt_content.list.20.fed_template
-		tt_content.fed_datasource = COA
-		tt_content.fed_datasource.10 =< lib.stdheader
-		tt_content.fed_datasource.20 < tt_content.list.20.fed_datasource
-		'
-	, TRUE);
-
-	t3lib_extMgm::addPageTSConfig('
-		mod.wizards.newContentElement.wizardItems.special.elements.fed_template {
-			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-			title = Fluid Template Display
-			description = Display a standalone Fluid template with optional template variables
-			tt_content_defValues {
-				CType = fed_template
-			}
-		}
-		mod.wizards.newContentElement.wizardItems.special.elements.fed_datasource {
-			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-			title = Fluid DataSource Display
-			description = Display a standalone Fluid template with attached DataSource(s)
-			tt_content_defValues {
-				CType = fed_datasource
-			}
-		}
-		mod.wizards.newContentElement.wizardItems.special.show := addToList(fed_template,fed_datasource)
-	');
-
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableIntegratedBackendLayouts']) {
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['XCLASS']['ext/cms/classes/class.tx_cms_backendlayout.php'] = t3lib_extMgm::extPath('fed', 'class.ux_cms_backendlayout.php');
 	}
