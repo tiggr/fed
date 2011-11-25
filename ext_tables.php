@@ -49,7 +49,7 @@ if (TYPO3_MODE == 'BE') {
 		$TCA['tt_content']['types']['fed_fce']['showitem'] = '
 		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
 		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.header;header,
-		--div--;Fluid Content Element, tx_fed_fcefile;Element type, pi_flexform;Configuration,
+		--div--;Content settings, tx_fed_fcefile;Element type, pi_flexform;Configuration,
 		--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.appearance,
 		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.frames;frames,
 		--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
