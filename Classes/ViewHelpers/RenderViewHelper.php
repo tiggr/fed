@@ -25,7 +25,7 @@
 ***************************************************************/
 
 /**
- * ExtJS4 App initiation ViewHelper
+ * Renders a secondary Fluid template with optional arguments
  *
  * @author Claus Due <claus@wildside.dk>, Wildside A/S
  * @version $Id$
