@@ -41,9 +41,9 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	protected $transferArguments = array('object', 'controllerName', 'extensionName', 'pluginName', 'action', 'pageUid');
 
 	/**
-	 * @var Tx_Fed_Utility_PropertyMapper
+	 * @var Tx_Fed_Utility_DomainObjectInfo
 	 */
-	protected $propertyMapper;
+	protected $infoService;
 
 	/**
 	 * @var string $action
@@ -77,7 +77,6 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	 * @return void
 	 */
 	public function initializeArguments() {
-		#parent::initializeArguments();
 		$this->registerArgument('class', 'string', 'Classname (CSS) for rendered container');
 		$this->registerArgument('extensionName', 'string', 'Name of the extension which contains a handling Controller', FALSE, $this->getControllerName());
 		$this->registerArgument('pluginName', 'string', 'Plugin name - overrides detection from specified object(s)', FALSE, $this->getPluginName());
@@ -91,17 +90,15 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	}
 
 	/**
-	 * @author Claus Due, Wildside A/S
-	 * @param Tx_Fed_Utility_PropertyMapper $propertyMapper
+	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
 	 */
-	public function injectPropertyMapper(Tx_Fed_Utility_PropertyMapper $propertyMapper) {
-		$this->propertyMapper = $propertyMapper;
+	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+		$this->infoService = $infoService;
 	}
 
 	/**
 	 * Get name of (the current) Controller
 	 *
-	 * @author Claus Due, Wildside A/S
 	 * @return string
 	 * @api
 	 */

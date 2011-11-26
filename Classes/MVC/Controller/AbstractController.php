@@ -35,11 +35,6 @@
 abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
 
 	/**
-	 * @var Tx_Extbase_Property_Mapper
-	 */
-	protected $propertyMapper;
-
-	/**
 	 * @var Tx_Fed_Utility_DomainObjectInfo
 	 */
 	protected $infoService;
@@ -50,7 +45,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $jsonService;
 
 	/**
-	 *
 	 * @var Tx_Fed_Utility_ExtJS
 	 */
 	protected $extJSService;
@@ -74,13 +68,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @var Tx_Fed_Service_File
 	 */
 	protected $fileService;
-
-	/**
-	 * @param Tx_Extbase_Property_Mapper $propertyMapper
-	 */
-	public function injectPropertyMapper(Tx_Extbase_Property_Mapper $propertyMapper) {
-		$this->propertyMapper = $propertyMapper;
-	}
 
 	/**
 	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService

@@ -188,6 +188,7 @@ class Tx_Fed_Utility_FlexForm implements t3lib_Singleton {
 
 	/**
 	 * Gets a DomainObject or ObjectStorage of $dataType
+	 *
 	 * @param type $dataType
 	 * @param type $uids
 	 */
@@ -283,6 +284,7 @@ class Tx_Fed_Utility_FlexForm implements t3lib_Singleton {
 	}
 
 	/**
+	 * Convert a DataStructure array to FlexForm XML
 	 *
 	 * @param array $dataStructure
 	 * @return string
@@ -445,6 +447,6 @@ class Tx_Fed_Utility_FlexForm implements t3lib_Singleton {
 		return $nodeArray;
 	}
 
-
 }
+
 ?>

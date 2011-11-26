@@ -35,9 +35,16 @@
 class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_PropertyMapper $propertyMapper
+	 * @var Tx_Fed_Utility_DomainObjectInfo
 	 */
-	protected $propertyMapper;
+	protected $infoService;
+
+	/**
+	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 */
+	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+		$this->infoService = $infoService;
+	}
 
 	/**
 	 * Initialize arguments
@@ -57,13 +64,6 @@ class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapView
 		$this->registerArgument('visible', 'boolean', 'If true, the marker is visible');
 		$this->registerArgument('zIndex', 'float', 'All Markers are displayed on the map in order of their zIndex, with higher values displaying in front of Markers with lower values. By default, Markers are displayed according to their latitude, with Markers of lower latitudes appearing in front of Markers at higher latitudes.');
 		$this->registerArgument('infobox', 'string', 'Optional infobox HTML');
-	}
-
-	/**
-	 * @param Tx_Fed_Utility_PropertyMapper $mapper
-	 */
-	public function injectPropertyMapper(Tx_Fed_Utility_PropertyMapper $mapper) {
-		$this->propertyMapper = $mapper;
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapView
 		if (count($data) == 0 && $object) {
 			if (count($properties) == 0) {
 				$addUidToProperties = FALSE;
-				$data = $this->propertyMapper->getPropertiesByAnnytation($object, 'map', 'list', $addUidToProperties);
+				$data = $this->infoService ->getPropertiesByAnnytation($object, 'map', 'list', $addUidToProperties);
 			} else {
 				$data = array();
 				foreach ($properties as $property) {

@@ -27,7 +27,6 @@ return array(
 	'tx_fed_utility_documenthead' => $extensionClassesPath . 'Utility/DocumentHead.php',
 	'tx_fed_utility_debug' => $extensionClassesPath . 'Utility/Debug.php',
 	'tx_fed_utility_datacomparison' => $extensionClassesPath . 'Utility/DataComparison.php',
-	'tx_fed_utility_propertymapper' => $extensionClassesPath . 'Utility/PropertyMapper.php',
 	'tx_fed_utility_path' => $extensionClassesPath . 'Utility/Path.php',
 	'tx_fed_extjs_modelgenerator' => $extensionClassesPath . 'ExtJS/ModelGenerator.php',
 	'tx_fed_mvc_view_exposedtemplateview' => $extensionClassesPath . 'MVC/View/ExposedTemplateView.php',

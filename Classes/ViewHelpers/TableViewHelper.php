@@ -27,9 +27,9 @@
 class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_PropertyMapper $propertyMapper
+	 * @var Tx_Fed_Utility_DomainObjectInfo
 	 */
-	protected $propertyMapper;
+	protected $infoService;
 
 	protected $tagName = 'table';
 
@@ -40,10 +40,10 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 	public $uniqId;
 
 	/**
-	 * @param Tx_Fed_Utility_PropertyMapper $mapper
+	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
 	 */
-	public function injectPropertyMapper(Tx_Fed_Utility_PropertyMapper $mapper) {
-		$this->propertyMapper = $mapper;
+	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+		$this->infoService = $infoService;
 	}
 
 	/**
@@ -330,7 +330,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 				$annotationValue = TRUE;
 			}
 		}
-		$values = $this->propertyMapper->getValuesByAnnotation($object, $annotationName, $annotationValue, FALSE);
+		$values = $this->infoService->getValuesByAnnotation($object, $annotationName, $annotationValue, FALSE);
 		return $values;
 	}
 
