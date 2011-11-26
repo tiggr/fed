@@ -56,6 +56,8 @@ return array(
 	'tx_fed_viewhelpers_fce_field_groupviewhelper' => $extensionClassesPath . 'ViewHelpers/Fce/Field/GroupViewHelper.php',
 	'tx_fed_viewhelpers_fce_field_selectviewhelper' => $extensionClassesPath . 'ViewHelpers/Fce/Field/SelectViewHelper.php',
 	'tx_fed_viewhelpers_fce_fieldviewhelper' => $extensionClassesPath . 'ViewHelpers/Fce/FieldViewHelper.php',
+	'tx_fed_scheduler_task' => $extensionClassesPath . 'Scheduler/Task.php',
+	'tx_fed_scheduler_fieldprovider' => $extensionClassesPath . 'Scheduler/FieldProvider.php',
 );
 
 ?>
