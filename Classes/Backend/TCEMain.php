@@ -143,13 +143,11 @@ class Tx_Fed_Backend_TCEMain {
 						$reference->deleteAction($table, $row['uid']);
 					}
 					break;
-				case 'copy':
-					$children = $this->contentService->getChildContentElementUids($id);
-					$reference->addRemapAction($table, $id, array('Tx_Fed_Backend_TCEMain', 'remapCallback'), array($table, $id, $children));
-					break;
 				case 'move':
-					$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => $area));
+					if ($relativeTo < 0) {
+						$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => $area));
+					}
 					break;
 				default:
 			}
@@ -181,11 +179,11 @@ class Tx_Fed_Backend_TCEMain {
 			foreach ((array) $incomingFieldArray['pi_flexform']['data']['options']['lDEF'] as $key=>$value) {
 				if (strpos($key, 'tt_content') === 0) {
 					$realKey = array_pop(explode('.', $key));
-					$incomingFieldArray[$realKey] = $value['vDEF'];
+					if (isset($incomingFieldArray[$realKey])) {
+						$incomingFieldArray[$realKey] = $value['vDEF'];
+					}
 				}
 			}
-			$area = $this->contentService->getFlexibleContentElementArea($incomingFieldArray);
-			$incomingFieldArray['tx_fed_fcecontentarea'] = $area;
 		}
 		if ($incomingFieldArray['uid'] > 0) {
 			$action = 'read';
@@ -220,20 +218,22 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
-
-	}
-
-	/**
-	 *
-	 * @param string $table
-	 * @param integer $id
-	 * @param array $children
-	 */
-	public static function remapCallback($table, $id, $children) {
-		foreach ($children as $child) {
-			$areaAndUid = explode(':', $child['tx_fed_fcecontentarea']);
-			$areaAndUid[1] = $fieldArray['uid']; // re-assign parent UID
-			#$reference->copyRecord($table, $child['uid'], $fieldArray['pid'], 0, array('tx_fed_fcecontentarea' => implode(':', $areaAndUid)));
+		if ($table == 'tt_content' && $fieldArray['CType'] == 'fed_fce') {
+			switch ($status) {
+				case 'new':
+					$newUid = $reference->substNEWwithIDs[$id];
+					$oldUid = $fieldArray['t3_origuid'];
+					$children = $this->contentService->getChildContentElementUids($oldUid);
+					foreach ($children as $child) {
+						$areaAndUid = explode(':', $child['tx_fed_fcecontentarea']);
+						$areaAndUid[1] = $newUid; // re-assign parent UID
+						$overrideValues = array('tx_fed_fcecontentarea' => implode(':', $areaAndUid));
+						$childUid = $reference->copyRecord($table, $child['uid'], $fieldArray['pid']);
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $childUid . "'", $overrideValues);
+					}
+					break;
+				default:
+			}
 		}
 	}
 
