@@ -25,7 +25,8 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 		'FlexibleContentElement' => 'render',
 	),
 	array(
-	)
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 Tx_Extbase_Utility_Extension::configurePlugin(
@@ -115,26 +116,42 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTempl
 	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] == '' ? '' : ',') . 'tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,';
 }
 
+if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
-		'[GLOBAL]
-		tt_content.fed_fce = COA
-		tt_content.fed_fce.10 =< lib.stdHeader
-		tt_content.fed_fce.20 < tt_content.list.20.fed_fce
-	', TRUE);
-	if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-		t3lib_extMgm::addPageTSConfig('
-			mod.wizards.newContentElement.wizardItems.special.elements.fed_fce {
-				icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-				title = Fluid Content Element
-				description = Flexible Content Element using a Fluid template
-				tt_content_defValues {
-					CType = fed_fce
-				}
+	t3lib_extMgm::addPageTSConfig('
+		mod.wizards.newContentElement.wizardItems.fed {
+			header = Fluid Content Elements
+			elements fce
+			show = fce,template,datasource
+			position = 0
+		}
+		mod.wizards.newContentElement.wizardItems.fed.elements.fce {
+			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+			title = Flexible Content Element
+			description = Flexible Content Element using a Fluid template
+			tt_content_defValues {
+				CType = fed_fce
 			}
-		');
-	}
+		}
+		mod.wizards.newContentElement.wizardItems.fed.elements.template {
+			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+			title = Template Display
+			description = Flexible Content Element using a Fluid template
+			tt_content_defValues {
+				CType = list
+				list_type = fed_template
+			}
+		}
+		mod.wizards.newContentElement.wizardItems.fed.elements.datasource {
+			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+			title = DataSource Display
+			description = DataSource Display through Fluid Template
+			tt_content_defValues {
+				CType = list
+				list_type = fed_datasource
+			}
+		}
+	');
 }
 
 if (TYPO3_MODE == 'BE') {
