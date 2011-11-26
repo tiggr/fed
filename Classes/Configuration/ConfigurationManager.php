@@ -76,6 +76,37 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	}
 
 	/**
+	 * Gets a human-readable label from a Fluid Page template file
+	 *
+	 * @param string $extensionName
+	 * @param string $templateFile
+	 * @return string
+	 */
+	public function getPageTemplateLabel($extensionName, $templateFile) {
+		$config = $this->getPageConfiguration($extensionName);
+		$templateRootPath = $config['templateRootPath'];
+		$templatePathAndFilename = $templateRootPath . 'Page/' . $templateFile . '.html';
+		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($templatePathAndFilename);
+		#var_dump($extensionName);
+		#var_dump($config);
+		#var_dump($templatePathAndFilename);
+		$layoutRootPath = Tx_Fed_Utility_Path::translatePath($config['layoutRootPath']);
+		$partialRootPath = Tx_Fed_Utility_Path::translatePath($config['partialRootPath']);
+		$exposedView = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
+		$exposedView->setTemplatePathAndFilename($templatePathAndFilename);
+		$exposedView->setLayoutRootPath($layoutRootPath);
+		$exposedView->setPartialRootPath($partialRootPath);
+		#$exposedView->render();
+		#$exposedView->setPartialRootPath($config['partialRootPath']);
+		#$exposedView->setLayoutRootPath($config['layoutRootPath']);
+		#$exposedView->setTemplateRootPath($config['templateRootPath']);
+		$page = $exposedView->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+		return $page['label'] ? $page['label'] : $extensionName . ': ' . $templateFile;
+		#var_dump($page);
+		#exit();
+	}
+
+	/**
 	 * Gets a list of usable Page Templates from defined page template TypoScript
 	 *
 	 * @param string $format

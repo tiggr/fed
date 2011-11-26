@@ -68,8 +68,9 @@ class Tx_Fed_Backend_PageLayoutSelector {
 			$selector .= '<optgroup label="Extension: ' . $extension . '">' . LF;
 			foreach ($group as $template) {
 				$optionValue = $extension . '->' . $template;
+				$label = $this->configurationManager->getPageTemplateLabel($extension, $template);
 				$selected = ($optionValue == $value ? ' selected="formField selected"' : '');
-				$option = '<option value="' . $optionValue . '"' . $selected . '>' . $optionValue . '</option>';
+				$option = '<option value="' . $optionValue . '"' . $selected . '>' . $label . '</option>';
 				$selector .= $option . LF;
 			}
 			$selector .= '</optgroup>' . LF;
