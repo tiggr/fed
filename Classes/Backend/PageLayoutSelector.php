@@ -23,7 +23,7 @@
 ***************************************************************/
 
 /**
- * Class that renders a hidden field for TCE
+ * Class that renders a Page template selection field.
  *
  * @package	TYPO3
  * @subpackage	fed

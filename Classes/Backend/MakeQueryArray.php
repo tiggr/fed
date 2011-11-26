@@ -25,7 +25,8 @@
  * ************************************************************* */
 
 /**
- *
+ * Hook class utilized to select tt_content (and other) records. Patched to
+ * prevent content elements nested in FCEs to appear twice.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
@@ -34,9 +35,19 @@
  * @package Fed
  * @subpackage Backend
  */
-
 class Tx_Fed_Backend_MakeQueryArray {
 
+	/**
+	 * Hook methods: This method is called when querying for tt_content records
+	 *
+	 * @param string $queryParts
+	 * @param mixed $reference
+	 * @param string $table
+	 * @param integer $id
+	 * @param string $addWhere
+	 * @param array $fieldList
+	 * @param array $_params
+	 */
 	public function makeQueryArray_post(&$queryParts, &$reference, $table, $id, &$addWhere, &$fieldList, &$_params) {
 		if (get_class($reference) === 'tx_cms_layout' && $table === 'tt_content') {
 			$queryParts['WHERE'] .= " AND tt_content.tx_fed_fcecontentarea = ''";

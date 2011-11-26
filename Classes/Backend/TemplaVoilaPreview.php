@@ -36,6 +36,7 @@
 class Tx_Fed_Backend_TemplaVoilaPreview extends tx_templavoila_preview_default {
 
 	/**
+	 * Render an FCE preview for TemplaVoila BE module
 	 *
 	 * @param array $row
 	 * @param string $table

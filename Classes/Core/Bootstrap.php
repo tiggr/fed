@@ -35,15 +35,15 @@
 
 class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 
-	private $mapper;
-	private $jsonService;
+	/**
+	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 */
+	protected $infoService;
 
 	/**
-	 * @param Tx_Fed_Object_ObjectManager $objectManager
+	 * @var Tx_Fed_Utillity_JSON
 	 */
-	public function injectCustomObjectManager(Tx_Fed_Object_ObjectManager $objectManager) {
-		$this->injectObjectManager($objectManager);
-	}
+	private $jsonService;
 
 	/**
 	 * Runs the request
@@ -53,7 +53,7 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 	 */
 	public function run($content, $configuration) {
 		$this->initialize($configuration);
-		$this->mapper = $this->objectManager->get('Tx_Fed_Utility_PropertyMapper');
+		$this->infoService = $this->objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
 		$this->jsonService = $this->objectManager->get('Tx_Fed_Utility_JSON');
 		$messager = $this->objectManager->get('Tx_Extbase_MVC_Controller_FlashMessages');
 		$requestHandlerResolver = $this->objectManager->get('Tx_Extbase_MVC_RequestHandlerResolver');
@@ -92,17 +92,23 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 		return $output;
 	}
 
+	/**
+	 * Assert if $content is a reference (table:uid) to a Domain Model Object,
+	 * if it is, return JSON-annotated properties
+	 *
+	 * @param string $content
+	 * @return mixed
+	 */
 	private function detectModelObject($content) {
 		if (is_string($content) === FALSE) {
 			return $content;
 		}
 		list ($dataType, $uid) = explode(':', $content);
 		if (class_exists($dataType) && intval($uid) > 0) {;
-			$repositoryClass = str_replace('_Model_', '_Repository_', $dataType) . 'Repository';
-			$repository = $this->objectManager->get($repositoryClass);
+			$repository = $this->infoService->getRepositoryInstance($dataType);
 			$object = $repository->findOneByUid($uid);
 			if ($object) {
-				$data = $this->mapper->getValuesByAnnotation($object, 'json', TRUE);
+				$data = $this->infoService->getValuesByAnnotation($object, 'json', TRUE);
 			} else {
 				$data = NULL;
 			}
