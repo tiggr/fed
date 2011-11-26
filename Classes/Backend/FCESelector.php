@@ -55,6 +55,13 @@ class Tx_Fed_Backend_FCESelector {
 		$this->flexform = $this->objectManager->get('Tx_Fed_Utility_FlexForm');
 	}
 
+	/**
+	 * Render a Flexible Content Element type selection field
+	 *
+	 * @param array $parameters
+	 * @param mixed $pObj
+	 * @return string
+	 */
 	public function renderField(&$parameters, &$pObj) {
 		$allTemplatePaths = $this->configurationManager->getContentConfiguration();
 		$name = $parameters['itemFormElName'];
@@ -63,13 +70,13 @@ class Tx_Fed_Backend_FCESelector {
 		$select .= "<option value=''>(Select Fluid FCE type)</option>" . LF;
 		foreach ($allTemplatePaths as $key=>$templatePathSet) {
 			$templateRootPath = $templatePathSet['templateRootPath'];
-			$templateRootPath = $this->translatePath($templateRootPath);
+			$templateRootPath = Tx_Fed_Utility_Path::translatePath($templateRootPath);
 			$files = $this->getFiles($templateRootPath, TRUE);
 			if (count($files) > 0) {
 				$groupLabel = 'Group: ' . $key;
 				$select .= "<optgroup label='{$groupLabel}'>" . LF;
 				foreach ($files as $fileRelPath) {
-					$templateFilename = PATH_site . $templateRootPath . DIRECTORY_SEPARATOR . $fileRelPath;
+					$templateFilename = $templateRootPath . DIRECTORY_SEPARATOR . $fileRelPath;
 					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {
@@ -96,17 +103,25 @@ class Tx_Fed_Backend_FCESelector {
 
 	}
 
+	/**
+	 * Get a list of files (recursively) located in and below $basePath
+	 *
+	 * @param string $basePath
+	 * @param boolean $recursive
+	 * @param string $appendBasePath
+	 * @return array
+	 */
 	protected function getFiles($basePath, $recursive=FALSE, $appendBasePath=NULL) {
-		$files = scandir(PATH_site . $basePath . $appendBasePath);
+		$files = scandir($basePath . $appendBasePath);
 		$addFiles = array();
 		foreach ($files as $file) {
 			if (substr($file, 0, 1) === '.') {
 				continue;
-			} else if (is_dir(PATH_site . $basePath . $appendBasePath . $file) && $recursive) {
+			} else if (is_dir($basePath . $appendBasePath . $file) && $recursive) {
 				foreach ($this->getFiles($basePath, $recursive, $appendBasePath . $file . DIRECTORY_SEPARATOR) as $addFile) {
 					$addFiles[] = $appendBasePath . $addFile;
 				}
-			} else if (is_file(PATH_site . $basePath . $appendBasePath . $file)) {
+			} else if (is_file($basePath . $appendBasePath . $file)) {
 				$addFiles[] = $appendBasePath . $file;
 			}
 		}
@@ -114,13 +129,6 @@ class Tx_Fed_Backend_FCESelector {
 		return (array) $addFiles;
 	}
 
-	protected function translatePath($path) {
-		if (strpos($path, 'EXT:') === 0) {
-			$slice = strpos($path, '/');
-			$extKey = array_pop(explode(':', substr($path, 0, $slice)));
-			$path = t3lib_extMgm::siteRelPath($extKey) . substr($path, $slice);
-		}
-		return $path;
-	}
 }
+
 ?>
