@@ -27,7 +27,7 @@ require_once t3lib_extMgm::extPath('cms', 'layout/class.tx_cms_layout.php');
 require_once t3lib_extMgm::extPath('cms', 'layout/interfaces/interface.tx_cms_layout_tt_content_drawitemhook.php');
 
 /**
- * Flexible Content Element Backend Renderer
+ * Fluid Template preview renderer
  *
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
@@ -101,6 +101,13 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		}
 	}
 
+	/**
+	 * Render preview based on a Fluid Template Display plugin
+	 *
+	 * @param boolean $drawItem
+	 * @param string $itemContent
+	 * @param array $row
+	 */
 	public function preProcessTemplateDisplay(&$drawItem, &$itemContent, array &$row) {
 		$flexform = t3lib_div::xml2array($row['pi_flexform']);
 		$templateFile = $flexform['data']['sDEF']['lDEF']['templateFile']['vDEF'];
@@ -125,6 +132,17 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		#$itemContent = $this->view->render();
 	}
 
+	/**
+	 * Hook method to draw a preview from a Fluid template file
+	 *
+	 * @param boolean $drawItem
+	 * @param string $itemContent
+	 * @param string $headerContent
+	 * @param array $row
+	 * @param string $templatePathAndFilename
+	 * @param array $variables
+	 * @param array $paths
+	 */
 	public function drawPreview(&$drawItem, &$itemContent, &$headerContent, array &$row, $templatePathAndFilename, array $variables, array $paths=array()) {
 		try {
 			$this->flexform->setContentObjectData($row);
@@ -146,11 +164,30 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		}
 	}
 
+	/**
+	 * Processing: Extbase Plugin preview for registered Dynamic FlexForms
+	 *
+	 * @param boolean $drawItem
+	 * @param string $itemContent
+	 * @param string $headerContent
+	 * @param array $row
+	 * @param array $configuration
+	 */
 	public function preProcessExtbasePlugin(&$drawItem, &$itemContent, &$headerContent, array &$row, array $configuration) {
-		$templatePathAndFilename = PATH_site . $configuration['templateFilename'];
-		$this->drawPreview($drawItem, $itemContent, $headerContent, $row, $templatePathAndFilename, (array) $configuration['variables']);
+		$templatePathAndFilename = $configuration['templateFilename'];
+		if (file_exists($templatePathAndFilename)) {
+			$this->drawPreview($drawItem, $itemContent, $headerContent, $row, $templatePathAndFilename, (array) $configuration['variables']);
+		}
 	}
 
+	/**
+	 * Processing: Fluid-based Flexible Content Element
+	 *
+	 * @param boolean $drawItem
+	 * @param string $itemContent
+	 * @param string $headerContent
+	 * @param array $row
+	 */
 	public function preProcessFlexibleContentElement(&$drawItem, &$itemContent, &$headerContent, array &$row) {
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
 		list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
@@ -167,6 +204,15 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		$this->drawPreview($drawItem, $itemContent, $headerContent, $row, $templatePathAndFilename, array(), $paths);
 	}
 
+	/**
+	 * Get Dynamic FlexForm configuration from a Fluid template with rendering
+	 * arguments set in $variables (Fluid template variables)
+	 *
+	 * @param string $templatePathAndFilename
+	 * @param array $variables
+	 * @param array $paths
+	 * @return array
+	 */
 	protected function getFlexFormConfiguration($templatePathAndFilename, $variables, array $paths=array()) {
 		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
@@ -190,19 +236,17 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		return $stored;
 	}
 
+	/**
+	 * Wrapper method to render a Preview section from a Fluid template file
+	 *
+	 * @param string $templatePathAndFilename
+	 * @param array $variables
+	 * @return string
+	 */
 	protected function renderFluidPreview($templatePathAndFilename, $variables) {
 		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
 		return $view->renderStandaloneSection('Preview', (array) $variables);
-	}
-
-	protected function translatePath($path) {
-		if (strpos($path, 'EXT:') === 0) {
-			$slice = strpos($path, '/');
-			$extKey = array_pop(explode(':', substr($path, 0, $slice)));
-			$path = t3lib_extMgm::siteRelPath($extKey) . substr($path, $slice);
-		}
-		return $path;
 	}
 
 }
