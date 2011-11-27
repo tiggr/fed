@@ -73,6 +73,7 @@ class Tx_Fed_ViewHelpers_Widget_ImageCropViewHelper extends Tx_Fluid_Core_Widget
 		$this->registerArgument('cropButtonLabel', 'string', 'Text for crop button', FALSE, 'Crop image');
 		$this->registerArgument('resetButtonLabel', 'string', 'Text for crop button', FALSE, 'Reset');
 		$this->registerArgument('sections', 'string', 'CSV list of section names to render, in sequence (Preview,Large,Button)', FALSE, 'Large,Preview,Button');
+		$this->registerArgument('memoryLimit', 'string', 'Memory limit to enforce during cropping operations', FALSE, '1024m');
 	}
 
 	/**

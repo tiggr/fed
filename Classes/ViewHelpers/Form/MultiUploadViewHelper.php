@@ -173,25 +173,14 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$formObject = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
 		$uploadFolder = $this->infoService->getUploadFolder($formObject, $propertyName);
 
-		$files = array(
-			$scriptPath . 'GearsInit.js',
-			$pluploadPath . 'plupload.full.js',
-			$pluploadPath . 'jquery.plupload.queue/jquery.plupload.queue.js',
-			$pluploadPath . 'jquery.ui.plupload/jquery.ui.plupload.js',
-			$scriptPath . 'FileListEditor.js'
-		);
-
 		$this->documentHead->includeFiles(array(
 			$scriptPath . 'GearsInit.js',
 			$pluploadPath . 'plupload.full.js',
 			$pluploadPath . 'jquery.plupload.queue/jquery.plupload.queue.js',
 			$pluploadPath . 'jquery.ui.plupload/jquery.ui.plupload.js',
-			$scriptPath . 'FileListEditor.js'
-		));
-
-		$this->documentHead->includeFiles(array(
-			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/com/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css',
-			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/com/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css',
+			$pluploadPath . 'jquery.ui.plupload/css/jquery.ui.plupload.css',
+			$pluploadPath . 'jquery.plupload.queue/css/jquery.plupload.queue.css',
+			$scriptPath . 'FileListEditor.js',
 			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Stylesheet/MultiUpload.css'
 		));
 
@@ -242,7 +231,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$optionsJson = $this->jsonService->encode($options);
 		$this->documentHead->includeHeader("
 			var {$this->uniqueId} = null;
-			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$optionsJson}); });", 'js'
+			var {$this->uniqueId}options = {$optionsJson};
+			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$this->uniqueId}options); });", 'js'
 		);
 	}
 

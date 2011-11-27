@@ -281,7 +281,10 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			} else {
 				$newFilename = $this->fileService->copyChunk($sourceFilename, $targetDir, $filename, $chunk);
 			}
-			echo $this->jsonService->getRpcResponse($newFilename);
+			$response = array(
+				'name' => basename($newFilename)
+			);
+			echo $this->jsonService->getRpcResponse($response);
 		} catch (Exception $e) {
 			echo $this->jsonService->getRpcError($e);
 		}

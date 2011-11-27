@@ -112,7 +112,7 @@ class Tx_Fed_Utility_JSON implements t3lib_Singleton {
 		$data = array(
 			'jsonrpc' => '2.0',
 			'result' => array(
-				'name' => basename($payload),
+				$payload
 			),
 			'id' => 'id'
 		);

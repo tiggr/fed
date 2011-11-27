@@ -69,8 +69,13 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 		$filename = PATH_site . $imageFile;
 		$pathinfo = pathinfo($filename);
 		$filenameCropped = $pathinfo['dirname'] . '/crop_' . basename($filename);
-		if (strtolower($pathinfo['extension']) == 'png') {
+		$memoryLimit = ini_set('memory_limit', $this->widgetConfiguration['memoryLimit']);
+		$returnValue = 0;
+		$extension = strtolower($pathinfo['extension']);
+		if ($extension == 'png') {
 			$im = imagecreatefrompng($filename);
+		} elseif ($extension == 'jpg' || $extension == 'jpeg') {
+			$im = imagecreatefromjpeg($filename);
 		} else {
 			$im = imagecreatefromstring(file_get_contents($filename));
 		}
@@ -89,8 +94,8 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 			} else {
 				$ratio = 1;
 			}
-			$cropped = imagecreatetruecolor($cropData['w'] * $ratio, $cropData['h'] * $ratio);
-			imagecopyresampled(
+			$cropped = imagecreatetruecolor(intval($cropData['w'] * $ratio), intval($cropData['h'] * $ratio));
+			$copied = imagecopyresampled(
 				$cropped,
 				$im,
 				0,
@@ -112,10 +117,10 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 				default:
 					imagejpeg($cropped, $filenameCropped);
 			}
-			return basename($filenameCropped);
-		} else {
-			return '0';
+			$returnValue = basename($filenameCropped);
 		}
+		ini_set('memory_limit', $memoryLimit);
+		return $returnValue;
 	}
 
 }
