@@ -1,6 +1,7 @@
 (function(jQuery){
 	jQuery.fn.imageCropper = function(options) {
 		var defaults = {
+			'field': null,
 			'uploader': null,
 			'path': '',
 			'url': ''
@@ -11,13 +12,15 @@
 			var scale = 1;
 			var aspectRatio = options.aspectRatio;
 			var large = element.find('.large img');
+			var original = large.attr('src');
 			var cropper = jQuery.Jcrop(large);
 			var maxWidth = options.maxWidth;
 			var maxHeight = options.maxHeight;
 			var thumbnail = element.find('.preview img');
 			var thumbWidth = element.find('.preview .img-div').width();
 			var thumbHeight = element.find('.preview .img-div').height();
-			var button = element.find('.button button');
+			var button = element.find('.button button.crop');
+			var reset = element.find('.button button.reset');
 			var cropData;
 
 			function makeCropper() {
@@ -37,13 +40,12 @@
 						var offsetRatioY = coordinates.y / large.height();
 						var newOffsetX = offsetRatioX * newWidth;
 						var newOffsetY = offsetRatioY * newHeight;
-						var css = {
+						thumbnail.css({
 							"width": Math.round(newWidth) + "px",
 							"height": Math.round(newHeight) + "px",
 							"marginLeft": "-" + Math.round(newOffsetX) + "px",
 							"marginTop": "-" + Math.round(newOffsetY) + "px"
-						};
-						thumbnail.css(css);
+						});
 						coordinates.scale = scale;
 						coordinates.x *= scale;
 						coordinates.y *= scale;
@@ -53,6 +55,7 @@
 						coordinates.y2 *= scale;
 						cropData = coordinates;
 						button.show();
+						reset.show();
 					}
 				});
 			};
@@ -60,22 +63,29 @@
 			function adjustScale() {
 				if (large.width() > maxWidth) {
 					scale = large.width() / maxWidth;
-					large.css({
-						"max-width": maxWidth + 'px'
-					});
 				} else {
 					scale = 1;
 				};
+				large.css({
+					"max-width": maxWidth + 'px'
+				});
 				thumbnail.css({
 					"width": options.previewWidth + 'px',
-					"height": options.previewHeight + 'px',
+					"height": (options.previewHeight * (large.height() / large.width())) + 'px',
 					"marginLeft": '0px',
 					"marginTop": '0px'
 				});
 			};
 
+			function updateField() {
+				if (options.field) {
+					options.field.val(large.attr('src').replace(options.path, ''));
+				};
+			};
+
 			if (options.uploader) {
 				options.uploader.bind('FileUploaded', function(up, file, info) {
+					original = options.path + file.name;
 					large.attr('src', options.path + file.name);
 					thumbnail.attr('src', options.path + file.name);
 					element.show();
@@ -88,10 +98,20 @@
 			};
 
 			large.load(function() {
-				adjustScale();
-				makeCropper();
+				large.css({width: 'auto', height: 'auto', maxWidth: 'auto'});
+				setTimeout(function() {
+					adjustScale();
+					makeCropper();
+				}, 0);
 			});
-			
+
+			reset.hide();
+			reset.click(function(event) {
+				large.attr('src', original);
+				thumbnail.attr('src', original);
+				updateField();
+			});
+
 			button.hide();
 			button.click(function(event) {
 				jQuery.ajax({
@@ -102,10 +122,11 @@
 						'cropData': cropData
 					},
 					complete: function(request) {
-						large.attr('src', options.path + request.responseText);
-						thumbnail.attr('src', options.path + request.responseText);
-						adjustScale();
-						makeCropper();
+						var src = request.responseText;
+						large.css({width: 'auto', height: 'auto', maxWidth: 'auto'});
+						large.attr('src', options.path + src);
+						thumbnail.attr('src', options.path + src);
+						updateField();
 					}
 				})
 				event.cancelled = true;

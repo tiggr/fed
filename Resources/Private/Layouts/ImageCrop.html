@@ -8,7 +8,8 @@
 	jQuery(document).ready(function() {
 		setTimeout(function() {
 			<fed:data.var name="id" /> = jQuery('#<fed:data.var name="id" />').imageCropper({
-				'uploader': <f:if condition="{uploader}" then="{uploader}" else="null" />.plupload('getUploader'),
+				'uploader': <f:if condition="{uploader}" then="{uploader}.plupload('getUploader')" else="null" />,
+				'field': <f:if condition="{uploader}" then="{uploader}.prev()" else="null" />,
 				'url': '<f:if condition="{url}" then="{url}" else="{f:widget.uri(action: 'crop', ajax: 1)}" />',
 				'path': '<fed:data.var name="path" />',
 				'maxWidth': <fed:data.var name="maxWidth" />,
@@ -25,12 +26,5 @@
 	<f:for each="{fed:data.func(func: 'explode', arguments: {0: ',', 1: sections})}" as="section">
 		<f:render section="{section}" />
 	</f:for>
-	<fed:comment>
-		<f:if condition="{preview}">
-			<f:render section="Preview" />
-		</f:if>
-		<f:render section="Large" />
-		<f:render section="CropButton" />
-	</fed:comment>
 </div>
 <br style="clear: both;" />

@@ -84,7 +84,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper extends Tx_Flu
 			if ($needle instanceof Tx_Extbase_DomainObject_AbstractDomainObject) {
 				$needle = $needle->getUid();
 			}
-			if ($candidate->getUid() === $needle) {
+			if ($candidate->getUid() == $needle) {
 				return $index;
 			}
 			$index++;

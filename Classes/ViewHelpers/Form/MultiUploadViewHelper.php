@@ -139,7 +139,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->setErrorClassAttribute();
 		$this->registerFieldNameForFormTokenGeneration($name);
 		$html = array(
-			'<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" />',
+			'<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" class="value-holder" />',
 			'<div id="' . $this->uniqueId . '" class="fed-plupload plupload_container"></div>',
 		);
 		$this->tag->addAttribute('id', '');

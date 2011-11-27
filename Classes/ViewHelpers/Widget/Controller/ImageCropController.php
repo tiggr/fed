@@ -50,7 +50,7 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 			'path', 'src', 'placeholderImage', 'placeholderText',
 			'uploader', 'largeWidth', 'largeHeight', 'preview', 'previewWidth', 'previewHeight',
 			'maxWidth', 'maxHeight', 'aspectRatio',
-			'cropButtonLabel', 'sections'
+			'cropButtonLabel', 'resetButtonLabel', 'sections'
 		);
 		foreach ($transferArguments as $argumentName) {
 			$this->view->assign($argumentName, $this->widgetConfiguration[$argumentName]);
@@ -68,13 +68,21 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 	public function cropAction($imageFile, array $cropData) {
 		$filename = PATH_site . $imageFile;
 		$pathinfo = pathinfo($filename);
-		$filenameCropped = $pathinfo['dirname'] . '/' . basename($filename);
+		$filenameCropped = $pathinfo['dirname'] . '/crop_' . basename($filename);
 		if (strtolower($pathinfo['extension']) == 'png') {
 			$im = imagecreatefrompng($filename);
 		} else {
 			$im = imagecreatefromstring(file_get_contents($filename));
 		}
 		if ($im) {
+			if (file_exists($filenameCropped)) {
+				unlink($filenameCropped);
+			}
+			foreach ($cropData as $index=>$value) {
+				if ($index != 'scale') {
+					$cropData[$index] = intval($value);
+				}
+			}
 			$maximumWidth = $this->widgetConfiguration['maxWidth'];
 			if ($cropData['w'] > $maximumWidth) {
 				$ratio = $maximumWidth / $cropData['w'];
@@ -82,7 +90,18 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 				$ratio = 1;
 			}
 			$cropped = imagecreatetruecolor($cropData['w'] * $ratio, $cropData['h'] * $ratio);
-			imagecopyresampled($cropped, $im, 0, 0, $cropData['x'], $cropData['y'], $cropData['w'] * $ratio, $cropData['h'] * $ratio, $cropData['w'], $cropData['h']);
+			imagecopyresampled(
+				$cropped,
+				$im,
+				0,
+				0,
+				$cropData['x'],
+				$cropData['y'],
+				$cropData['w'] * $ratio,
+				$cropData['h'] * $ratio,
+				$cropData['w'],
+				$cropData['h']
+			);
 			switch (strtolower($pathinfo['extension'])) {
 				case 'gif':
 					imagegif($cropped, $filenameCropped);

@@ -71,6 +71,7 @@ class Tx_Fed_ViewHelpers_Widget_ImageCropViewHelper extends Tx_Fluid_Core_Widget
 		$this->registerArgument('maxWidth', 'integer', 'Maximum width of large image', FALSE, 1024);
 		$this->registerArgument('maxHeight', 'integer', 'Maximum height of large image', FALSE, 768);
 		$this->registerArgument('cropButtonLabel', 'string', 'Text for crop button', FALSE, 'Crop image');
+		$this->registerArgument('resetButtonLabel', 'string', 'Text for crop button', FALSE, 'Reset');
 		$this->registerArgument('sections', 'string', 'CSV list of section names to render, in sequence (Preview,Large,Button)', FALSE, 'Large,Preview,Button');
 	}
 
