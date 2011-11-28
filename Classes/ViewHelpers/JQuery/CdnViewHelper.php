@@ -41,46 +41,8 @@
  * @subpackage ViewHelpers\JQuery
  * @uses jQuery
  */
-class Tx_Fed_ViewHelpers_JQuery_CdnViewHelper extends Tx_Fed_Core_ViewHelper_AbstractJQueryViewHelper {
+class Tx_Fed_ViewHelpers_JQuery_CdnViewHelper extends Tx_Fed_ViewHelpers_JQueryViewHelper {
 
-	protected $tagName = 'div';
-
-	/**
-	 * @var Tx_Fed_Utility_CDN
-	 */
-	protected $cdn;
-
-	/**
-	 * @param Tx_Fed_Utility_CDN $cdn
-	 */
-	public function injectCDNService(Tx_Fed_Utility_CDN $cdn) {
-		$this->cdn = $cdn;
-	}
-
-	/**
-	 * Initialize the arguments used in this ViewHelper
-	 */
-	public function initializeArguments() {
-		$this->registerUniversalTagAttributes();
-		$this->registerArgument('jQueryVersion', 'string', 'Which version of jQuery to load. Specify as either "1", "1.8" or "1.8.2" - for the loose versions you always get the latest release', TRUE);
-		$this->registerArgument('jQueryUIVersion', 'string', 'Which version of jQuery UI to load. If not specified does not load jQueryUI. If value is empty or "current", the newest version is automatically loaded. In production mode you should ALWAYS specifiy the major and minor versions!');
-		$this->registerArgument('jQueryUITheme', 'string', 'Name of optional jQueryUI theme to load. Requires use of jQueryUIVersion - selects the CDN theme matching that version number');
-		$this->registerArgument('jQueryUIThemeUrl', 'string', 'If used, loads the theme from a specific url');
-		$this->registerArgument('compatibility', 'boolean', 'If TRUE, puts jQuery and jQueryUI into compatibility mode');
-		$this->registerArgument('report', 'boolean', 'If TRUE, outputs a report about the version of loaded libraries. Use this when you go from development to production and change the version attributes to match those versions.');
-	}
-
-	/**
-	 * Loads necessary resources from Google CDN
-	 */
-	public function render() {
-		$jQueryVersion = $this->arguments['jQueryVersion'];
-		$jQueryUIVersion = $this->arguments['jQueryUIVersion'];
-		$jQueryUITheme = $this->arguments['jQueryUITheme'];
-		$return = $this->arguments['report'];
-		$compatibility = $this->arguments['compatibility'];
-		return $this->cdn->includeJQuery($jQueryVersion, $jQueryUIVersion, $jQueryUITheme, $compatibility, $return);
-	}
 
 }
 
