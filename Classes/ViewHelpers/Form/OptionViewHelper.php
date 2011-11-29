@@ -49,7 +49,7 @@ class Tx_Fed_ViewHelpers_Form_OptionViewHelper extends Tx_Fluid_ViewHelpers_Form
 	public function initializeArguments() {
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
-		$this->registerArgument('selected', 'string', 'Set to "selected" to mark field as selected. If not present, selected status will be determined by select value');
+		$this->registerArgument('selected', 'boolean', 'Set to "selected" to mark field as selected. If not present, selected status will be determined by select value');
 	}
 
 	/**
@@ -60,22 +60,25 @@ class Tx_Fed_ViewHelpers_Form_OptionViewHelper extends Tx_Fluid_ViewHelpers_Form
 		if (!$this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'options')) {
 			throw new Exception('Options can only be added inside select tags, optionally inside optgroup tag(s) inside the select tag', 1313937196);
 		}
-		if ($this->hasArgument('selected')) {
-			$selected = $this->arguments['selected'];
+		if ($this->arguments['selected']) {
+			$selected = 'selected';
 		} else if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'value')) {
 			$value = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'value');
-			$selected = $this->arguments['value'] ===  $value || in_array($this->arguments['value'], $value) ? 'selected' : '';
+			$selected = $this->arguments['value'] ==  $value || in_array($this->arguments['value'], $value) ? 'selected' : '';
 		}
 		$tagContent = $this->renderChildren();
 		$options = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'options');
 		$options[$tagContent] = $this->arguments['value'];
 		$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'options', $options);
-		if ($selected === 'selected') {
-			$this->tag->addAttribute('selected', $selected);
+		if ($selected) {
+			$this->tag->addAttribute('selected', 'selected');
 		} else {
 			$this->tag->removeAttribute('selected');
 		}
 		$this->tag->setContent($tagContent);
+		if ($this->arguments['value']) {
+			$this->tag->addAttribute('value', $this->arguments['value']);
+		}
 		return $this->tag->render();
 	}
 

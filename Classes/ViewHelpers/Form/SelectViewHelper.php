@@ -85,7 +85,7 @@ class Tx_Fed_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_ViewHelpers_Form
 	public function initializeArguments() {
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
-		$this->registerTagAttribute('multiple', 'string', 'if set, multiple select field');
+		$this->registerTagAttribute('multiple', 'string', 'if set, multiple select field', FALSE, '');
 		$this->registerTagAttribute('size', 'string', 'Size of input field');
 		$this->registerTagAttribute('disabled', 'string', 'Specifies that the input element should be disabled when the page loads');
 		$this->registerArgument('options', 'array', 'Associative array with internal IDs as key, and the values are displayed in the select box');
@@ -107,13 +107,13 @@ class Tx_Fed_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_ViewHelpers_Form
 	 */
 	public function render() {
 		$name = $this->getName();
-		if ($this->hasArgument('multiple')) {
+		if ($this->arguments['multiple'] !== '') {
 			$name .= '[]';
 		}
 
 		$this->tag->addAttribute('name', $name);
 
-		if ($this->hasArgument('options')) {
+		if ($this->arguments['options']) {
 			$options = $this->getOptions();
 			if (empty($options)) {
 				$options = array('' => '');
@@ -138,7 +138,7 @@ class Tx_Fed_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_ViewHelpers_Form
 			// register field name for token generation.
 			// in case it is a multi-select, we need to register the field name
 			// as often as there are elements in the box
-		if ($this->hasArgument('multiple') && $this->arguments['multiple'] !== '') {
+		if ($this->arguments['multiple'] !== '') {
 			$content .= $this->renderHiddenFieldForEmptyValue();
 			for ($i=0; $i<count($options); $i++) {
 				$this->registerFieldNameForFormTokenGeneration($name);
@@ -255,7 +255,7 @@ class Tx_Fed_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_ViewHelpers_Form
 	 */
 	protected function getSelectedValue() {
 		$value = $this->getValue();
-		if (!$this->hasArgument('optionValueField')) {
+		if (!$this->arguments['optionValueField']) {
 			return $value;
 		}
 		if (!is_array($value) && !($value instanceof Iterator)) {
