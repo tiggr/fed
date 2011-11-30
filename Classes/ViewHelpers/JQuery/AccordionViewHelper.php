@@ -103,7 +103,6 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 			return;
 		}
 
-
 		// render tab group
 		$this->templateVariableContainer->add('tabs', array());
 		$this->templateVariableContainer->add('selectedIndex', 0);
@@ -125,15 +124,26 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		return $this->tag->render();
 	}
 
+	/**
+	 * Render the tab group HTML
+	 *
+	 * @return string
+	 */
 	protected function renderTabs() {
 		$html = "";
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
-			$html .= '<h3><a href="javascript:;">' . $tab['title'] . '</a></h3>' . LF;
+			$html .= '<h3><a href="#">' . $tab['title'] . '</a></h3>' . LF;
 			$html .= '<div>' . $tab['content'] . '</div>' . LF;
 		}
 		return $html;
 	}
 
+	/**
+	 * Add one tab to the internal storage
+	 *
+	 * @param string $title
+	 * @param string $content
+	 */
 	protected function addTab($title, $content) {
 		$tab = array(
 			'title' => $title,
@@ -145,11 +155,21 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$this->templateVariableContainer->add('tabs', $tabs);
 	}
 
+	/**
+	 * Set the currently selected index
+	 *
+	 * @param integer $index
+	 */
 	protected function setSelectedIndex($index) {
 		$this->templateVariableContainer->remove('selectedIndex');
 		$this->templateVariableContainer->add('selectedIndex', $index);
 	}
 
+	/**
+	 * Add an index to list of disabled indices
+	 *
+	 * @param integer $index
+	 */
 	protected function addDisabledIndex($index) {
 		$disabled = $this->templateVariableContainer->get('disabledIndices');
 		array_push($disabled, $index);
@@ -157,10 +177,20 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$this->templateVariableContainer->add('disabledIndices', $disabled);
 	}
 
+	/**
+	 * Get the currently set index
+	 *
+	 * @return integer
+	 */
 	protected function getCurrentIndex() {
 		return $this->templateVariableContainer->get('currentIndex');
 	}
 
+	/**
+	 * Set the currently set index
+	 *
+	 * @param integer $index
+	 */
 	protected function setCurrentIndex($index) {
 		$this->templateVariableContainer->remove('currentIndex');
 		$this->templateVariableContainer->add('currentIndex', $index);
@@ -172,7 +202,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	protected function addScript() {
 		$selectedIndex = $this->templateVariableContainer->get('selectedIndex');
 		if ($selectedIndex === 0 && $this->arguments['collapsed'] === TRUE && $this->arguments['collapsible'] === TRUE) {
-			$selectedIndex = 'false';
+			$this->setSelectedIndex(FALSE);
 		}
 		if ($this->arguments['animated'] === 'FALSE') {
 			$animation = '"animated" : false,';
@@ -195,7 +225,6 @@ jQuery(document).ready(function() {
 		clearStyle : {$clearStyle},
 		collapsible : {$collapsible},
 		fillSpace : {$fillSpace},
-		header : '> :first-child',
 		active : ''
 	});
 });
