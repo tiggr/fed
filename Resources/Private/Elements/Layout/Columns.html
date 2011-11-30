@@ -21,8 +21,6 @@
 				7: {0: '25-50-25', 1: '25% - 50% - 25%'},
 				8: {0: '25-25-50', 1: '25% - 25% - 50%'}
 				}" maxItems="1" />
-		<fed:fce.field.input name="cellpadding" label="Cell padding" default="0" />
-
 		<fed:fce.grid>
 			<fed:fce.grid.row>
 				<fed:data.func func="floor" as="gridColumnWidth"><fed:math>100/{columns}</fed:math></fed:data.func>
@@ -41,20 +39,7 @@
 </f:section>
 
 <f:section name="Main">
-	<fed:style>
-		<fed:raw>
-		.content-columns { width: 100%; clear: both; }
-		.content-columns .content-column { float: left; }
-		.content-columns .content-column .content-column-padding { padding: {cellpadding}; clear: both; }
-		.content-column-50 { width: 50%; }
-		.content-column-33 { width: 33.3%; }
-		.content-column-25 { width: 25%; }
-		.content-column-20 { width: 20%; }
-		.content-column-15 { width: 15%; }
-		.content-column-10 { width: 10%; }
-		</fed:raw>
-	</fed:style>
-
+	<fed:style href="{f:uri.resource(path: 'Stylesheet/Content/Columns.css', extensionName: 'fed')}" />
 	<div class="content-columns content-columns-{columnClass}">
 		<f:for each="{fed:data.func(func: 'explode', arguments: {0: '-', 1: columnClass})}" as="className" iteration="iteration">
 			<div class="content-column content-column-{className} column{iteration.cycle}">
