@@ -72,6 +72,7 @@ if (TYPO3_MODE == 'BE') {
 		t3lib_div::loadTCA('pages');
 		$before = '--div--;Page Template,tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,--div--;LLL:EXT:cms/locallang_tca.xml:pages.tabs.options,';
 		$TCA['pages']['types'][1]['showitem'] = $before . $TCA['pages']['types'][1]['showitem'];
+		$TCA['pages']['types'][4]['showitem'] = $before . $TCA['pages']['types'][4]['showitem'];
 		t3lib_extMgm::addTCAcolumns('pages', array(
 			'tx_fed_page_controller_action' => Array (
 				'exclude' => 1,
