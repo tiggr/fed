@@ -321,11 +321,44 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param array $browser
 	 * @return boolean
 	 */
+	public function pack($code) {
+		$encoding = 62; // see value in Tx_Fed_Utility_JavascriptPacker
+		$fastDecode = FALSE;
+		$specialChars = FALSE;
+		$packer = $this->objectManager->get('Tx_Fed_Utility_JavascriptPacker', $encoding, $fastDecode, $specialChars);
+		$packed = $packer->pack();
+		return (string) $packed;
+	}
+
+	/**
+	* Check client browser for browser sniffing
+	* supported browser: msie, net, opera, flash, konqu
+	* @param array $browser
+	* return boolean
+	*/
 	public function checkClientBrowser(array $browser) {
 		foreach($browser as $value) {
-			$find = stripos(t3lib_div::getIndpEnv('HTTP_USER_AGENT'), $value);
-			if($find) {
-				return TRUE;
+			$clientInfo = t3lib_div::clientInfo();
+			$searchBrowser = explode(' ', $value);
+			if($clientInfo['BROWSER'] == $searchBrowser[0]) {
+				$operator = $searchBrowser[1];
+				$detectedVersion = $clientInfo['VERSION'];
+				$sniffedVersion = $searchBrowser[2];
+				switch($operator) {
+					case '==':
+						return $detectedVersion == $sniffedVersion;
+					case '<=':
+						return $detectedVersion <= $sniffedVersion;
+					case '>=':
+						return $detectedVersion >= $sniffedVersion;
+					case '<':
+						return $detectedVersion < $sniffedVersion;
+					case '>':
+						return $detectedVersion > $sniffedVersion;
+					case '!=':
+						return $detectedVersion != $sniffedVersion;
+					default: throw new Exception('Invalid operand in browser detection statement: ' . $operator, 1323276364);
+				}
 			}
 		}
 		return FALSE;

@@ -42,7 +42,7 @@ class Tx_Fed_ViewHelpers_StyleViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		$this->registerArgument('compress', 'boolean', 'If true, files are compressed using JSPacker', FALSE, FALSE);
 		$this->registerArgument('index', 'int', 'Which index to take in additionalHeaderData - pushes current resident DOWN', FALSE, -1);
 		$this->registerArgument('media', 'string', 'Attributes of the stylesheet file', FALSE, NULL);
-		$this->registerArgument('browser', 'mixed', 'Comma seperated list of allowed browsers for file inclusion', FALSE, NULL);
+		$this->registerArgument('browser', 'mixed', 'Comma seperated list of allowed browsers using clientInfo(). IMPORTANT: whitespace between browser/condition/value. Sample: msie < 9', FALSE, NULL);
 	}
 
 	/**
