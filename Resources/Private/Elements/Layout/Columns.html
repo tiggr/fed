@@ -24,7 +24,7 @@
 		<fed:fce.grid>
 			<fed:fce.grid.row>
 				<fed:data.func func="floor" as="gridColumnWidth"><fed:math>100/{columns}</fed:math></fed:data.func>
-				<f:for each="{fed:data.func(func: 'explode', arguments: {0: '-', 1: columnClass})}" as="className" iteration="iteration">
+				<f:for each="{columnClass->fed:explode(glue: '-')}" as="className" iteration="iteration">
 					<fed:fce.grid.column width="{columnClass}%">
 						<fed:fce.content name="column{iteration.cycle}" label="Content column #{iteration.cycle}" />
 					</fed:fce.grid.column>
