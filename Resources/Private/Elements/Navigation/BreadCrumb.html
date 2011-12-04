@@ -3,15 +3,26 @@
 <f:layout name="FCE" />
 
 <f:section name="Configuration">
-	<fed:fce id="breadcrumb" label="Navigation: Bread Crumb" enabled="TRUE">
-		<fed:fce.field.select name="entryLevel" label="Entry-level" items="{0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}" />
-	</fed:fce>
+  <fed:fce id="breadcrumb" label="Navigation: Bread Crumb" enabled="TRUE">
+    <fed:fce.field.group name="startingPage" label="Starting page"
+      internalType="db" allowed="pages" maxItems="1" />
+    <fed:fce.field.select name="entryLevel" label="Entry-level"
+      commaSeparatedItems="-1,0,1,2,3,4,5,6" />
+  </fed:fce>
 </f:section>
 
 <f:section name="Preview">
-
+  Entrylevel: {entryLevel}<br />
+  Starting page UID: {startingPage}
 </f:section>
 
 <f:section name="Main">
-	<fed:page.breadCrumb entryLevel="{entryLevel}" />
+  <f:if condition="{startingPage}">
+    <f:then>
+      <fed:page.breadCrumb pageUid="{startingPage}" entryLevel="{entryLevel}" />
+    </f:then>
+    <f:else>
+      <fed:page.breadCrumb entryLevel="{entryLevel}" />
+    </f:else>
+  </f:if>
 </f:section>
