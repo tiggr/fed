@@ -70,6 +70,11 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $fileService;
 
 	/**
+	 * @var Tx_Fed_Service_Email
+	 */
+	protected $emailService;
+
+	/**
 	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
 	 */
 	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
@@ -116,6 +121,13 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 */
 	public function injectFileService(Tx_Fed_Service_File $fileService) {
 		$this->fileService = $fileService;
+	}
+
+	/**
+	 * @param Tx_Fed_Service_Email $emailService
+	 */
+	public function injectEmailService(Tx_Fed_Service_Email $emailService) {
+		$this->emailService = $emailService;
 	}
 
 	/**
