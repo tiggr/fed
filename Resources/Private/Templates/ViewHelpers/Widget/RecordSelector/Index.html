@@ -29,7 +29,9 @@
 		<f:then>
 			<div class="selections">
 				<f:form.hidden name="{name}" value="0" />
-				<p><strong>{listLabel}</strong></p>
+				<f:if condition="{listLabel}">
+					<p><strong>{listLabel}</strong></p>
+				</f:if>
 				<ul class="selection-list">
 					<f:for each="{values}" as="value">
 						<li data-id="{value.uid}">
