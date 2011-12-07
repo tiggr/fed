@@ -114,20 +114,10 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 */
 	protected function autoRender($menu, $rootLine) {
 		$tagName = $this->arguments['tagNameChildren'];
-		$classFirst = $this->arguments['classFirst'];
-		$classLast = $this->arguments['classLast'];
 		$substElementUid = $this->arguments['substElementUid'];
 		$html = array();
-
 		foreach ($menu as $key => $page) {
-			if($key == 0 && $classFirst) {
-				$class = $classFirst . ' ' . $page['class'];
-			}elseif($key+1 == count($menu) && $classLast) {
-				$class = $classLast . ' ' . $page['class'];
-			}else {
-				$class = $page['class'];
-			}
-			$class = trim($class)!='' ? ' class="' . $class . '"' : '';
+			$class = trim($page['class'])!='' ? ' class="' . $page['class'] . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
 			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
 			$i++;
@@ -203,19 +193,18 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 * @return array
 	 */
 	protected function getItemClass($pageRow) {
-		$classes = array();
+		$class = array();
 		if ($pageRow['active']) {
-			$classes[] = $this->arguments['classActive'];
+			$class[] = $this->arguments['classActive'];
 		}
 		if ($pageRow['current']) {
-			$classes[] = $this->arguments['classCurrent'];
+			$class[] = $this->arguments['classCurrent'];
 		}
 		if ($pageRow['hasSubPages']) {
-			$classes[] = $this->arguments['classHasSubpages'];
+			$class[] = $this->arguments['classHasSubpages'];
 		}
-		return $classes;
+		return $class;
 	}
-
 
 	/**
 	 * Get a list from allowed doktypes for pages
@@ -239,6 +228,8 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 * @return array
 	 */
 	protected function parseMenu($menu, $rootLine) {
+		$classFirst = $this->arguments['classFirst'];
+		$classLast = $this->arguments['classLast'];
 		$filtered = array();
 		foreach ($menu as $page) {
 			$pageUid = $page['uid'];
@@ -257,6 +248,13 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 				$page['title'] = $this->getNavigationTitle($pageUid);
 				$filtered[] = $page;
 			}
+		}
+		if($classFirst) {
+			$filtered[0]['class'] = trim($filtered[0]['class'] . ' ' . $classFirst);
+		}
+		if($classLast) {
+			$length = count($filtered);
+			$filtered[$length-1]['class'] = trim($filtered[$length-1]['class'] . ' ' . $classLast);
 		}
 		return $filtered;
 	}
