@@ -63,11 +63,6 @@ class Tx_Fed_Utility_DomainObjectInfo implements t3lib_Singleton {
 	protected $dataMapFactory;
 
 	/**
-	 * @var Tx_Extbase_Reflection_ObjectAccess
-	 */
-	protected $objectAccess;
-
-	/**
 	 * @var Tx_Fed_Configuration_ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -101,13 +96,6 @@ class Tx_Fed_Utility_DomainObjectInfo implements t3lib_Singleton {
 	 */
 	public function injectDataMapFactory(Tx_Extbase_Persistence_Mapper_DataMapFactory $dataMapFactory) {
 		$this->dataMapFactory = $dataMapFactory;
-	}
-
-	/**
-	 * @param Tx_Extbase_Reflection_ObjectAccess $objectAccess
-	 */
-	public function injectObjectAccess(Tx_Extbase_Reflection_ObjectAccess $objectAccess) {
-		$this->objectAccess = $objectAccess;
 	}
 
 	/**
@@ -546,7 +534,7 @@ class Tx_Fed_Utility_DomainObjectInfo implements t3lib_Singleton {
 			$object = $this->objectManager->get($className);
 		}
 		if ($propertyName === NULL) {
-			$properties = $this->objectAccess->getGettablePropertyNames($object);
+			$properties = Tx_Extbase_Reflection_ObjectAccess::getGettablePropertyNames($object);
 			$folders = array();
 			foreach ($properties as $propertyName) {
 				$uploadFolder = $this->getUploadFolder($object, $propertyName);
