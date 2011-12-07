@@ -43,9 +43,10 @@ class Tx_Fed_Service_Content implements t3lib_Singleton {
 
 	/**
 	 * @param array $record
+	 * @param integer $id
 	 * @return string
 	 */
-	public function getFlexibleContentElementArea($record) {
+	public function getFlexibleContentElementArea($record, $id=NULL) {
 		$url = t3lib_div::_GET('returnUrl');
 		$urlHashCutoffPoint = strrpos($url, '#');
 		if ($urlHashCutoffPoint > 0) {
@@ -54,6 +55,9 @@ class Tx_Fed_Service_Content implements t3lib_Singleton {
 			$afterContentElementUid = abs($record['pid']);
 			$afterRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $afterContentElementUid . "'");
 			$area = $afterRecord['tx_fed_fcecontentarea'];
+		} else if ($id > 0) {
+			$existingRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $id . "'");
+			$area = $existingRecord['tx_fed_fcecontentarea'];
 		}
 		return $area;
 	}

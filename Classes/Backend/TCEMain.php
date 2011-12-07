@@ -144,7 +144,9 @@ class Tx_Fed_Backend_TCEMain {
 					}
 					break;
 				case 'move':
-					if ($relativeTo < 0) {
+					if ($relativeTo > 0) {
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => ''));
+					} else {
 						$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => $area));
 					}
@@ -175,7 +177,13 @@ class Tx_Fed_Backend_TCEMain {
 	 * @access	public
 	 */
 	public function processDatamap_preProcessFieldArray(array &$incomingFieldArray, $table, $id, t3lib_TCEmain &$reference) {
-		if ($table === 'tt_content') {
+		if ($incomingFieldArray['uid'] > 0) {
+			$action = 'read';
+		} else {
+			$action = 'create';
+		}
+		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
+		if ($table === 'tt_content' && $id) {
 			foreach ((array) $incomingFieldArray['pi_flexform']['data']['options']['lDEF'] as $key=>$value) {
 				if (strpos($key, 'tt_content') === 0) {
 					$realKey = array_pop(explode('.', $key));
@@ -185,12 +193,6 @@ class Tx_Fed_Backend_TCEMain {
 				}
 			}
 		}
-		if ($incomingFieldArray['uid'] > 0) {
-			$action = 'read';
-		} else {
-			$action = 'create';
-		}
-		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
 	}
 
 	/**
@@ -207,6 +209,7 @@ class Tx_Fed_Backend_TCEMain {
 		if ($record) {
 			$fieldArray = $record;
 		}
+		$fieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($fieldArray, $id);
 	}
 
 	/**
