@@ -209,7 +209,9 @@ class Tx_Fed_Backend_TCEMain {
 		if ($record) {
 			$fieldArray = $record;
 		}
-		$fieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($fieldArray, $id);
+		if ($table === 'tt_content') {
+			$fieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($fieldArray, $id);
+		}
 	}
 
 	/**
