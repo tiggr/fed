@@ -81,8 +81,7 @@ class Tx_Fed_Backend_DynamicFlexForm {
 				$action = $configuration['tx_fed_page_controller_action'];
 				list ($extensionName, $action) = explode('->', $action);
 				$paths = $this->configurationManager->getPageConfiguration($extensionName);
-				$templatePath = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath']);
-				$templateFile = $templatePath . '/Page/' . $action . '.html';
+				$templateFile = $paths['templateRootPath'] . '/Page/' . $action . '.html';
 			} else {
 				$templateFile = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
 			}
@@ -96,13 +95,7 @@ class Tx_Fed_Backend_DynamicFlexForm {
 			list ($extensionName, $filename) = explode(':', $row['tx_fed_fcefile']);
 			$values = $this->flexform->convertFlexFormContentToArray($row['pi_flexform']);
 			$paths = $this->configurationManager->getContentConfiguration($extensionName);
-			if ($paths) {
-				$filename = $paths['templateRootPath'] . $filename;
-				$filename = Tx_Fed_Utility_Path::translatePath($filename);
-			} else {
-				$filename = $row['tx_fed_fcefile'];
-			}
-			$this->flexform->convertFlexFormContentToDataStructure($filename, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
+			$this->flexform->convertFlexFormContentToDataStructure($paths['templateRootPath'] . $filename, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
 		} else {
 				// check for registered Fluid FlexForms based on cType first, then plugin list_type
 			$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['cType']);

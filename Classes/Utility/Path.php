@@ -35,18 +35,21 @@
 class Tx_Fed_Utility_Path implements t3lib_Singleton {
 
 	/**
-	 * Translates a path which may contain EXT: into a proper path
+	 * Translates an array of paths or single path into absolute paths/path
 	 *
-	 * @param string $path
-	 * @return string
+	 * @param mixed $path
+	 * @return mixed
 	 */
 	public static function translatePath($path) {
-		if (strpos($path, 'EXT:') === 0) {
-			$slice = strpos($path, '/');
-			$extKey = array_pop(explode(':', substr($path, 0, $slice)));
-			$path = t3lib_extMgm::extPath($extKey, substr($path, $slice));
+		if (is_array($path) == FALSE) {
+			return t3lib_div::getFileAbsFileName($path);
+		} else {
+			foreach ($path as $key=>$subPath) {
+				$path[$key] = self::translatePath($subPath);
+			}
 		}
 		return $path;
 	}
 }
+
 ?>

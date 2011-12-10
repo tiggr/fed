@@ -42,17 +42,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @return array
 	 */
 	public function getContentConfiguration($extensionName=NULL) {
-		$typoscript = $this->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-		$paths = $typoscript['plugin.']['tx_fed.']['fce.'];
-		if (is_array($paths) === FALSE) {
-			return array();
-		}
-		$paths = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($paths);
-		if ($extensionName) {
-			return $paths[$extensionName];
-		} else {
-			return $paths;
-		}
+		return $this->getTypoScriptSubConfiguration($extensionName, 'fce');
 	}
 
 	/**
@@ -62,12 +52,28 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @return array
 	 */
 	public function getPageConfiguration($extensionName=NULL) {
+		return $this->getTypoScriptSubConfiguration($extensionName, 'page');
+	}
+
+	/**
+	 * Gets an array of TypoScript configuration from below plugin.tx_fed -
+	 * if $extensionName is set in parameters it is used to indicate which sub-
+	 * section of the result to return.
+	 *
+	 * @param string $extensionName
+	 * @param string $memberName
+	 * @return array
+	 */
+	protected function getTypoScriptSubConfiguration($extensionName, $memberName) {
 		$config = $this->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-		$config = $config['plugin.']['tx_fed.']['page.'];
+		#var_dump($config['plugin.']['tx_fed.']);
+		#exit();
+		$config = $config['plugin.']['tx_fed.'][$memberName . '.'];
 		if (is_array($config) === FALSE) {
 			return array();
 		}
 		$config = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($config);
+		$config = Tx_Fed_Utility_Path::translatePath($config);
 		if ($extensionName) {
 			return $config[$extensionName];
 		} else {
@@ -84,15 +90,10 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 */
 	public function getPageTemplateLabel($extensionName, $templateFile) {
 		$config = $this->getPageConfiguration($extensionName);
-		$templateRootPath = $config['templateRootPath'];
-		$templatePathAndFilename = $templateRootPath . 'Page/' . $templateFile . '.html';
-		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($templatePathAndFilename);
-		$layoutRootPath = Tx_Fed_Utility_Path::translatePath($config['layoutRootPath']);
-		$partialRootPath = Tx_Fed_Utility_Path::translatePath($config['partialRootPath']);
 		$exposedView = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
-		$exposedView->setTemplatePathAndFilename($templatePathAndFilename);
-		$exposedView->setLayoutRootPath($layoutRootPath);
-		$exposedView->setPartialRootPath($partialRootPath);
+		$exposedView->setTemplatePathAndFilename($config['templateRootPath'] . 'Page/' . $templateFile . '.html');
+		$exposedView->setLayoutRootPath($config['layoutRootPath']);
+		$exposedView->setPartialRootPath($config['partialRootPath']);
 		$page = $exposedView->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
 		return $page['label'] ? $page['label'] : $extensionName . ': ' . $templateFile;
 	}
@@ -111,7 +112,6 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 		}
 		foreach ($typoScript as $extensionName=>$group) {
 			$path = $group['templateRootPath'] . 'Page' . DIRECTORY_SEPARATOR;
-			$path = Tx_Fed_Utility_Path::translatePath($path);
 			$files = scandir($path);
 			$output[$extensionName] = array();
 			foreach ($files as $k=>$file) {

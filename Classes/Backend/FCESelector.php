@@ -69,14 +69,12 @@ class Tx_Fed_Backend_FCESelector {
 		$select = "<div><select name='{$name}'  class='formField select' onchange='if (confirm(TBE_EDITOR.labels.onChangeAlert) && TBE_EDITOR.checkSubmit(-1)){ TBE_EDITOR.submitForm() };'>" . LF;
 		$select .= "<option value=''>(Select Fluid FCE type)</option>" . LF;
 		foreach ($allTemplatePaths as $key=>$templatePathSet) {
-			$templateRootPath = $templatePathSet['templateRootPath'];
-			$templateRootPath = Tx_Fed_Utility_Path::translatePath($templateRootPath);
-			$files = $this->getFiles($templateRootPath, TRUE);
+			$files = $this->getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
 				$groupLabel = 'Group: ' . $key;
 				$select .= "<optgroup label='{$groupLabel}'>" . LF;
 				foreach ($files as $fileRelPath) {
-					$templateFilename = $templateRootPath . DIRECTORY_SEPARATOR . $fileRelPath;
+					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
 					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {

@@ -47,12 +47,12 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$this->view->setControllerContext($this->controllerContext);
 		if ($extensionName && $filename) {
 			$paths = $configurationManager->getContentConfiguration($extensionName);
-			$absolutePath = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath']) . DIRECTORY_SEPARATOR . $filename;
-			$this->view->setLayoutRootPath(Tx_Fed_Utility_Path::translatePath($paths['layoutRootPath']));
-			$this->view->setPartialRootPath(Tx_Fed_Utility_Path::translatePath($paths['partialRootPath']));
+			$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $filename;
+			$this->view->setLayoutRootPath($paths['layoutRootPath']);
+			$this->view->setPartialRootPath($paths['partialRootPath']);
 			$this->view->setTemplatePathAndFilename($absolutePath);
 		} else {
-			$absolutePath = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath']) . DIRECTORY_SEPARATOR . $cObj['tx_fed_fcefile'];
+			$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $cObj['tx_fed_fcefile'];
 			$this->view->setTemplatePathAndFilename($absolutePath);
 		}
 		$config = $this->view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');

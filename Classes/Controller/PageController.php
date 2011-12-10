@@ -56,14 +56,11 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 		$flexformData = $this->flexform->convertFlexFormContentToArray($flexFormSource);
 		list ($extensionName, $action) = explode('->', $configuration['tx_fed_page_controller_action']);
 		$paths = $configManager->getPageConfiguration($extensionName);
-		$templateRootPath = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath']);
-		$layoutRootPath = Tx_Fed_Utility_Path::translatePath($paths['layoutRootPath']);
-		$partialRootPath = Tx_Fed_Utility_Path::translatePath($paths['partialRootPath']);
 		$view = $this->objectManager->get('Tx_Fluid_View_TemplateView');
 		$view->setControllerContext($this->controllerContext);
-		$view->setTemplateRootPath($templateRootPath);
-		$view->setLayoutRootPath($layoutRootPath);
-		$view->setPartialRootPath($partialRootPath);
+		$view->setTemplateRootPath($paths['templateRootPath']);
+		$view->setLayoutRootPath($paths['layoutRootPath']);
+		$view->setPartialRootPath($paths['partialRootPath']);
 		$view->assignMultiple($flexformData);
 		$view->assign('page', $GLOBALS['TSFE']->page);
 		$view->assign('user', $GLOBALS['TSFE']->fe_user->user);
