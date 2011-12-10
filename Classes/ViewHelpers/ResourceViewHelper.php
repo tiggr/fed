@@ -145,8 +145,8 @@ class Tx_Fed_ViewHelpers_ResourceViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		if ($src instanceof Tx_Fed_Resource_File) {
 			switch ($field) {
 				case 'filesize': return $src->getSize();
-				case 'mofified': return $src->getModified()->getTimestamp();
-				case 'created': return $src->getCreated()->getTimestamp();
+				case 'mofified': return $src->getModified()->format('U');
+				case 'created': return $src->getCreated()->format('U');
 				case 'filename': return $src->getBasename();
 				default: return $index;
 			}
