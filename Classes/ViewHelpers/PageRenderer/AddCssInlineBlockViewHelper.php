@@ -33,7 +33,7 @@
  * @package Fed
  * @subpackage ViewHelpers/PageRenderer
  */
-class Tx_Fed_ViewHelpers_PageRenderer_AddCssFileViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
+class Tx_Fed_ViewHelpers_PageRenderer_AddCssInlineBlockViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
 
 	/**
 	 * Initialize
