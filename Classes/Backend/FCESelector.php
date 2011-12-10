@@ -71,7 +71,13 @@ class Tx_Fed_Backend_FCESelector {
 		foreach ($allTemplatePaths as $key=>$templatePathSet) {
 			$files = $this->getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
-				$groupLabel = 'Group: ' . $key;
+				if (!t3lib_extMgm::isLoaded($key)) {
+					$groupLabel = ucfirst($key);
+				} else {
+					$emConfigFile = t3lib_extMgm::extPath($key, 'ext_emconf.php');
+					require $emConfigFile;
+					$groupLabel = $EM_CONF['']['title'];
+				}
 				$select .= "<optgroup label='{$groupLabel}'>" . LF;
 				foreach ($files as $fileRelPath) {
 					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
@@ -84,7 +90,7 @@ class Tx_Fed_Backend_FCESelector {
 						if ($enabled !== FALSE) {
 							$optionValue = $key . ':' . $fileRelPath;
 							if (!$label) {
-								$label = $optionValue;
+								$label = $fileRelPath;
 							}
 							$selected = ($optionValue == $value ? " selected='selected'" : "");
 							$select .= "<option value='{$optionValue}'{$selected}>{$label}</option>" .LF;
