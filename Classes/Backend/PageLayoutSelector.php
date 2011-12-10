@@ -65,7 +65,14 @@ class Tx_Fed_Backend_PageLayoutSelector {
 		$selector = '<select name="' . $name . '" class="formField select" ' . $onChange . '>' . LF;
 		$selector .= '<option value=""></option>' . LF;
 		foreach ($availableTemplates as $extension=>$group) {
-			$selector .= '<optgroup label="Extension: ' . $extension . '">' . LF;
+			if (!t3lib_extMgm::isLoaded($extension)) {
+				$groupTitle = ucfirst($extension);
+			} else {
+				$emConfigFile = t3lib_extMgm::extPath($extension, 'ext_emconf.php');
+				require $emConfigFile;
+				$groupTitle = $EM_CONF['']['title'];
+			}
+			$selector .= '<optgroup label="' . $groupTitle . '">' . LF;
 			foreach ($group as $template) {
 				$optionValue = $extension . '->' . $template;
 				$label = $this->configurationManager->getPageTemplateLabel($extension, $template);

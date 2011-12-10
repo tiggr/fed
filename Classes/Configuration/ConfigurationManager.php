@@ -95,7 +95,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 		$exposedView->setLayoutRootPath($config['layoutRootPath']);
 		$exposedView->setPartialRootPath($config['partialRootPath']);
 		$page = $exposedView->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
-		return $page['label'] ? $page['label'] : $extensionName . ': ' . $templateFile;
+		return $page['label'] ? $page['label'] : $templateFile . '.html';
 	}
 
 	/**
