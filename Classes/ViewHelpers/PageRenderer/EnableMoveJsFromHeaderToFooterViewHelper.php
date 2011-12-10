@@ -31,7 +31,7 @@
  * @package Fed
  * @subpackage ViewHelpers/PageRenderer
  */
-class Tx_Fed_ViewHelpers_PageRenderer_EnableModeJsFromHeaderToFooterViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
+class Tx_Fed_ViewHelpers_PageRenderer_EnableMoveJsFromHeaderToFooterViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
 
 	/**
 	 * Render
