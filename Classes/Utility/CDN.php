@@ -49,6 +49,11 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	protected $documentHead;
 
 	/**
+	 * @var t3lib_PageRenderer
+	 */
+	protected $pageRenderer;
+
+	/**
 	 * The pattern from which jQuery library URIs are generated
 	 * @var string
 	 */
@@ -59,6 +64,13 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	 */
 	public function injectDocumentHead(Tx_Fed_Utility_DocumentHead $documentHead) {
 		$this->documentHead = $documentHead;
+	}
+
+	/**
+	 * @param t3lib_PageRenderer $pageRenderer
+	 */
+	public function injectPageRenderer(t3lib_PageRenderer $pageRenderer) {
+		$this->pageRenderer = $pageRenderer;
 	}
 
 	/**
@@ -88,19 +100,17 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	 * @param mixed $jQueryUIVersion Specify as either "1", "1.8" or "1.8.2" - for the loose versions you always get the latest release
 	 * @param mixed $jQueryUITheme If NULL/FALSE excludes theme
 	 * @param boolean $compatibility If TRUE puts jQuery into compatibility mode. Ignored if $return === TRUE
-	 * @param boolean $return If TRUE, returns associative array of urls only
 	 * @return void
 	 * @api
 	 */
-	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion=FALSE, $jQueryUITheme=FALSE, $compatibility=FALSE, $return=FALSE) {
+	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion=FALSE, $jQueryUITheme=FALSE, $compatibility=FALSE) {
 		$file = $this->buildPackageUri('jquery', $jQueryVersion, 'jquery.min.js');
-		$returns = array();
-		$returns[] = $this->documentHead->includeFileAt($file);
+		$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, TRUE, FALSE, TRUE);
 		if ($jQueryVersion) {
-			$returns[] = $this->includeJQueryUI($jQueryUIVersion, $return);
+			$this->includeJQueryUI($jQueryUIVersion, $return);
 		}
 		if ($jQueryUITheme) {
-			$returns[] = $this->includeJQueryUITheme($jQueryUITheme, $return);
+			$this->includeJQueryUITheme($jQueryUITheme, $return);
 		}
 		if ($compatibility) {
 			$this->includeJQueryNoConflict();
@@ -112,28 +122,20 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	 * the URL if $return === TRUE
 	 * @param string $jQueryUIVersion
 	 * @param boolean $return If TRUE returns only the URL
-	 * @return mixed
 	 * @api
 	 */
-	public function includeJQueryUI($jQueryUIVersion=NULL, $return=FALSE) {
+	public function includeJQueryUI($jQueryUIVersion=NULL) {
 		$file = $this->buildPackageUri('jqueryui', $jQueryUIVersion, 'jquery-ui.min.js');
-		$this->documentHead->includeFileAt($file, 1);
+		$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, FALSE, FALSE, TRUE);
 	}
 
 	/**
 	 * Inserts a style tag pointing to theme or returns the computed URL/URI
 	 * @param type $jQueryUITheme URI/URL/name of theme to load
-	 * @param boolean $return If TRUE returns only the URI/URL
-	 * @return mixed
 	 * @api
 	 */
-	public function includeJQueryUITheme($jQueryUITheme=NULL, $return=FALSE) {
-		if ($return) {
-			return $this->documentHead->wrap(NULL, $jQueryUITheme, 'css');
-		} else {
-			$this->documentHead->includeFileAt($jQueryUITheme, 2);
-			return TRUE;
-		}
+	public function includeJQueryUITheme($jQueryUITheme=NULL) {
+		$this->pageRenderer->addCssFile($jQueryUITheme, 'stylesheet', 'all', 'JQuery Theme CSS', TRUE, TRUE, FALSE, FALSE);
 	}
 
 	/**
@@ -142,7 +144,7 @@ class Tx_Fed_Utility_CDN implements t3lib_Singleton {
 	 */
 	public function includeJQueryNoConflict() {
 		$script = 'jQuery.noConflict();';
-		$this->documentHead->includeHeader($script, 'js', NULL, 1);
+		$this->pageRenderer->addJsInlineCode('jquery-compat', $script, FALSE);
 	}
 
 	/**

@@ -44,10 +44,22 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	protected $objectManager;
 
 	/**
+	 * @var t3lib_PageRenderer
+	 */
+	protected $pageRenderer;
+
+	/**
 	 * @param Tx_Extbase_Object_Manager $objectManager
 	 */
 	public function injectObjectManager(Tx_Extbase_Object_Manager $objectManager) {
 		$this->objectManager = $objectManager;
+	}
+
+	/**
+	 * @param t3lib_PageRenderer $pageRenderer
+	 */
+	public function injectPageRenderer(t3lib_PageRenderer $pageRenderer) {
+		$this->pageRenderer = $pageRenderer;
 	}
 
 	/**
@@ -71,32 +83,16 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param string $key Optional key for referencing later through $GLOBALS['TSFE']->additionalHeaderData, defaults to md5 cheksum of tag
 	 * @param int $index Position to take in additionalHeaderData; pushes current resident DOWN
 	 * @param array $attributes Attributes of tag
-	 * @api
+	 * @deprecated
 	 */
 	public function includeHeader($code, $type=NULL, $key=NULL, $index=-1, $attributes=NULL) {
-		if ($type !== NULL) {
-			$code = $this->wrap($code, NULL, $type, $attributes);
-		}
 		if ($key === NULL) {
 			$key = md5($code);
 		}
-		if ($index >= 0) {
-			if (isset($GLOBALS['TSFE']->additionalHeaderData[$key])) {
-				unset($GLOBALS['TSFE']->additionalHeaderData[$key]);
-			}
-			$current = $GLOBALS['TSFE']->additionalHeaderData;
-			$new = array($key => $code);
-			if ($index === 0) {
-				$merged = array_merge($new, $current);
-			} else if ($index < count($current)-1) {
-				$after = array_splice($current, $index);
-				$merged = array_merge($current, $new, $after);
-			} else {
-				$merged = array_merge($current, $new);
-			}
-			$GLOBALS['TSFE']->additionalHeaderData = $merged;
-		} else {
-			$GLOBALS['TSFE']->additionalHeaderData[$key] = $code;
+		if ($type == 'js') {
+			$this->pageRenderer->addJsInlineCode($key, $code, FALSE, $index == 0);
+		} else if ($type == 'css') {
+			$this->pageRenderer->addCssInlineBlock($key, $code, FALSE, $index == 0);
 		}
 	}
 
@@ -108,7 +104,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param string $type Type of wrapping (css/js)
 	 * @param array $attributes Attributes of tag
 	 * @return string
-	 * @api
+	 * @deprecated
 	 */
 	public function wrap($code=NULL, $file=NULL, $type=NULL, $attributes=NULL) {
 		if ($type == self::TYPE_JAVASCRIPT) {
@@ -136,7 +132,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param array $files
 	 * @param boolean $saveToFile
 	 * @return string Contents or filename if $saveToFile was specified
-	 * @api
+	 * @deprecated
 	 */
 	public function concatenateFiles(array $files, $saveToFile=FALSE, $extension=self::TYPE_JAVASCRIPT) {
 		$contents = "";
@@ -157,7 +153,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param string $contents Contents of the file
 	 * @param string $uniqid Unique id of the temporary file
 	 * @param string $extension Extensin of the filename
-	 * @api
+	 * @deprecated
 	 */
 	public function saveContentToTempFile($contents, $uniqid=NULL, $extension=NULL) {
 		$uniqid = $uniqid === NULL ? uniqid('u') : $uniqid;
@@ -178,7 +174,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param int $index The position in additionalHeaderData to take; pushes current resident DOWN
 	 * @param array $attributes Attributes of tag
 	 * @return string The MD5 checksum of files (which is also the additionalHeaderData array key if you $concat = TRUE)
-	 * @api
+	 * @deprecated
 	 */
 	public function includeFiles(array $filenames, $cache=FALSE, $concat=FALSE, $compress=FALSE, $index=-1, $attributes=NULL) {
 		$pathinfo = pathinfo($filename);
@@ -211,7 +207,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param int $index Position to take in additionalHeaderData; pushes current resident DOWN
 	 * @param array $attributes Attributes of tag
 	 * @return void
-	 * @api
+	 * @deprecated
 	 */
 	public function includeFile($filename, $cache=FALSE, $concat=FALSE, $compress=FALSE, $index=-1, $attributes=NULL) {
 		$pathinfo = pathinfo($filename);
@@ -226,24 +222,11 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 		if ($type !== 'css' && $type !== 'js') {
 			$type = 'js'; // assume Javascript for unknown files - this may change later on...
 		}
-		if ($cache === FALSE && $compress === FALSE) {
-			$code = $this->wrap(NULL, $filename, $type, $attributes);
-		} else if ($compress === TRUE) {
-			$contents = file_get_contents(PATH_site . $filename);
-			if ($compress) {
-				$contents = $this->pack($contents);
-			}
-			$md5 = md5($filename);
-			if ($cache === TRUE) {
-				$cachedFile = $this->saveContentToTempFile($contents, $md5, $type);
-				$code = $this->wrap(NULL, $cachedFile, $type, $attributes);
-			} else {
-				$code = $this->wrap($contents, NULL, $type, $attributes);
-			}
-		} else {
-			$code = $this->wrap(NULL, $filename, $type, $attributes);
+		if ($type == 'js') {
+			$this->pageRenderer->addJsFile($filename, 'text/javascript', $compress, $index == 0);
+		} else if ($type == 'css') {
+			$this->pageRenderer->addCssFile($filename, 'stylesheet', $attributes['media'] ? $attributes['media'] : 'all', '', $compress, $index == 0);
 		}
-		$this->includeHeader($code, NULL, NULL, $index);
 	}
 
 	/**
@@ -254,7 +237,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param string $filename Name of file to include at index $index
 	 * @param string $index Position to hijack (push resident DOWN) in additionalHeaderData. Assumes you want the TOP position ;)
 	 * @param array $attributes Attributes of tag
-	 * @api
+	 * @deprecated
 	 */
 	public function includeFileAt($filename, $index=0, $attributes=NULL) {
 		return $this->includeFile($filename, FALSE, FALSE, FALSE, $index, $attributes);
@@ -268,6 +251,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 *
 	 * @param string $dir
 	 * @param string $type
+	 * @deprecated
 	 */
 	public function getFilenamesOfType($dir, $extension=NULL) {
 		$relative = $dir;
@@ -292,7 +276,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	/**
 	 * Pack/compress Javascript code
 	 * @param string $code
-	 * @api
+	 * @deprecated
 	 */
 	public function pack($code) {
 		$encoding = 62; // see value in Tx_Fed_Utility_JavascriptPacker
