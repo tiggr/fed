@@ -37,9 +37,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsLibraryViewHelper extends Tx_Fed_View
 	 * Initialize
 	 */
 	public function initializeArguments() {
-		$this->registerArgument('rel', 'string', 'Rel argument - see PageRenderer documentation', FALSE, 'stylesheet');
-		$this->registerArgument('media', 'strong', 'Media argument - see PageRenderer documentation', FALSE, 'all');
-		$this->registerArgument('title', 'string', 'Title argument - see PageRenderer documentation', FALSE, '');
+		$this->registerArgument('name', 'string', 'Rel argument - see PageRenderer documentation', TRUE);
+		$this->registerArgument('type', 'string', 'Type argument - see PageRenderer documentation', FALSE, 'text/havascruot');
 		$this->registerArgument('compress', 'boolean', 'Compress argument - see PageRenderer documentation', FALSE, TRUE);
 		$this->registerArgument('forceOnTop', 'boolean', 'ForceOnTop argument - see PageRenderer documentation', FALSE, FALSE);
 		$this->registerArgument('allWrap', 'string', 'AllWrap argument - see PageRenderer documentation', FALSE, '');
@@ -53,10 +52,9 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsLibraryViewHelper extends Tx_Fed_View
 	 */
 	public function render($file) {
 		$this->pageRenderer->addJsLibrary(
+			$this->arguments['name'],
 			$file,
-			$this->arguments['rel'],
-			$this->arguments['media'],
-			$this->arguments['title'],
+			$this->arguments['type'],
 			$this->arguments['compress'],
 			$this->arguments['forceOnTop'],
 			$this->arguments['allWrap'],
