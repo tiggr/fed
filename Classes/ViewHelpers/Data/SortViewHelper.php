@@ -150,7 +150,7 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 			$value = $object;
 		}
 		if ($value instanceof DateTime) {
-			$value = $value->getTimestamp();
+			$value = $value->format('U');
 		} elseif ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
 			$value = $value->count();
 		} elseif (is_array($value)) {
