@@ -150,6 +150,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param mixed $object
 	 * @return string
+	 * @api
 	 */
 	public function getBackendControllerClassName($object) {
 		$className = is_object($object) ? get_class($object) : $object;
@@ -217,6 +218,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param mixed $object
 	 * @return Tx_Extbase_Persistence_Repository
+	 * @api
 	 */
 	public function getRepositoryInstance($object) {
 		$class = $this->getRepositoryClassname($object);
@@ -225,6 +227,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * Gets the absolute path to partial templates for $object
+	 * @api
 	 */
 	public function getPartialTemplatePath($object) {
 		$controllerName = $this->getControllerName($object);
@@ -241,6 +244,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * Returns the View configuration for $object as defined in Typoscript
 	 * @param type $object
 	 * @return type
+	 * @api
 	 */
 	public function getViewConfiguration($object) {
 		$config = $this->getExtensionTyposcriptConfiguration($object);
@@ -252,6 +256,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param type $object
 	 * @return string
+	 * @api
 	 */
 	public function getResourcePath($object) {
 		$extensionName = $this->getExtensionName($object);
@@ -264,6 +269,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param type $object
 	 * @return string
+	 * @api
 	 */
 	public function getResourcePathRel($object) {
 		$extensionName = $this->getExtensionName($object);
@@ -357,6 +363,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * Fetches the TS config array from the current extension
 	 * @param mixed $object
 	 * @return array
+	 * @api
 	 */
 	public function getExtensionTyposcriptConfiguration($object) {
 		$extensionName = $this->getExtensionName($object);
@@ -433,6 +440,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param mixed $object
 	 * @param string $propertyName
+	 * @api
 	 */
 	public function getAnnotationsByProperty($object, $propertyName) {
 		if (is_object($object)) {
@@ -450,6 +458,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @param string $propertyName
 	 * @param string $annotationName
 	 * @return array
+	 * @api
 	 */
 	public function getAnnotationValuesByProperty($object, $propertyName, $annotationName) {
 		$annotations = $this->getAnnotationsByProperty($object, $propertyName);
@@ -458,6 +467,8 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * @param mixed $object
+	 * @return string
+	 * @api
 	 */
 	public function getDatabaseTable($object) {
 		if (is_object($object)) {
@@ -471,7 +482,8 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * @param string $table
-	 * @return string
+	 * @return string,
+	 * @api
 	 */
 	public function getObjectType($table) {
 		$typoscript = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
@@ -490,6 +502,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	/**
 	 * @param mixed $subject
 	 * @return mixed
+	 * @api
 	 */
 	public function convertLowerCaseUnderscoredToLowerCamelCase($subject) {
 		if (is_array($subject)) {
@@ -506,6 +519,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	/**
 	 * @param mixed $subject
 	 * @return mixed
+	 * @api
 	 */
 	public function convertCamelCaseToLowerCaseUnderscored($subject) {
 		if (is_array($subject)) {
@@ -525,6 +539,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @param mixed $object
 	 * @param string $propertyName
 	 * @return mixed
+	 * @api
 	 */
 	public function getUploadFolder($object, $propertyName=NULL) {
 		if (is_object($object)) {
