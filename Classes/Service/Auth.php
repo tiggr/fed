@@ -50,6 +50,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	 * Returns TRUE only if a FrontendUser is currently logged in. Use argument
 	 * to return TRUE only if the FrontendUser logged in must be that specific user.
 	 * @return boolean
+	 * @api
 	 */
 	public function assertFrontendUserLoggedIn(Tx_Extbase_Domain_Model_FrontendUser $frontendUser=NULL) {
 		$currentFrontendUser = $this->userService->getCurrentFrontendUser();
@@ -70,6 +71,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	 * Returns TRUE if a FrontendUserGroup (specific given argument, else not) is logged in
 	 * @param mixed $groups One Tx_Extbase_Domain_Model_FrontendUsergroup or ObjectStorage containing same
 	 * @return boolean
+	 * @api
 	 */
 	public function assertFrontendUserGroupLoggedIn($groups=NULL) {
 		$currentFrontendUser = $this->userService->getCurrentFrontendUser();
@@ -93,6 +95,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	 * Returns TRUE only if a backend user is currently logged in. If used,
 	 * argument specifies that the logged in user must be that specific user
 	 * @return boolean
+	 * @api
 	 */
 	public function assertBackendUserLoggedIn($backendUser=NULL) {
 		$currentBackendUser = $this->userService->getCurrentBackendUser();
@@ -112,6 +115,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	 * the array/CSV $groups
 	 * @param mixed $groups Array of group uids or CSV of group uids or one group uid
 	 * @return boolean
+	 * @api
 	 */
 	public function assertBackendUserGroupLoggedIn($groups=NULL) {
 		if (!$this->assertBackendUserLoggedIn()) {
@@ -135,6 +139,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	 * Returns TRUE only if there is a current user logged in and this user
 	 * is an admin class backend user
 	 * @return boolean
+	 * @api
 	 */
 	public function assertAdminLoggedIn() {
 		if (!$this->assertBackendUserLoggedIn()) {

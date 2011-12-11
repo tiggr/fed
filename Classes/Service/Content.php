@@ -24,7 +24,7 @@
 ***************************************************************/
 
 /**
- * Service for interacting with Pages
+ * Service for interacting with page content
  *
  * @package Fed
  * @subpackage Service
@@ -33,8 +33,11 @@
 class Tx_Fed_Service_Content implements t3lib_Singleton {
 
 	/**
+	 * Get an array of child element records from a parent FCE
+	 *
 	 * @param integer $id
 	 * @return array
+	 * @api
 	 */
 	public function getChildContentElementUids($id) {
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,tx_fed_fcecontentarea', 'tt_content', "tx_fed_fcecontentarea LIKE '%:" . $id . "'");
@@ -42,9 +45,12 @@ class Tx_Fed_Service_Content implements t3lib_Singleton {
 	}
 
 	/**
+	 * Gets a value for the field tx_fed_fcecontentarea based on $record and $id
+	 *
 	 * @param array $record
 	 * @param integer $id
 	 * @return string
+	 * @api
 	 */
 	public function getFlexibleContentElementArea($record, $id=NULL) {
 		$url = t3lib_div::_GET('returnUrl');

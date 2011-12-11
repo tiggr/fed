@@ -31,36 +31,16 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage Utility
+ * @deprecated
  */
-class Tx_Fed_Utility_PartialRender implements t3lib_Singleton {
+class Tx_Fed_Utility_PartialRender extends Tx_Fed_Service_Render implements t3lib_Singleton {
 
 	/**
-	 * @var Tx_Extbase_Object_ObjectManager
-	 */
-	protected $objectManager;
-
-	/**
-	 * @param Tx_Extbase_Object_ObjectManager $objectManager
-	 */
-	public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-	}
-
-	/**
-	 * Renders a relative-path partial template, fx from fileadmin/templates/
-	 * Passes arguments to template
-	 *
-	 * @param string $templatePath The relative path to the Fluid template file
-	 * @param array $arguments The arguments (template vars) for the template
-	 * @return string
+	 * @see Tx_Fed_Service_Render
+	 * @deprecated
 	 */
 	public function render($templateFile, $arguments=NULL) {
-		$view = $this->objectManager->get('Tx_Fluid_View_StandaloneView');
-		$view->setTemplatePathAndFilename(PATH_site . $templateFile);
-		if ($arguments) {
-			$view->assignMultiple($arguments);
-		}
-		return $view->render();
+		return $this->renderTemplateFile($templateFile, $arguments);
 	}
 
 }

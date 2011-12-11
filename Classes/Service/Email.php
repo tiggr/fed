@@ -45,6 +45,7 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 	 * @param mixed $body
 	 * @param mixed $from
 	 * @return boolean
+	 * @api
 	 */
 	public function mail($subject, $body, $recipientEmail, $recipientName=NULL, $fromEmail=NULL, $fromName=NULL) {
 		$mail = new t3lib_mail_Message();
@@ -67,6 +68,7 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 	 * Get a mailer (SwiftMailer) object instance
 	 *
 	 * @return t3lib_mail_Message;
+	 * @api
 	 */
 	public function getMailer() {
 		$mail = new t3lib_mail_Message();
