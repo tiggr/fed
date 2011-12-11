@@ -31,7 +31,7 @@
  * @package Fed
  * @subpackage ViewHelpers/PageRenderer
  */
-class Tx_Fed_ViewHelpers_PageRenderer_GetIconTypeViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
+class Tx_Fed_ViewHelpers_PageRenderer_GetIconMimeTypeViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
 
 	/**
 	 * Render
