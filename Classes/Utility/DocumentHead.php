@@ -274,20 +274,6 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	}
 
 	/**
-	 * Pack/compress Javascript code
-	 * @param string $code
-	 * @deprecated
-	 */
-	public function pack($code) {
-		$encoding = 62; // see value in Tx_Fed_Utility_JavascriptPacker
-		$fastDecode = FALSE;
-		$specialChars = FALSE;
-		$packer = $this->objectManager->get('Tx_Fed_Utility_JavascriptPacker', $encoding, $fastDecode, $specialChars);
-		$packed = $packer->pack();
-		return (string) $packed;
-	}
-
-	/**
 	* Check client browser
 	* @param array $browser
 	* return boolean
