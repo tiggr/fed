@@ -36,7 +36,7 @@ class Tx_Fed_ViewHelpers_PageRenderer_SetRenderXhtmlViewHelper extends Tx_Fed_Vi
 	/**
 	 * Render
 	 *
-	 * @param string $enable
+	 * @param boolean $enable
 	 */
 	public function render($enable=NULL) {
 		if ($enable === NULL) {
