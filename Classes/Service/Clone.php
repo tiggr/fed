@@ -83,6 +83,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 	/**
 	 * Copy a singe object based on field annotations about how to copy the object
 	 *
+	 * @param Tx_Extbase_DomainObject_AbstractDomainOject $object The object to be copied
 	 * @return Tx_Extbase_DomainObject_AbstractDomainOject $copy
 	 * @api
 	 */

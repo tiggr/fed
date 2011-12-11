@@ -63,6 +63,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 *
 	 * @param Tx_Fed_Domain_Model_Page $page
 	 * @param integer $columnPosition
+	 * @api
 	 */
 	public function getContentElementsByColumnPosition(Tx_Fed_Domain_Model_Page $page, $columnPosition) {
 		$pid = $page->getUid();
@@ -74,6 +75,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 *
 	 * @param Tx_Fed_Domain_Model_Page $page
 	 * @param string $columnName
+	 * @api
 	 */
 	public function getContentElementsByColumnName(Tx_Fed_Domain_Model_Page $page, $columnName) {
 		$columns = $this->getColumnConfiguration($page);
@@ -90,6 +92,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 * Gets an array of the column definition in a BackendLayout object
 	 *
 	 * @param Tx_Fed_Domain_Model_Page $page
+	 * @api
 	 */
 	public function getColumnConfiguration(Tx_Fed_Domain_Model_Page $page) {
 		$config = $page->getBackendLayout()->getConfig();
@@ -112,6 +115,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 *
 	 * @param integer $pageUid
 	 * @return array
+	 * @api
 	 */
 	public function getPageTemplateConfiguration($pageUid) {
 		$pageSelect = new t3lib_pageSelect();
@@ -132,6 +136,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 *
 	 * @param integer $pageUid
 	 * @return string
+	 * @api
 	 */
 	public function getPageFlexFormSource($pageUid) {
 		$pageSelect = new t3lib_pageSelect();

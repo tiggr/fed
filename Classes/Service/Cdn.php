@@ -119,7 +119,7 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 
 	/**
 	 * Inserts a style tag pointing to theme or returns the computed URL/URI
-	 * @param type $jQueryUITheme URI/URL/name of theme to load
+	 * @param string $jQueryUITheme URI/URL/name of theme to load
 	 * @api
 	 */
 	public function includeJQueryUITheme($jQueryUITheme=NULL) {
