@@ -39,7 +39,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @var Tx_Fluid_Core_ViewHelper_TagBuilder
 	 */
 	protected $tag;
-	
+
 	/**
 	 * @var Tx_Fed_Utility_JSON
 	 */
@@ -81,7 +81,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	public function injectTagBuilder(Tx_Fluid_Core_ViewHelper_TagBuilder $tagBuilder) {
 		$this->tag = $tagBuilder;
 	}
-	
+
 	/**
 	 * Inject JSON Service
 	 * @param Tx_Fed_Utility_JSON $service
@@ -171,53 +171,6 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	}
 
 	/**
-	 * Wrap the code in proper HTML tags. Supports CSS and Javascript only - or returns input $code
-	 * DEPRECATED: moved to Tx_Fed_Utility_DocumentHead which is injected at
-	 * $this->documentHead
-	 *
-	 * @param string $code The code, JS or CSS, to be wrapped
-	 * @param string $filename If specified, file is used instead of source inject
-	 * @param string $type Type of wrapping (css/js)
-	 * @return string
-	 * @deprecated
-	 */
-	protected function wrap($code=NULL, $file=NULL, $type=NULL) {
-		if ($type === NULL) {
-			$type = $this->type;
-		}
-		return $this->documentHead->wrap($code, $file, $type);
-	}
-
-	/**
-	 * Concatenate files into a string. You can use this in your subclassed extensions to
-	 * combine css/js files in sequence to generate a single output file or code chunk
-	 * DEPRECATED: moved to Tx_Fed_Utility_DocumentHead which is injected at
-	 * $this->documentHead
-	 *
-	 * @param array $files
-	 * @param boolean $saveToFile
-	 * @return string Contents or filename if $saveToFile was specified
-	 * @deprecated
-	 */
-	protected function concatenate(array $files, $saveToFile=FALSE, $extension=Tx_Fed_Utility_DocumentHead::TYPE_JAVASCRIPT) {
-		return $this->documentHead->concatenateFiles($files, $saveToFile, $extension);
-	}
-
-	/**
-	 * Save $contents to a temporary file, for example a combined .css file
-	 * DEPRECATED: moved to Tx_Fed_Utility_DocumentHead which is injected at
-	 * $this->documentHead
-	 *
-	 * @param string $contents Contents of the file
-	 * @param string $uniqid Unique id of the temporary file
-	 * @param string $extension Extensin of the filename
-	 * @deprecated
-	 */
-	protected function saveToTempFile($contents, $uniqid, $extension) {
-		return $this->documentHead->saveContentToTempFile($contents, $uniqid, $extension);
-	}
-
-	/**
 	 * Include a list of files with optional concat, compress and cache
 	 * May be deprecated in the future but since the function is so vital, it
 	 * will remain proxied to DocumentHead for now - However, it has been
@@ -259,15 +212,6 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 */
 	public function getFilenamesOfType($dir, $extension=NULL) {
 		return $this->documentHead->getFilenamesOfType($dir, $extension);
-	}
-
-	/**
-	 * Pack/compress Javascript code. Demoted from @api to non-api, fuction
-	 * moved to Tx_Fed_Utility_DocumentHead
-	 * @param string $code
-	 */
-	public function pack($code) {
-		return (string) $this->documentHead->pack($code);
 	}
 
 	/**

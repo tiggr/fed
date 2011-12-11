@@ -192,35 +192,6 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	}
 
 	/**
-	 * Get type of display as derived from instance class names - or the value
-	 * used as ViewHelper argument.
-	 *
-	 * @author Claus Due, Wildside A/S
-	 * @return string
-	 * @api
-	 */
-	public function getDisplayType() {
-		$thisClass = get_class($this);
-		$isComponent = strpos($thisClass, 'Component');
-		$isWidget = strpos($thisClass, 'Widget');
-		$isField = strpos($thisClass, 'Field');
-		$jsClass = str_replace('ViewHelper', '', str_replace('Tx_Fed_ViewHelpers_Extbase_', '', $thisClass));
-		$jsClass = str_replace('Widget_', 'widget.', $jsClass);
-		$jsClass = str_replace('Component_', 'component.', $jsClass);
-		if ($jsClass === '') {
-			if ($isField) {
-				$jsClass = 'Field';
-			} else if ($isWidget) {
-				$jsClass = 'Widget';
-			} else if ($isComponent) {
-				$jsClass = 'Component';
-			}
-		}
-		$jsClass = "dk.wildside.display.{$jsClass}";
-		return $jsClass;
-	}
-
-	/**
 	 * Renders tag content with managed template variables
 	 * @return string
 	 */

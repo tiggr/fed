@@ -49,8 +49,6 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractBackendViewHelper extends Tx_Fed_C
 	 * @return string
 	 */
 	protected function getIcon($icon, $title=NULL) {
-		#var_dump($GLOBALS['TBE_STYLES']['spriteIconApi']['iconsAvailable']);
-		#exit();
 		return t3lib_iconWorks::getSpriteIcon($icon, array('title' => $title));
 	}
 
