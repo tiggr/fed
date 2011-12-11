@@ -31,7 +31,7 @@
  * @package Fed
  * @subpackage ViewHelpers/PageRenderer
  */
-class Tx_Fed_ViewHelpers_PageRenderer_GetPropotypePathViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
+class Tx_Fed_ViewHelpers_PageRenderer_GetPrototypePathViewHelper extends Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper {
 
 	/**
 	 * Render
