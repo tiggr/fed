@@ -250,11 +250,9 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	 */
 	protected function renderFlashTagCloud($tags) {
 		$elementId = uniqid('wpcumulus_');
-		#$instance = $this->arguments['instanceName'];
 		$movie = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Flash/com.roytanck.wpcumulus.swf';
 		$tagcloud = $this->renderTags($tags);
 		$tagcloud = str_replace( "&nbsp;", " ", $tagcloud);
-		#$encodedTagCloud = addslashes($tagCloud);
 		$encodedTagCloud = '<tags>' . $tagcloud . '</tags>';
 		$hostedLibrary = "http://ajax.googleapis.com/ajax/libs/swfobject/2/swfobject.js";
 		$expressInstall = "http://www.adobe.com/go/getflashplayer";
@@ -267,7 +265,7 @@ swfobject.embedSWF("{$movie}", "{$elementId}", "{$this->arguments['width']}", "{
 	tspeed: '{$this->arguments['speed']}',
 	distr: '{$distribute}',
 	mode: 'tags',
-	tagcloud: '{$encodedTagCloud}',
+	tagcloud: "{$encodedTagCloud}",
 	tcolor2: '0x{$this->arguments['color']}'
 });
 SCRIPT;
