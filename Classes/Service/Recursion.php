@@ -24,6 +24,11 @@
 ***************************************************************/
 
 /**
+ * Recursion Service
+ *
+ * Can be implemented to observe and handle methods which run recursively or
+ * otherwise capable of ending in an infinite loop. Using this service you can
+ * gently break execution and report a user-friendly error message.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$

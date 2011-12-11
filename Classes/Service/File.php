@@ -24,7 +24,9 @@
 ***************************************************************/
 
 /**
- * File service - upload, move, copy etc. files. File operations are considered
+ * File service
+ *
+ * Upload, move, copy etc. files. File operations are considered
  * critical, which means that failure results in an Exception. Use try/catch to
  * detect the particular type of error if you want to report it as a FlashMessage.
  *

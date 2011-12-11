@@ -26,7 +26,7 @@
 /**
  * Email service
  *
- * Contains quick-use emailing functions
+ * Contains quick-use emailing functions.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$

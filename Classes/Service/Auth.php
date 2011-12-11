@@ -24,6 +24,10 @@
 ***************************************************************/
 
 /**
+ * Authentication service
+ *
+ * Responds with either TRUE or FALSE depending on various authentication checks
+ * such as group membership, logged in BE/FE user etc.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$

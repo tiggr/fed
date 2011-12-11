@@ -24,7 +24,9 @@
 ***************************************************************/
 
 /**
- * Service for interacting with page content
+ * Page Content Service
+ *
+ * Service to interact with content elements - primarily FED's FCE content.
  *
  * @package Fed
  * @subpackage Service

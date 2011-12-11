@@ -24,6 +24,9 @@
 ***************************************************************/
 
 /**
+ * JSON Service
+ *
+ * Encodes and decodes JSON using optimal settings for mixed data types.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$

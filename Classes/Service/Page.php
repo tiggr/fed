@@ -24,7 +24,10 @@
 ***************************************************************/
 
 /**
- * Service for interacting with Pages
+ * Page Service
+ *
+ * Service for interacting with Pages - gets content elements and page configuration
+ * options.
  *
  * @package Fed
  * @subpackage Service

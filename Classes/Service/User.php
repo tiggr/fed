@@ -24,6 +24,10 @@
 ***************************************************************/
 
 /**
+ * User Service
+ *
+ * Gets Frontend or Backend users currently logged in. Uses FrontendUserRepository
+ * for fetching Frontend Users.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
@@ -52,16 +56,21 @@ class Tx_Fed_Service_User implements t3lib_Singleton {
 	}
 
 	/**
+	 * Gets the currently logged in Frontend User
+	 *
 	 * @return Tx_Extbase_Domain_Model_FrontendUser
+	 * @api
 	 */
 	public function getCurrentFrontendUser() {
 		return $this->frontendUserRepository->findByUid($GLOBALS['TSFE']->fe_user->user['uid']);
 	}
 
 	/**
-	 * Returns an emulated BackendUser record as lowerCamelCase indexed array
+	 * Returns a be_user record as lowerCamelCase indexed array if a BE user is
+	 * currently logged in.
 	 *
 	 * @return array
+	 * @api
 	 */
 	public function getCurrentBackendUser() {
 		return $GLOBALS['BE_USER']->user;
