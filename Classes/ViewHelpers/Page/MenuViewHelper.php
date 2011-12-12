@@ -62,6 +62,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		$this->registerArgument('classFirst', 'string', 'Optional class name for the first menu elment', FALSE, '');
 		$this->registerArgument('classLast', 'string', 'Optional class name for the last menu elment', FALSE, '');
 		$this->registerArgument('substElementUid', 'boolean', 'Optional parameter for wrapping the link with the uid of the page', FALSE, '');
+		$this->registerArgument('includeSpacers', 'boolean', 'Wether or not to include menu spacers in the page select query', FALSE, FALSE);
 	}
 
 	/**
@@ -213,12 +214,16 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 * @return array
 	 */
 	protected function allowedDoktypeList() {
-		return array(
+		$types = array(
 			constant('t3lib_pageSelect::DOKTYPE_DEFAULT'),
 			constant('t3lib_pageSelect::DOKTYPE_LINK'),
 			constant('t3lib_pageSelect::DOKTYPE_SHORTCUT'),
 			constant('t3lib_pageSelect::DOKTYPE_MOUNTPOINT')
 		);
+		if ($this->arguments['includeSpacers']) {
+			array_push($types, constant('t3lib_pageSelect::DOKTYPE_SPACER'));
+		}
+		return $types;
 	}
 
 	/**
@@ -247,6 +252,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 				$page['link'] = $this->getItemLink($pageUid, $rootLine, $shortcut, $doktype);
 				$page['class'] = implode(' ', $this->getItemClass($page));
 				$page['title'] = $this->getNavigationTitle($pageUid);
+				$page['doktype'] = $doktype;
 				$filtered[] = $page;
 			}
 		}
