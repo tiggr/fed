@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "fed".
 #
-# Auto generated 12-12-2011 11:08
+# Auto generated 12-12-2011 11:17
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.4.5',
+	'version' => '1.4.6',
 	'constraints' => array(
 		'depends' => array(
 			'cms' => '',
