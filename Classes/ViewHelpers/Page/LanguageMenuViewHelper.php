@@ -180,8 +180,8 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 	 * @return array
 	 */
 	protected function parseLanguageMenu() {
-		$order = t3lib_div::trimExplode(',', $this->arguments['order']);
-		$labelOverwrite = t3lib_div::trimExplode(',', $this->arguments['labelOverwrite']);
+		$order = ($this->arguments['order']) ? t3lib_div::trimExplode(',', $this->arguments['order']) : '';
+		$labelOverwrite = ($this->arguments['labelOverwrite']) ? t3lib_div::trimExplode(',', $this->arguments['labelOverwrite']) : '';
 
 		$tempArray = $languageMenu = array();
 
