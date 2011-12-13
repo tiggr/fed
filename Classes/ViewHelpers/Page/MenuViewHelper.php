@@ -96,6 +96,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		if (strlen(trim($content)) === 0) {
 			$content = $this->autoRender($menu, $rootLine);
 			$this->tag->setContent($content);
+			$this->tag->forceClosingTag(TRUE);
 			$content = $this->tag->render();
 		}
 		if (count($backups) > 0) {
