@@ -174,4 +174,8 @@ if (TYPO3_MODE == 'BE') {
 
 }
 
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCacheLifetime']) {
+	$GLOBALS['typo3CacheManager']->getCache('extbase_object')->getBackend()->setDefaultLifetime(86400);
+}
+
 ?>
