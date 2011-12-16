@@ -35,7 +35,7 @@ FED.SOLR = {
 		'tagsH4H5H6^2.0',
 		'tagsInline'
 	],
-	proxy: '/typo3conf/ext/fed/Resources/Public/Script/SolrProxy.php',
+	proxy: '?type=1324054607',
 	query: {},
 	queryString: '',
 	results: [],

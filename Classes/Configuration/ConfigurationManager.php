@@ -40,6 +40,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 *
 	 * @param string $extensionName Optional extension name to get only that extension
 	 * @return array
+	 * @api
 	 */
 	public function getContentConfiguration($extensionName=NULL) {
 		return $this->getTypoScriptSubConfiguration($extensionName, 'fce');
@@ -50,6 +51,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 *
 	 * @param string $extensionName
 	 * @return array
+	 * @api
 	 */
 	public function getPageConfiguration($extensionName=NULL) {
 		return $this->getTypoScriptSubConfiguration($extensionName, 'page');
@@ -66,8 +68,6 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 */
 	protected function getTypoScriptSubConfiguration($extensionName, $memberName) {
 		$config = $this->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
-		#var_dump($config['plugin.']['tx_fed.']);
-		#exit();
 		$config = $config['plugin.']['tx_fed.'][$memberName . '.'];
 		if (is_array($config) === FALSE) {
 			return array();
@@ -87,10 +87,11 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @param string $extensionName
 	 * @param string $templateFile
 	 * @return string
+	 * @api
 	 */
 	public function getPageTemplateLabel($extensionName, $templateFile) {
 		$config = $this->getPageConfiguration($extensionName);
-		$exposedView = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
+		$exposedView = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 		$exposedView->setTemplatePathAndFilename($config['templateRootPath'] . 'Page/' . $templateFile . '.html');
 		$exposedView->setLayoutRootPath($config['layoutRootPath']);
 		$exposedView->setPartialRootPath($config['partialRootPath']);
@@ -103,6 +104,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 *
 	 * @param string $format
 	 * @return array
+	 * @api
 	 */
 	public function getAvailablePageTemplateFiles($format='html') {
 		$typoScript = $this->getPageConfiguration();

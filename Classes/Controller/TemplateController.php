@@ -33,28 +33,40 @@
  * @package Fed
  * @subpackage Controller
  */
-class Tx_Fed_Controller_TemplateController extends Tx_Fed_Core_AbstractController {
+class Tx_Fed_Controller_TemplateController extends Tx_Fed_MVC_Controller_AbstractController {
+
+	/**
+	 * @var string
+	 */
+	protected $defaultViewObjectName = 'Tx_Fed_MVC_View_ExposedTemplateView';
+
+	/**
+	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
+	 */
+	public function initializeView(Tx_Fed_MVC_View_ExposedTemplateView $view) {
+		$json = $this->objectManager->get('Tx_Fed_Utility_JSON');
+		$flexform = $this->getFlexForm();
+		if ($flexform['templateFile']) {
+			$view->setTemplatePathAndFilename(PATH_site . $flexform['templateFile']);
+		} else if ($flexform['templateSource']) {
+			$source = $flexform['templateSource'];
+			$tempFile = tempnam(PATH_site . 'typo3temp/', md5($source));
+			file_put_contents($tempFile, $source);
+			$view->setTemplatePathAndFilename($tempFile);
+		}
+		if ($flexform['fluidVars']) {
+			$object = $json->decode($flexform['fluidVars']);
+			foreach ($object as $k=>$v) {
+				$view->assign($k, $v);
+			}
+		}
+	}
 
 	/**
 	 * Show template as defined in flexform
 	 * @return string
 	 */
 	public function showAction() {
-		$json = $this->objectManager->get('Tx_Fed_Utility_JSON');
-		$flexform = $this->getFlexForm();
-		$this->view = $this->objectManager->get('Tx_Fluid_View_StandaloneView');
-		if ($flexform['templateFile']) {
-			$this->view->setTemplateSource(file_get_contents(PATH_site . $flexform['templateFile']));
-		} else if ($flexform['templateSource']) {
-			$source = $flexform['templateSource'];
-			$this->view->setTemplateSource($source);
-		}
-		if ($flexform['fluidVars']) {
-			$object = $json->decode($flexform['fluidVars']);
-			foreach ($object as $k=>$v) {
-				$this->view->assign($k, $v);
-			}
-		}
 		try {
 			$content = $this->view->render();
 		} catch (Exception $e) {

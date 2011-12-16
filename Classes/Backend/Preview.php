@@ -214,7 +214,7 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 	 * @return array
 	 */
 	protected function getFlexFormConfiguration($templatePathAndFilename, $variables, array $paths=array()) {
-		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
+		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
 		$flexform = $this->flexform->getAll();
 		$view->assignMultiple($flexform);
@@ -244,7 +244,7 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 	 * @return string
 	 */
 	protected function renderFluidPreview($templatePathAndFilename, $variables) {
-		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
+		$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
 		return $view->renderStandaloneSection('Preview', (array) $variables);
 	}

@@ -24,6 +24,12 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'FED Hasher'
 );
 
+Tx_Extbase_Utility_Extension::registerPlugin(
+	$_EXTKEY,
+	'Solr',
+	'FED Solr Proxy'
+);
+
 $pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Template.xml');

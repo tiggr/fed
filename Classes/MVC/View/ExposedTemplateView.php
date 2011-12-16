@@ -27,19 +27,12 @@
  * ExposedTemplateView. Allows access to registered template and viewhelper
  * variables from a Fluid template.
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage View
  */
-class Tx_Fed_MVC_View_ExposedTemplateView extends Tx_Fluid_View_StandaloneView {
+class Tx_Fed_MVC_View_ExposedTemplateView extends Tx_Fluid_View_TemplateView {
 
-	/**
-	 * @var Tx_Fluid_Core_Rendering_RenderingContextInterface
-	 */
-	public $baseRenderingContext;
 
 	/**
 	 * Get a variable stored in the Fluid template
@@ -49,7 +42,9 @@ class Tx_Fed_MVC_View_ExposedTemplateView extends Tx_Fluid_View_StandaloneView {
 	 * @return mixed
 	 */
 	public function getStoredVariable($viewHelperClassname, $name, $sectionName) {
-		$this->baseRenderingContext->setControllerContext($this->controllerContext);
+		if ($this->controllerContext) {
+			$this->baseRenderingContext->setControllerContext($this->controllerContext);
+		}
 		$this->templateParser->setConfiguration($this->buildParserConfiguration());
 		$parsedTemplate = $this->getParsedTemplate();
 		$this->setRenderingContext($this->baseRenderingContext);
@@ -81,27 +76,6 @@ class Tx_Fed_MVC_View_ExposedTemplateView extends Tx_Fluid_View_StandaloneView {
 			}
 			return $parsedTemplate;
 		}
-	}
-
-	/**
-	 * Exposition proxy for startRendering() method
-	 *
-	 * @param type $type
-	 * @param Tx_Fluid_Core_Parser_ParsedTemplateInterface $parsedTemplate
-	 * @param Tx_Fluid_Core_Rendering_RenderingContextInterface $renderingContext
-	 * @return type
-	 */
-	public function startRendering($type, Tx_Fluid_Core_Parser_ParsedTemplateInterface $parsedTemplate, Tx_Fluid_Core_Rendering_RenderingContextInterface $renderingContext) {
-		return parent::startRendering($type, $parsedTemplate, $renderingContext);
-	}
-
-	/**
-	 * Exposition proxy for stopRendering() method
-	 *
-	 * @return void
-	 */
-	public function stopRendering() {
-		return parent::stopRendering();
 	}
 
 	/**

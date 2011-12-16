@@ -62,6 +62,17 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Solr',
+	array(
+		'Solr' => 'search',
+	),
+	array(
+		'Solr' => 'search',
+	)
+);
+
 t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 	[GLOBAL]
 	config.tx_extbase.persistence.classes.Tx_Fed_Persistence_FileObjectStorage.mapping {
@@ -96,6 +107,22 @@ t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 			userFunc = tx_fed_utility_pdf->run
 			extensionName = Fed
 			pluginName = API
+		}
+	}
+
+	FedSolrBridge = PAGE
+	FedSolrBridge {
+		typeNum = 1324054607
+		config {
+			no_cache = 1
+			disableAllHeaderCode = 1
+		}
+		headerData >
+		1324054607 = USER_INT
+		1324054607 {
+			userFunc = tx_fed_core_bootstrap->run
+			extensionName = Fed
+			pluginName = Solr
 		}
 	}
 ");

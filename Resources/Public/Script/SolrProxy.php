@@ -1,9 +1,9 @@
 <?php
-
-
-$mod = array(
-	'qf' => implode('+', $_GET['fields'])
-);
+if ($_GET['fields']) {
+	$mod = array(
+		'qf' => implode('+', $_GET['fields'])
+	);
+}
 $queryString = $_SERVER['QUERY_STRING'];
 $new = "http://localhost:8080/solr/select/?" . modifyUrl($queryString, $mod);
 

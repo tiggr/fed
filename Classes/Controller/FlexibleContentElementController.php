@@ -26,42 +26,41 @@
 /**
  * Flexible Content Element Plugin Rendering Controller
  *
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage Controller
  */
 class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_AbstractController {
 
 	/**
-	 * Show template as defined in flexform
-	 * @return string
+	 * @var string
 	 */
-	public function renderAction() {
+	protected $defaultViewObjectName = 'Tx_Fed_MVC_View_ExposedTemplateView';
+
+	/**
+	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
+	 */
+	public function initializeView(Tx_Fed_MVC_View_ExposedTemplateView $view) {
 		$cObj = $this->request->getContentObjectData();
 		$this->flexform->setContentObjectData($cObj);
 		$configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 		list ($extensionName, $filename) = explode(':', $cObj['tx_fed_fcefile']);
-		$this->view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
-		$this->view->setControllerContext($this->controllerContext);
-		if ($extensionName && $filename) {
-			$paths = $configurationManager->getContentConfiguration($extensionName);
-			$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $filename;
-			$this->view->setLayoutRootPath($paths['layoutRootPath']);
-			$this->view->setPartialRootPath($paths['partialRootPath']);
-			$this->view->setTemplatePathAndFilename($absolutePath);
-		} else {
-			$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $cObj['tx_fed_fcefile'];
-			$this->view->setTemplatePathAndFilename($absolutePath);
-		}
-		$config = $this->view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
-		$templateVariables = $this->flexform->getAllAndTransform($config['fields']);
-		$templateVariables['page'] = $GLOBALS['TSFE']->page;
-		$templateVariables['record'] = $cObj;
-		$templateVariables['config'] = $config;
-		$content = $this->view->renderStandaloneSection('Main', $templateVariables);
-		return $content;
+		$paths = $configurationManager->getContentConfiguration($extensionName);
+		$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $filename;
+		$view->setLayoutRootPath($paths['layoutRootPath']);
+		$view->setPartialRootPath($paths['partialRootPath']);
+		$view->setTemplatePathAndFilename($absolutePath);
+		$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+		$view->assignMultiple($this->flexform->getAllAndTransform($config['fields']));
+		$view->assign('page', $GLOBALS['TSFE']->page);
+		$view->assign('record', $cObj);
+	}
+
+	/**
+	 * Show template as defined in flexform
+	 * @return string
+	 */
+	public function renderAction() {
+		return $this->view->render();
 	}
 
 }

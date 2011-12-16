@@ -81,7 +81,7 @@ class Tx_Fed_Backend_FCESelector {
 				$select .= "<optgroup label='{$groupLabel}'>" . LF;
 				foreach ($files as $fileRelPath) {
 					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
-					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedTemplateView');
+					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {
 						$config =  $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
@@ -96,7 +96,7 @@ class Tx_Fed_Backend_FCESelector {
 							$select .= "<option value='{$optionValue}'{$selected}>{$label}</option>" .LF;
 						}
 					} catch (Exception $e) {
-						$select .= "<option value=''>INVALID: " . $fileRelPath . " (Exception # " . $e->getCode() . ")</option>" . LF;
+						$select .= "<option value=''>INVALID: " . $fileRelPath . " (Exception # " . $e->getMessage() . ")</option>" . LF;
 					}
 				}
 				$select .= "</optgroup>" . LF;

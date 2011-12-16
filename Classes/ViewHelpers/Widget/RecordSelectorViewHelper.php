@@ -36,7 +36,7 @@
 class Tx_Fed_ViewHelpers_Widget_RecordSelectorViewHelper extends Tx_Fluid_Core_Widget_AbstractWidgetViewHelper implements Tx_Fluid_Core_ViewHelper_Facets_ChildNodeAccessInterface {
 
 	/**
-	 * @var Tx_Person_ViewHelpers_Widget_Controller_RecordSelectorController
+	 * @var Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController
 	 */
 	protected $controller;
 
