@@ -54,7 +54,7 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFileViewHelper extends Tx_Fed_ViewHel
 		if ($file === NULL) {
 			$file = $this->renderChildren();
 		}
-		$this->pageRenderer->addJsFooterLibrary(
+		$this->pageRenderer->addJsFile(
 			$this->arguments['name'],
 			$file,
 			$this->arguments['type'],
