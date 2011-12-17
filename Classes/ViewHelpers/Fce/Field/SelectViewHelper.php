@@ -73,7 +73,7 @@ class Tx_Fed_ViewHelpers_Fce_Field_SelectViewHelper extends Tx_Fed_ViewHelpers_F
 		$config['type'] = 'select';
 		if ($this->arguments['commaSeparatedItems']) {
 			$config['items'] = array();
-			$itemNames = explode(',', $this->arguments['commaSeparatedItems']);
+			$itemNames = t3lib_div::trimExplode(',', $this->arguments['commaSeparatedItems']);
 			foreach ($itemNames as $itemName) {
 				array_push($config['items'], array($itemName, $itemName));
 			}

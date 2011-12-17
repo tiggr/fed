@@ -90,7 +90,7 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 			case 'fed_template': $this->preProcessTemplateDisplay($drawItem, $itemContent, $row); break;
 			default:
 					// check for a defined Fluid FlexForm - attempt to render Preview section
-				$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['cType']);
+				$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['CType']);
 				if (!$flexFormConfiguration && !empty($row['list_type'])) {
 					$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('plugin', $row['list_type']);
 				}

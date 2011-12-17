@@ -98,11 +98,14 @@ class Tx_Fed_Backend_DynamicFlexForm {
 			$this->flexform->convertFlexFormContentToDataStructure($paths['templateRootPath'] . $filename, $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
 		} else {
 				// check for registered Fluid FlexForms based on cType first, then plugin list_type
-			$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['cType']);
+			$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('contentObject', $row['CType']);
 			if (!$flexFormConfiguration && $row['list_type']) {
 				$flexFormConfiguration = Tx_Fed_Core::getRegisteredFlexForms('plugin', $row['list_type']);
 			}
 			if ($flexFormConfiguration) {
+				$typoScript = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
+				$paths = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($typoScript['plugin.']['tx_fed.']['view.']);
+				$paths = Tx_Fed_Utility_Path::translatePath($paths);
 				$values = $this->flexform->convertFlexFormContentToArray($row['pi_flexform']);
 				$this->flexform->convertFlexFormContentToDataStructure($flexFormConfiguration['templateFilename'], $values, $paths, $dataStructArray, $conf, $row, $table, $fieldName);
 			}

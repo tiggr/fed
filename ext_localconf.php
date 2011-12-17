@@ -3,6 +3,7 @@ if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
@@ -16,17 +17,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 		'Hash' => 'request',
 		'Tool' => 'clearCache,inspectCookie,removeCookie,setCookie,inspectSession,setSession,removeSession,validate'
 	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Fce',
-	array(
-		'FlexibleContentElement' => 'render',
-	),
-	array(
-	),
-	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
 Tx_Extbase_Utility_Extension::configurePlugin(
@@ -79,7 +69,19 @@ t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 	}
 ");
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		$_EXTKEY,
+		'Fce',
+		array(
+			'FlexibleContentElement' => 'render',
+		),
+		array(
+		),
+		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
+	);
+}
+
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
 
@@ -90,7 +92,8 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 			'Template' => 'show',
 		),
 		array(
-		)
+		),
+		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 	);
 
 
@@ -102,10 +105,26 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 		),
 		array(
 			'DataSource' => 'rest',
-		)
+		),
+		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 	);
 
 
+}
+
+
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
+	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
+		'[GLOBAL]
+		page = PAGE
+		page.typeNum = 0
+		page.5 = USER
+		page.5.userFunc = tx_fed_core_bootstrap->run
+		page.5.extensionName = Fed
+		page.5.pluginName = API
+		page.10 >
+	', TRUE);
+	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] == '' ? '' : ',') . 'tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,';
 }
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
@@ -113,11 +132,12 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 		$_EXTKEY,
 		'Solr',
 		array(
-			'Solr' => 'search',
+			'Solr' => 'form,search',
 		),
 		array(
 			'Solr' => 'search',
-		)
+		),
+		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 	);
 	t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 		FedSolrBridge = PAGE
@@ -137,72 +157,72 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 		}");
 }
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
-	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
-		'[GLOBAL]
-		page = PAGE
-		page.typeNum = 0
-		page.5 = USER
-		page.5.userFunc = tx_fed_core_bootstrap->run
-		page.5.extensionName = Fed
-		page.5.pluginName = API
-		page.10 >
-	', TRUE);
-	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] == '' ? '' : ',') . 'tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,';
-}
-
-if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-
-	t3lib_extMgm::addPageTSConfig('
-		mod.wizards.newContentElement.wizardItems.fed {
-			header = Fluid Content Elements
-			elements fce
-			show = fce,template,datasource
-			position = 0
-		}
-		mod.wizards.newContentElement.wizardItems.fed.elements.fce {
-			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-			title = Flexible Content Element
-			description = Flexible Content Element using a Fluid template
-			tt_content_defValues {
-				CType = fed_fce
-			}
-		}
-	');
-}
-
-if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
-
-	t3lib_extMgm::addPageTSConfig('
-		mod.wizards.newContentElement.wizardItems.fed {
-			header = Fluid Content Elements
-			elements fce
-			show = fce,template,datasource
-			position = 0
-		}
-		mod.wizards.newContentElement.wizardItems.fed.elements.template {
-			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-			title = Template Display
-			description = Flexible Content Element using a Fluid template
-			tt_content_defValues {
-				CType = list
-				list_type = fed_template
-			}
-		}
-		mod.wizards.newContentElement.wizardItems.fed.elements.datasource {
-			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
-			title = DataSource Display
-			description = DataSource Display through Fluid Template
-			tt_content_defValues {
-				CType = list
-				list_type = fed_datasource
-			}
-		}
-	');
-	
-}
-
 if (TYPO3_MODE == 'BE') {
+	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
+	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']
+	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']
+	) {
+
+		t3lib_extMgm::addPageTSConfig('
+			mod.wizards.newContentElement.wizardItems.fed {
+				header = Fluid Content Elements
+				elements fce
+				show = fce,template,datasource,solr
+				position = 0
+			}');
+	}
+
+	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
+		t3lib_extMgm::addPageTSConfig('
+			mod.wizards.newContentElement.wizardItems.fed.elements.fce {
+				icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+				title = Flexible Content Element
+				description = Flexible Content Element using a Fluid template
+				tt_content_defValues {
+					CType = fed_fce
+				}
+			}
+		');
+	}
+
+	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
+
+		t3lib_extMgm::addPageTSConfig('
+			mod.wizards.newContentElement.wizardItems.fed.elements.template {
+				icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+				title = Template Display
+				description = Flexible Content Element using a Fluid template
+				tt_content_defValues {
+					CType = list
+					list_type = fed_template
+				}
+			}
+			mod.wizards.newContentElement.wizardItems.fed.elements.datasource {
+				icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+				title = DataSource Display
+				description = DataSource Display through Fluid Template
+				tt_content_defValues {
+					CType = list
+					list_type = fed_datasource
+				}
+			}
+		');
+	}
+
+	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
+
+		t3lib_extMgm::addPageTSConfig('
+			mod.wizards.newContentElement.wizardItems.fed.elements.solr {
+				icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
+				title = Solr AJAX Search Form and Results
+				description = Inserts a Solr search form configured by TypoScript settings for the "solr" extension.
+				tt_content_defValues {
+					CType = fed_solr
+				}
+			}
+		');
+	}
+
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['fed'] = 'EXT:fed/Classes/Backend/TCEMain.php:Tx_Fed_Backend_TCEMain';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['fed'] = 'EXT:fed/Classes/Backend/TCEMain.php:Tx_Fed_Backend_TCEMain';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['moveRecordClass']['fed'] = 'EXT:fed/Classes/Backend/TCEMain.php:Tx_Fed_Backend_TCEMain';

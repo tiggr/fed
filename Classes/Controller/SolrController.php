@@ -57,6 +57,15 @@ class Tx_Fed_Controller_SolrController extends Tx_Fed_Core_AbstractController {
 	}
 
 	/**
+	 * Displays the search form
+	 *
+	 * @return string
+	 */
+	public function formAction() {
+		return $this->view->render();
+	}
+
+	/**
 	 * Queries the Solr server
 	 *
 	 * @return string

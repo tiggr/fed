@@ -9,7 +9,7 @@
 		<solr:searchField />
 	</div>
 	<solr:errors />
-	<f:if condition="{arguments.options.auto}">
+	<f:if condition="{arguments.options.auto} > 0">
 		<f:else>
 			<f:if condition="{arguments.options.useLinksAsButtons}">
 				<f:then>
@@ -62,9 +62,16 @@
 	</solr:noResults>
 	<solr:results>
 		<solr:result>
-			<solr:scorebar showPercent="FALSE" />
-			<dt>Score: <span class="relevancy"></span></dt>
-			<span class="result-number">1</span><a class="url title" href="#">Title</a>
+			<f:if condition="{arguments.options.showScorebar}">
+				<solr:scorebar showPercent="FALSE" />
+			</f:if>
+			<f:if condition="{arguments.options.showScorePercentage}">
+				<dt>Score: <span class="relevancy"></span></dt>
+			</f:if>
+			<f:if condition="{arguments.options.showResultNumbers}">
+				<span class="result-number">1</span>
+			</f:if>
+			<a class="url title" href="#">Title</a>
 			<div class="content">Content</div>
 		</solr:result>
 	</solr:results>

@@ -19,11 +19,16 @@
 
 <div id="{arguments.id}">
 	<f:render section="SearchField" />
+
 	<f:render section="Facets" />
 
 	<f:render section="Statistics" />
-	<f:render section="Paginate" />
+	<f:if condition="{arguments.options.paginate}">
+		<f:render section="Paginate" />
+	</f:if>
 	<f:render section="Results" />
-	<f:render section="Paginate" />
+	<f:if condition="{arguments.options.paginate}">
+		<f:render section="Paginate" />
+	</f:if>
 	<f:render section="Statistics" />
 </div>

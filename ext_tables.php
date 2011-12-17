@@ -3,6 +3,7 @@ if (!defined ('TYPO3_MODE')){
 	die ('Access denied.');
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
 
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
@@ -10,27 +11,36 @@ Tx_Extbase_Utility_Extension::registerPlugin(
 	'FED Hasher'
 );
 
-$pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Template.xml');
-
-$pluginSignature = str_replace('_','',$_EXTKEY) . '_datasource';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/DataSource.xml');
-
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+t3lib_div::loadTCA('tt_content');
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
 	Tx_Extbase_Utility_Extension::registerPlugin(
 		$_EXTKEY,
 		'Solr',
-		'FED Solr Search'
+		'Solr AJAX Search'
 	);
+	Tx_Fed_Core::registerFluidFlexFormContentObject('fed_solr', t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/Templates/Solr/Form.html'));
+	$TCA['tt_content']['types']['fed_solr']['showitem'] = '
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.header;header,
+	--div--;Solr, pi_flexform;Solr settings,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.appearance,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.frames;frames,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.visibility;visibility,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.extended,tx_fed_fcecontentarea
+	';
 }
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_template']['pluginType'] = 'CType';
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_datasource']['pluginType'] = 'CType';
+	$pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
+	$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+	t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Template.xml');
+
+	$pluginSignature = str_replace('_','',$_EXTKEY) . '_datasource';
+	$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+	t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/DataSource.xml');
 
 	Tx_Extbase_Utility_Extension::registerPlugin(
 		$_EXTKEY,
@@ -65,7 +75,6 @@ if (TYPO3_MODE == 'BE') {
 			'Fluid Content Element'
 		);
 		t3lib_extMgm::addPlugin(array('Fluid Content Element', 'fed_fce'), 'CType');
-		t3lib_div::loadTCA('tt_content');
 		$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_fce'] = 'pi_flexform';
 		$TCA['tt_content']['types']['fed_fce']['showitem'] = '
 		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,

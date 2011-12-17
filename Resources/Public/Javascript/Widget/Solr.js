@@ -5,13 +5,15 @@
 			'crop': 200,
 			'onionSkinNumbers': 5,
 			'beforeResultNumber': '#',
-			'auto': false,
+			'auto': 1,
 			'facetTitles': {},
 			'facet': 'on',
 			'scorebarHeight': 16,
 			'scorebarWidth': 50
 		};
 		var options = jQuery.extend(defaults, options);
+		options.resultsPerPage = parseInt(options.resultsPerPage);
+		options.onionSkinNumbers = parseInt(options.onionSkinNumbers);
 		return this.each(function() {
 			var timer = null;
 			var parent = this;
