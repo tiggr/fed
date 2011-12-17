@@ -213,12 +213,33 @@
 				performSearch();
 			};
 			var modifyUrl = function() {
-				top.location.hash = searchField.val() + '/' + currentPage.toString();
+				var params = [
+					searchField.val(),
+					currentPage.toString(),
+					options.resultsPerPage
+				];
+				for (var key in appliedFacets) {
+					var facet = appliedFacets[key];
+					params.push(facet.facetName + '+' + decodeURI(facet.facetValue));
+				};
+				top.location.hash = params.join('/');
 			};
 			var parseUrl = function() {
 				var hash = top.location.hash.substring(1).split('/');
-				searchField.val(hash[0]);
-				currentPage = parseInt(hash[1]);
+				if (hash.length > 0) {
+					searchField.val(hash.shift());
+					currentPage = parseInt(hash.shift());
+					var resultsPerPage = parseInt(hash.shift());
+					options.resultsPerPage = resultsPerPage > 0 ? resultsPerPage : options.resultsPerPage
+					for (var i in hash) {
+						var parts = hash[i].split('+');
+						var facet = {
+							"facetName": parts[0],
+							"facetValue": encodeURI(parts[1])
+						};
+						appliedFacets.push(facet);
+					};
+				};
 			};
 			var performSearch = function() {
 				var arguments = buildSearchParameters();
