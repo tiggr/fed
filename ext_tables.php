@@ -3,31 +3,11 @@ if (!defined ('TYPO3_MODE')){
 	die ('Access denied.');
 }
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_template']['pluginType'] = 'CType';
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_datasource']['pluginType'] = 'CType';
-
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Template',
-	'Fluid Template Display'
-);
-
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Datasource',
-	'Data Source Display'
-);
 
 Tx_Extbase_Utility_Extension::registerPlugin(
 	$_EXTKEY,
 	'Hash',
 	'FED Hasher'
-);
-
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Solr',
-	'FED Solr Proxy'
 );
 
 $pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
@@ -37,6 +17,33 @@ t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Co
 $pluginSignature = str_replace('_','',$_EXTKEY) . '_datasource';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/DataSource.xml');
+
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		$_EXTKEY,
+		'Solr',
+		'FED Solr Search'
+	);
+}
+
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_template']['pluginType'] = 'CType';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_datasource']['pluginType'] = 'CType';
+
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		$_EXTKEY,
+		'Template',
+		'Fluid Template Display'
+	);
+
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		$_EXTKEY,
+		'Datasource',
+		'Data Source Display'
+	);
+}
 
 if (TYPO3_MODE == 'BE') {
 	if (t3lib_extMgm::isLoaded('scheduler')) {
@@ -50,7 +57,6 @@ if (TYPO3_MODE == 'BE') {
 
 	$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_sandbox'] = 'pi_flexform';
 
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_fce']['pluginType'] = 'CType';
 		Tx_Extbase_Utility_Extension::registerPlugin(

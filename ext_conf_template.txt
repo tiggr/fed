@@ -8,6 +8,12 @@ enableFluidContentElements = 0
   # cat=basic/enable; type=boolean; label=Fluid Page Templates: Enable the Fluid Page template features. When enabled, this changes the default behavior of your TYPO3 installation to always look for an render a Fluid Page Template without requiring additional TypoScript. When this setting is active your root line MUST include template selection on the top level page or FE rendering cannot be determined (you will get an error from Fluid saying "could not load template file").
 enableFluidPageTemplates = 0
 
+  # cat=basic/enable; type=boolean; label=Solr Features: Enable the Solr support features: Service, frontend plugin and Widget AJAX TypoScript configuration.
+enableSolrFeatures = 0
+
+  # cat=basic/enable; type=boolean; label=Frontend Plugins: Enable the frontend plugins provided by FED: Fluid Template Display, DataSource Display and Solr AJAX Search
+enableFrontendPlugins = 0
+
   # cat=basic/enable; type=boolean; label=INCOMPLETE - Integrated BE Layouts: Enable integrated Backend Layouts. Enables Fluid Page template files to contain their own BE layout definition without requiring a BE layout record to be even present. However, overrides all current BE layout integrations IF using Fluid Page templates - otherwise, nothing is affected. Use this only if you are sure your template files are configured to support this!
 enableIntegratedBackendLayouts = 0
 

@@ -31,28 +31,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
-	'Template',
-	array(
-		'Template' => 'show',
-	),
-	array(
-	)
-);
-
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Datasource',
-	array(
-		'DataSource' => 'list,show,rest',
-	),
-	array(
-		'DataSource' => 'rest',
-	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
 	'Hash',
 	array(
 		'Hash' => 'request',
@@ -62,16 +40,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Solr',
-	array(
-		'Solr' => 'search',
-	),
-	array(
-		'Solr' => 'search',
-	)
-);
 
 t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 	[GLOBAL]
@@ -109,25 +77,65 @@ t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 			pluginName = API
 		}
 	}
-
-	FedSolrBridge = PAGE
-	FedSolrBridge {
-		typeNum = 1324054607
-		config {
-			no_cache = 1
-			disableAllHeaderCode = 1
-		}
-		headerData >
-		1324054607 = USER_INT
-		1324054607 {
-			userFunc = tx_fed_core_bootstrap->run
-			extensionName = Fed
-			pluginName = Solr
-		}
-	}
 ");
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
+
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		$_EXTKEY,
+		'Template',
+		array(
+			'Template' => 'show',
+		),
+		array(
+		)
+	);
+
+
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		$_EXTKEY,
+		'Datasource',
+		array(
+			'DataSource' => 'list,show,rest',
+		),
+		array(
+			'DataSource' => 'rest',
+		)
+	);
+
+
+}
+
+if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
+	Tx_Extbase_Utility_Extension::configurePlugin(
+		$_EXTKEY,
+		'Solr',
+		array(
+			'Solr' => 'search',
+		),
+		array(
+			'Solr' => 'search',
+		)
+	);
+	t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
+		FedSolrBridge = PAGE
+		FedSolrBridge {
+			typeNum = 1324054607
+			config {
+				no_cache = 1
+				disableAllHeaderCode = 1
+			}
+			headerData >
+			1324054607 = USER_INT
+			1324054607 {
+				userFunc = tx_fed_core_bootstrap->run
+				extensionName = Fed
+				pluginName = Solr
+			}
+		}");
+}
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
@@ -160,6 +168,18 @@ if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']
 				CType = fed_fce
 			}
 		}
+	');
+}
+
+if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
+
+	t3lib_extMgm::addPageTSConfig('
+		mod.wizards.newContentElement.wizardItems.fed {
+			header = Fluid Content Elements
+			elements fce
+			show = fce,template,datasource
+			position = 0
+		}
 		mod.wizards.newContentElement.wizardItems.fed.elements.template {
 			icon = ../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png
 			title = Template Display
@@ -179,6 +199,7 @@ if (TYPO3_MODE == 'BE' && $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']
 			}
 		}
 	');
+	
 }
 
 if (TYPO3_MODE == 'BE') {
