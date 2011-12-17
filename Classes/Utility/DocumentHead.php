@@ -39,6 +39,11 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	const TYPE_STYLESHEET = 'css';
 
 	/**
+	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 */
+	protected $configurationManager;
+
+	/**
 	 * @var Tx_Extbase_Object_Manager
 	 */
 	protected $objectManager;
@@ -47,6 +52,14 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @var t3lib_PageRenderer
 	 */
 	protected $pageRenderer;
+
+	 /**
+	  * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	  * @return void
+	  */
+	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+		$this->configurationManager = $configurationManager;
+	}
 
 	/**
 	 * @param Tx_Extbase_Object_Manager $objectManager
@@ -60,6 +73,20 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 */
 	public function injectPageRenderer(t3lib_PageRenderer $pageRenderer) {
 		$this->pageRenderer = $pageRenderer;
+	}
+
+	/**
+	 * Returns TRUE if what we are outputting may be cached
+	 *
+	 * DEPRECATED - but will be moved to a more suitable location such as a possible
+	 * cache manager or other Service.
+	 *
+	 * @return boolean
+	 * @deprecated
+	 */
+	public function isCached() {
+		$userObjType = $this->configurationManager->getContentObject()->getUserObjectType();
+		return ($userObjType !== tslib_cObj::OBJECTTYPE_USER_INT);
 	}
 
 	/**

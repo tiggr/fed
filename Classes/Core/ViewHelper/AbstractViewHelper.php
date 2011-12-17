@@ -66,6 +66,11 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	protected $objectManager;
 
 	/**
+	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 */
+	protected $configurationManager;
+
+	/**
 	 * @var type
 	 */
 	private $registeredArguments = array();
@@ -116,6 +121,24 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 */
 	public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
 		$this->objectManager = $objectManager;
+	}
+
+	 /**
+	  * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	  * @return void
+	  */
+	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+		$this->configurationManager = $configurationManager;
+	}
+
+	/**
+	 * Returns TRUE if what we are outputting may be cached
+	 *
+	 * @return boolean
+	 */
+	protected function isCached() {
+		$userObjType = $this->configurationManager->getContentObject()->getUserObjectType();
+		return ($userObjType !== tslib_cObj::OBJECTTYPE_USER_INT);
 	}
 
 	/**

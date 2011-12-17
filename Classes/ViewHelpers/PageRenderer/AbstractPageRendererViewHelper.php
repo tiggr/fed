@@ -33,7 +33,7 @@
  * @package Fed
  * @subpackage ViewHelpers
  */
-abstract class Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+abstract class Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
 	 * @var t3lib_PageRenderer
