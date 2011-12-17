@@ -37,7 +37,6 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFileViewHelper extends Tx_Fed_ViewHel
 	 * Initialize
 	 */
 	public function initializeArguments() {
-		$this->registerArgument('name', 'string', 'Name argument - see PageRenderer documentation', TRUE);
 		$this->registerArgument('type', 'string', 'Type argument - see PageRenderer documentation', FALSE, 'text/javascript');
 		$this->registerArgument('compress', 'boolean', 'Compress argument - see PageRenderer documentation', FALSE, TRUE);
 		$this->registerArgument('forceOnTop', 'boolean', 'ForceOnTop argument - see PageRenderer documentation', FALSE, FALSE);
@@ -55,7 +54,6 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFileViewHelper extends Tx_Fed_ViewHel
 			$file = $this->renderChildren();
 		}
 		$this->pageRenderer->addJsFile(
-			$this->arguments['name'],
 			$file,
 			$this->arguments['type'],
 			$this->arguments['compress'],
