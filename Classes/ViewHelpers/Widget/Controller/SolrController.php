@@ -92,6 +92,7 @@ class Tx_Fed_ViewHelpers_Widget_Controller_SolrController extends Tx_Fluid_Core_
 		}
 		$this->widgetConfiguration['options']['facetTitles'] = $titles;
 		$this->widgetConfiguration['options']['fields'] = (array) t3lib_div::trimExplode(',', $this->solrConfiguration['search']['query']['fields']);
+		$this->widgetConfiguration['resultsPerPageOptions'] = $this->solrConfiguration['search']['results']['resultsPerPageSwitchOptions'];
 		$this->view->assign('arguments', $this->widgetConfiguration);
 		$this->view->assign('options', $this->jsonService->encode($this->widgetConfiguration['options']));
 		return $this->view->render();

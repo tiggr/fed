@@ -31,6 +31,7 @@
 					.removeClass('fed-solr-facet-group-list-template').addClass('fed-solr-facet-group-list'),
 				"facets": element.find('.fed-solr-facets').hide(),
 				"results": element.find('.fed-solr-results').hide(),
+				"resultsperpage": element.find('.fed-solr-resultsperpage').hide().each(function() { jQuery(this).change(function() { updateResultsPerPage(jQuery(this)); }); }),
 				"result": element.find('.fed-solr-result-template').hide()
 					.addClass('fed-solr-result').removeClass('fed-solr-result-template'),
 				"noresults" : element.find('.fed-solr-noresults').hide(),
@@ -49,17 +50,25 @@
 					"total": element.find('.fed-solr-paginate-total').hide(),
 					"current": element.find('.fed-solr-paginate-current').hide(),
 					"first": element.find('.fed-solr-paginate-first')
-						.hide().click(function() { gotoPage(1); }),
+						.hide().click(function() {gotoPage(1);}),
 					"previous": element.find('.fed-solr-paginate-previous')
-						.hide().click(function() { gotoPage(-1); }),
+						.hide().click(function() {gotoPage(-1);}),
 					"next": element.find('.fed-solr-paginate-next')
-						.hide().click(function() { gotoPage(-2); }),
+						.hide().click(function() {gotoPage(-2);}),
 					"last": element.find('.fed-solr-paginate-last')
-						.hide().click(function() { gotoPage(pages); }),
+						.hide().click(function() {gotoPage(pages);}),
 					"root": element.find('.fed-solr-paginate').hide()
 				}
 			};
 			var searchField = element.find('.fed-solr-search-field');
+			var updateResultsPerPage = function(selector) {
+				var newResultsPerPage = selector.val();
+				if (newResultsPerPage != options.resultsPerPage) {
+					options.resultsPerPage = newResultsPerPage;
+					gotoPage(1);
+					elements.resultsperpage.val(newResultsPerPage);
+				};
+			};
 			var gotoPage = function(page) {
 				if (page < 0) {
 					if (page == -1 && currentPage-1 > 0) {
@@ -70,7 +79,7 @@
 				};
 				if (page > pages) {
 					page = pages;
-				} if (page < 1) {
+				}if (page < 1) {
 					page = 1;
 				};
 				currentPage = parseInt(page);
@@ -93,7 +102,7 @@
 
 				elements.statistics.root.show();
 				elements.statistics.first.html(results.start + 1).show();
-				elements.statistics.last.html((results.start + options.resultsPerPage < results.numFound) ? results.start + options.resultsPerPage : results.numFound).show();
+				elements.statistics.last.html((results.start + options.resultsPerPage < results.numFound) ? parseInt(results.start + parseInt(options.resultsPerPage)) : results.numFound).show();
 				elements.statistics.total.html(results.numFound).show();
 
 				elements.paginate.root.show();
@@ -126,7 +135,6 @@
 						var fill = jQuery('<div></div>').width(parseInt(width) + 2).height(options.scorebarHeight).addClass('fed-solr-scorebar-fill');
 						if (scorebar.hasClass('percent')) {
 							var percent = jQuery('<div></div>').html(parseInt(ratio * 100) + '%').addClass('percent').width(options.scorebarWidth);
-							//var percent = ratio * 100;
 							fill.append(percent);
 						};
 						scorebar.append(fill);
@@ -137,6 +145,7 @@
 					elements.results.append(row).show();
 				};
 
+				elements.resultsperpage.show().val(options.resultsPerPage);
 				if (pages == 1) {
 					elements.paginate.root.hide();
 				} else {
@@ -148,7 +157,7 @@
 									(i > currentPage - onion && i < currentPage + onion)
 								) {
 								var number = elements.paginate.number.clone();
-								number.click(function() { gotoPage(jQuery(this).html()); }).html(i.toString()).show();
+								number.click(function() {gotoPage(jQuery(this).html());}).html(i.toString()).show();
 								if (i == currentPage) {
 									number.addClass('active');
 								} else {
