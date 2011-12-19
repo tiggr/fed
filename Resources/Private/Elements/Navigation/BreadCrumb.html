@@ -4,7 +4,8 @@
 
 <f:section name="Configuration">
   <fed:flexform id="breadcrumb" label="Navigation: Bread Crumb" enabled="TRUE">
-    <fed:flexform.field.tree size="20" parentField="pid" name="startingPage" label="Starting page" table="pages" expandAll="FALSE" />
+    <fed:flexform.field.group size="1" maxItems="1" minItems="1" name="startingPage" label="Starting page"
+		internalType="db" allowed="pages" suggest="TRUE" />
     <fed:flexform.field.select name="entryLevel" label="Entry-level"
       commaSeparatedItems="-1,0,1,2,3,4,5,6" />
   </fed:flexform>

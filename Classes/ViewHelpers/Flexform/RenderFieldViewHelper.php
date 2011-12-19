@@ -143,6 +143,12 @@ XML;
 				$config['mm'] ? "<MM>{$config['mm']}</MM>" : NULL,
 			));
 		}
+		if ($config['itemsProcFunc']) {
+			$itemsProcFunc = '<itemsProcFunc>' . $config['itemsProcFunc'] . '</itemsProcFunc>';
+		}
+		if ($config['suggest']) {
+			$suggest = "<wizards><suggest><type>suggest</type></suggest></wizards>";
+		}
 		if ($config['requestUpdate'] === TRUE) {
 			$onChange = "<onChange>reload</onChange>" . LF;
 		}
@@ -157,10 +163,11 @@ XML;
 	<size>{$config['size']}</size>
 	<multiple>{$config['multiple']}</multiple>
 	<show_thumbs>{$config['show_thumbs']}</show_thumbs>
-	<itemsProcFunc>{$config['itemsProcFunc']}</itemsProcFunc>
+	{$itemsProcFunc}
 	{$switchedConfig}
 	{$addedConfig}
 	{$wizards}
+	{$suggest}
 </config>
 XML;
 		return $xml;

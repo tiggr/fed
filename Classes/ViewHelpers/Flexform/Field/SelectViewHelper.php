@@ -48,6 +48,7 @@ class Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper extends Tx_Fed_ViewHelp
 		$this->registerArgument('mm', 'string', 'Optional name of MM table to use for record selection', FALSE, NULL);
 		$this->registerArgument('showThumbs', 'boolean', 'If TRUE, adds thumbnail display when editing in BE', FALSE, TRUE);
 		$this->registerArgument('itemsProcFunc', 'string', 'Optional class name of data provider to fill select options');
+		$this->registerArgument('suggest', 'boolean', 'Add "suggest" box to search for entries', FALSE, FALSE);
 	}
 
 	/**
@@ -83,6 +84,7 @@ class Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper extends Tx_Fed_ViewHelp
 		$config['mm'] = $this->arguments['mm'];
 		$config['show_thumbs'] = $this->getFlexFormBoolean($this->arguments['showThumbs']);
 		$config['itemsProcFunc'] = $this->arguments['itemsProcFunc'];
+		$config['suggest'] = $this->arguments['suggest'];
 		return $config;
 	}
 
