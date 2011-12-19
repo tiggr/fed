@@ -50,14 +50,19 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterFileViewHelper extends Tx_Fed_V
 	 * @param string $file
 	 */
 	public function render($file) {
-		$this->pageRenderer->addJsFooterFile(
-			$file,
-			$this->arguments['type'],
-			$this->arguments['compress'],
-			$this->arguments['forceOnTop'],
-			$this->arguments['allWrap'],
-			$this->arguments['excludeFromConcatenation']
-		);
+		if ($this->isCached()) {
+			$this->pageRenderer->addJsFooterFile(
+				$file,
+				$this->arguments['type'],
+				$this->arguments['compress'],
+				$this->arguments['forceOnTop'],
+				$this->arguments['allWrap'],
+				$this->arguments['excludeFromConcatenation']
+			);
+		} else {
+			// additionalFooterData only possible in USER
+			$GLOBALS['TSFE']->additionalHeaderData[md5($file)] = '<script type="text/javascript" src="' . $file . '"></script>';
+		}
 	}
 
 }

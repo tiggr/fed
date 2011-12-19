@@ -51,12 +51,16 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsInlineCodeViewHelper extends Tx_Fed_V
 		if (!$block) {
 			$block = $this->renderChildren();
 		}
-		$this->pageRenderer->addJsInlineCode(
-			$this->arguments['name'],
-			$block,
-			$this->arguments['compress'],
-			$this->arguments['forceOnTop']
-		);
+		if ($this->isCached()) {
+			$this->pageRenderer->addJsInlineCode(
+				$this->arguments['name'],
+				$block,
+				$this->arguments['compress'],
+				$this->arguments['forceOnTop']
+			);
+		} else {
+			$GLOBALS['TSFE']->additionalHeaderData[md5($name)] = t3lib_div::wrapJS($block);
+		}
 	}
 
 }

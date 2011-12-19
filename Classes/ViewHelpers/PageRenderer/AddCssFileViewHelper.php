@@ -54,16 +54,22 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddCssFileViewHelper extends Tx_Fed_ViewHe
 	 * @param string $file
 	 */
 	public function render($file=NULL) {
-		$this->pageRenderer->addCssFile(
-			$file,
-			$this->arguments['rel'],
-			$this->arguments['media'],
-			$this->arguments['title'],
-			$this->arguments['compress'],
-			$this->arguments['forceOnTop'],
-			$this->arguments['allWrap'],
-			$this->arguments['excludeFromConcatenation']
-		);
+		if ($this->isCached()) {
+			$this->pageRenderer->addCssFile(
+				$file,
+				$this->arguments['rel'],
+				$this->arguments['media'],
+				$this->arguments['title'],
+				$this->arguments['compress'],
+				$this->arguments['forceOnTop'],
+				$this->arguments['allWrap'],
+				$this->arguments['excludeFromConcatenation']
+			);
+
+		} else {
+			$GLOBALS['TSFE']->additionalHeaderData[md5($file)] = '<link rel="' . $this->arguments['rel'] . '" type="text/css" media="' . $this->arguments['media'] . '" href="' . $file . '" />';
+		}
+
 	}
 
 }

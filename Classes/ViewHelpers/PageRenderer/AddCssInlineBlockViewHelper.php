@@ -56,12 +56,16 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddCssInlineBlockViewHelper extends Tx_Fed
 		$name = $this->arguments['name'];
 		$compress = $this->arguments['compress'];
 		$forceOnTop = $this->arguments['forceOnTop'];
-		$this->pageRenderer->addCssInlineBlock(
-			$name,
-			$block,
-			$compress,
-			$forceOnTop
-		);
+		if ($this->isCached()) {
+			$this->pageRenderer->addCssInlineBlock(
+				$name,
+				$block,
+				$compress,
+				$forceOnTop
+			);
+		} else {
+			$GLOBALS['TSFE']->additionalHeaderData[md5($name)] = '<style type="text/css" media="' . $this->arguments['media'] . '" >' . $block . '</style>';
+		}
 	}
 
 }
