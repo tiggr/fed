@@ -16,7 +16,7 @@
 				<f:if condition="{field.enabled}">
 					<{field.name}>
 					<TCEforms>
-						<fed:fce.renderField config="{field}" />
+						<fed:flexform.renderField config="{field}" />
 					</TCEforms>
 					</{field.name}>
 				</f:if>
