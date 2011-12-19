@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -27,25 +26,34 @@
 /**
  * ViewHelper used to render the FlexForm definition for Fluid FCEs
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
- * @subpackage ViewHelpers/Fce/Field
+ * @subpackage ViewHelpers/Flexform
  */
+class Tx_Fed_ViewHelpers_Flexform_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Fce_FieldViewHelper {
 
-class Tx_Fed_ViewHelpers_Fce_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Fce_FieldViewHelper {
-
+	/**
+	 * Initialize
+	 */
 	public function initializeArguments() {
 		$this->registerArgument('config', 'array', 'Configuration of the field');
 	}
 
+	/**
+	 * Render method
+	 *
+	 * @return string
+	 */
 	public function render() {
 		$config = $this->arguments['config'];
 		return $this->getCustomizedConfiguration($config);
 	}
 
+	/**
+	 * Gets XML for any wizards defined in $config
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getWizardConfiguration($config) {
 		if (count($config['wizards']) == 0) {
 			return NULL;
@@ -68,6 +76,12 @@ class Tx_Fed_ViewHelpers_Fce_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Fc
 		return $xml;
 	}
 
+	/**
+	 * Wrapper to render XML for a FlexForm field based on $config
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getCustomizedConfiguration($config) {
 		$type = $config['type'];
 		$method = "get" . ucfirst($type) . "Configuration";
@@ -78,6 +92,12 @@ class Tx_Fed_ViewHelpers_Fce_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Fc
 		}
 	}
 
+	/**
+	 * Render an input FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getInputConfiguration($config) {
 		$wizards = $this->getWizardConfiguration($config);
 		$xml = <<< XML
@@ -94,6 +114,12 @@ XML;
 		return $xml;
 	}
 
+	/**
+	 * Render a select FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getSelectConfiguration($config, $addedConfig=NULL) {
 		$wizards = $this->getWizardConfiguration($config);
 		if ($config['items']) {
@@ -140,6 +166,12 @@ XML;
 		return $xml;
 	}
 
+	/**
+	 * Render a textarea/RTE FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getTextConfiguration($config) {
 		$wizards = $this->getWizardConfiguration($config);
 		$xml = <<< XML
@@ -157,6 +189,12 @@ XML;
 		return $xml;
 	}
 
+	/**
+	 * Render a checkbox FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getCheckConfiguration($config) {
 		if ($config['requestUpdate'] === TRUE) {
 			$onChange = "<onChange>reload</onChange>" . LF;
@@ -174,6 +212,12 @@ XML;
 		return $xml;
 	}
 
+	/**
+	 * Render a group FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getGroupConfiguration($config) {
 		$added = <<< XML
 	<allowed>{$config['allowed']}</allowed>
@@ -184,6 +228,12 @@ XML;
 		return $xml;
 	}
 
+	/**
+	 * Render a userFunction to return FlexForm field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
 	protected function getUserConfiguration($config) {
 		$wizards = $this->getWizardConfiguration($config);
 		$xml = <<< XML

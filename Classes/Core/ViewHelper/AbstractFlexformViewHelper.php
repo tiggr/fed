@@ -25,16 +25,12 @@
  * ************************************************************* */
 
 /**
+ * Base class for all FlexForm related ViewHelpers
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage Core/ViewHelper
  */
-class Tx_Fed_Core_ViewHelper_AbstractFceViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
+abstract class Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
 	 * Render method
@@ -91,7 +87,7 @@ class Tx_Fed_Core_ViewHelper_AbstractFceViewHelper extends Tx_Fed_Core_ViewHelpe
 	 * @return array
 	 */
 	protected function getStorage() {
-		return $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FceViewHelper', 'storage');
+		return $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage');
 	}
 
 	/**
@@ -100,7 +96,7 @@ class Tx_Fed_Core_ViewHelper_AbstractFceViewHelper extends Tx_Fed_Core_ViewHelpe
 	 * @return void
 	 */
 	protected function setStorage($storage) {
-		$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', $storage);
+		$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', $storage);
 	}
 
 }

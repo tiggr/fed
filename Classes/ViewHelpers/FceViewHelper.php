@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,7 +24,7 @@
  * ************************************************************* */
 
 /**
- *
+ * DEPRECATED: remains until 1.6 - instead use same ViewHelper in Flexform namespace
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
@@ -34,31 +33,7 @@
  * @package Fed
  * @subpackage ViewHelpers/Fce
  */
-class Tx_Fed_ViewHelpers_FceViewHelper
-extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
-
-	/**
-	 * Initialize arguments
-	 */
-	public function initializeArguments() {
-		$this->registerArgument('id', 'string', 'Identifier of this Flexible Content Element', TRUE);
-		$this->registerArgument('label', 'string', 'Label for this Fluid FCE in template file selector', FALSE, NULL);
-		$this->registerArgument('enabled', 'boolean', 'If FALSE, makes the FCE inactive', FALSE, TRUE);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$this->setStorage(array(
-			'label' => $this->arguments['label'],
-			'enabled' => $this->arguments['enabled'],
-			'id' => $this->arguments['id'],
-			'fields' => array(),
-		));
-		$this->renderChildren();
-		return '';
-	}
+class Tx_Fed_ViewHelpers_FceViewHelper extends Tx_Fed_ViewHelpers_FlexformViewHelper {
 
 }
 

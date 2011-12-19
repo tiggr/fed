@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,16 +24,12 @@
  * ************************************************************* */
 
 /**
+ * Base class for all FlexForm fields.
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
- * @subpackage ViewHelpers/Fce
+ * @subpackage ViewHelpers/Flexform/Field
  */
-abstract class Tx_Fed_ViewHelpers_Fce_FieldViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
+abstract class Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
 
 	/**
 	 * Initialize arguments

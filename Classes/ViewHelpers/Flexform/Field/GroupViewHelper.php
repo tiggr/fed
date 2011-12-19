@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,17 +24,35 @@
  * ************************************************************* */
 
 /**
+ * Group (select supertype) FlexForm field ViewHelper
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
  */
+class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Fed_Core_ViewHelper_Field_AbstractFieldViewHelper {
 
-class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Fed_ViewHelpers_Fce_Field_GroupViewHelper {
+	/**
+	 * Initialize
+	 */
+	public function initializeArguments() {
+		parent::initializeArguments();
+		$this->registerArgument('internalType', 'string', 'FlexForm-internalType of this Group Selector', TRUE);
+		$this->registerArgument('allowed', 'string', 'FlexForm-style "allowed" content for a group type field');
+		$this->registerArgument('uploadFolder', 'string', 'Upload folder');
+	}
+
+	/**
+	 * Render method
+	 */
+	public function render() {
+		$config = $this->getFieldConfig();
+		$config['type'] = 'group';
+		$config['internal_type'] = $this->arguments['internalType'];
+		$config['allowed'] = $this->arguments['allowed'];
+		$config['uploadfolder'] = $this->arguments['uploadFolder'];
+		$this->addField($config);
+		$this->renderChildren();
+	}
 
 }
 

@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,50 +24,13 @@
  * ************************************************************* */
 
 /**
+ * DEPRECATED: remains until 1.6 - instead use same ViewHelper in Flexform namespace
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Fce/Field
+ * @deprecated
  */
-
-class Tx_Fed_ViewHelpers_Fce_Field_TextViewHelper extends Tx_Fed_ViewHelpers_Fce_FieldViewHelper {
-
-	const RTE_DEFAULT = "richtext[*]:rte_transform[mode=ts_css]";
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('validate', 'string', 'FlexForm-type validation configuration for this input', FALSE, 'trim');
-		$this->registerArgument('cols', 'int', 'Number of columns in editor', FALSE, 85);
-		$this->registerArgument('rows', 'int', 'Number of rows in editor', FALSE, 10);
-		$this->registerArgument('defaultExtras', 'string', 'FlexForm-syntax "defaultExtras" definition, example: "richtext[*]:rte_transform[mode=ts_css]"', FALSE, '');
-		$this->registerArgument('enableRichText', 'boolean', 'Shortcut for adding "richtext[*]:rte_transform[mode=ts_css]" to "defaultExtras"', FALSE, FALSE);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getBaseConfig();
-		$config['type'] = 'text';
-		$config['validate'] = $this->arguments['validate'];
-		$config['cols'] = $this->arguments['cols'];
-		$config['rows'] = $this->arguments['rows'];
-		if ($this->arguments['enableRichText'] && $this->arguments['defaultExtras'] == '') {
-			$config['defaultExtras'] = self::RTE_DEFAULT;
-		} else {
-			$config['defaultExtras'] = $this->arguments['defaultExtras'];
-		}
-		$this->addField($config);
-		$this->renderChildren();
-	}
-
+class Tx_Fed_ViewHelpers_Fce_Field_TextViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_TextViewHelper {
 
 }
 

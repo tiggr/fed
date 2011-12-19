@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,40 +24,32 @@
  * ************************************************************* */
 
 /**
- *
+ * Flexform Grid Row ViewHelper
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @package Fed/Fce
- * @subpackage ViewHelpers/Fce/Tab
+ * @package Fed
+ * @subpackage ViewHelpers/Flexform/Grid
  */
-class Tx_Fed_ViewHelpers_Fce_Tab_FileViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
+class Tx_Fed_ViewHelpers_Flexform_Grid_RowViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
 
 	/**
-	 * Initialize arguments
+	 * Initialize
 	 */
 	public function initializeArguments() {
-
+		$this->registerArgument('repeat', 'integer', 'number of times to repeat this colum while appending $iteration to name', FALSE, 1);
 	}
 
 	/**
 	 * Render method
+	 * @return type
 	 */
 	public function render() {
-		/*
-		$group = array(
-			'name' => $this->arguments['name'],
-			'label' => $this->arguments['label'],
-			'fields' => array(),
-			'areas' => array()
-		);
-		$storage = $this->getStorage();
-		array_push($storage, $group);
-		$this->setStorage($storage);
+		$this->addGridRow();
 		$this->renderChildren();
-		*/
+		return '';
 	}
 
 }

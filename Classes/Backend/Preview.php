@@ -219,7 +219,7 @@ class Tx_Fed_Backend_Preview implements tx_cms_layout_tt_content_drawItemHook {
 		$flexform = $this->flexform->getAll();
 		$view->assignMultiple($flexform);
 		$view->assignMultiple((array) $variables);
-		$stored = $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+		$stored = $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 		$stored['groups'] = array();
 		foreach ($stored['fields'] as $field) {
 			$groupKey = $field['group']['name'];

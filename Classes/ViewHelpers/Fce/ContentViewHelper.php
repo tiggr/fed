@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,16 +24,12 @@
  * ************************************************************* */
 
 /**
+ * Renders content from nested content areas in the current FCE
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Fce
  */
-class Tx_Fed_ViewHelpers_Fce_ContentViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
+class Tx_Fed_ViewHelpers_Fce_ContentViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
 
 	/**
 	 * Initialize arguments

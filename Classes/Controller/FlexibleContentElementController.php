@@ -49,7 +49,7 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$view->setLayoutRootPath($paths['layoutRootPath']);
 		$view->setPartialRootPath($paths['partialRootPath']);
 		$view->setTemplatePathAndFilename($absolutePath);
-		$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+		$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 		$view->assignMultiple($this->flexform->getAllAndTransform($config['fields']));
 		$view->assign('page', $GLOBALS['TSFE']->page);
 		$view->assign('record', $cObj);

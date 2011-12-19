@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,16 +24,17 @@
  * ************************************************************* */
 
 /**
- *
+ * DEPRECATED: remains until 1.6 - instead use same ViewHelper in Flexform namespace
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
- * @subpackage ViewHelpers/Page
+ * @subpackage ViewHelpers
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_PageViewHelper extends Tx_Fed_ViewHelpers_FceViewHelper {
+class Tx_Fed_ViewHelpers_PageViewHelper extends Tx_Fed_ViewHelpers_FlexformViewHelper {
 
 }
 

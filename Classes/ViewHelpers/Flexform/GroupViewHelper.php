@@ -25,7 +25,9 @@
  * ************************************************************* */
 
 /**
- * Proxy for FCE GroupViewHelper - exact same feature
+ * FlexForm field group ViewHelper
+ *
+ * Groups FlexForm fields into sheets.
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
@@ -34,8 +36,28 @@
  * @package Fed/Fce
  * @subpackage ViewHelpers/Flexform
  */
-class Tx_Fed_ViewHelpers_Flexform_GroupViewHelper extends Tx_Fed_ViewHelpers_Fce_GroupViewHelper {
+class Tx_Fed_ViewHelpers_Flexform_GroupViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
 
+	/**
+	 * Initialize arguments
+	 */
+	public function initializeArguments() {
+		$this->registerArgument('name', 'string', 'Name of the group, used as FlexForm sheet name, must be FlexForm XML-valid tag name string', TRUE);
+		$this->registerArgument('label', 'string', 'Label for the field group - used as tab name in FlexForm', TRUE);
+	}
+
+	/**
+	 * Render method
+	 */
+	public function render() {
+		$group = array(
+			'name' => $this->arguments['name'],
+			'label' => $this->arguments['label'],
+		);
+		$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group', $group);
+		$this->renderChildren();
+		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group');
+	}
 
 }
 

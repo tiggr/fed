@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,31 +24,13 @@
  * ************************************************************* */
 
 /**
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * DEPRECATED: remains until 1.6 - instead use same ViewHelper in Flexform namespace
+ *
  * @package Fed
  * @subpackage ViewHelpers/Fce/Grid
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Fce_Grid_RowViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		$this->registerArgument('repeat', 'integer', 'number of times to repeat this colum while appending $iteration to name', FALSE, 1);
-	}
-	
-	/**
-	 * Render method
-	 * @return type 
-	 */
-	public function render() {
-		$this->addGridRow();
-		$this->renderChildren();
-		return '';
-	}
+class Tx_Fed_ViewHelpers_Fce_Grid_RowViewHelper extends Tx_Fed_ViewHelpers_Flexform_Grid_RowViewHelper {
 
 }
 

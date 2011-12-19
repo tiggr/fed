@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -27,16 +26,14 @@
 /**
  * ViewHelper used to render the FlexForm definition for Fluid FCEs
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Fce/Field
  */
 class Tx_Fed_ViewHelpers_Fce_RenderContentViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
-
+	/**
+	 * Initialize
+	 */
 	public function initializeArguments() {
 		$this->registerArgument('area', 'string', 'Name of the area to render');
 		$this->registerArgument('limit', 'integer', 'Optional limit to the number of content elements to render');
@@ -44,6 +41,11 @@ class Tx_Fed_ViewHelpers_Fce_RenderContentViewHelper extends Tx_Fed_Core_ViewHel
 		$this->registerArgument('sortDirection', 'string', 'Optional sort direction of content elements', FALSE, 'ASC');
 	}
 
+	/**
+	 * Render
+	 *
+	 * @return string
+	 */
 	public function render() {
 		$html = "";
 		$record = $this->templateVariableContainer->get('record');

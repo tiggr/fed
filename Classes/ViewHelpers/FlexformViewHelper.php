@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,7 +24,7 @@
  * ************************************************************* */
 
 /**
- * Alias of Tx_Fed_ViewHelpers_FceViewHelper
+ * FlexForm configuration container ViewHelper
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
@@ -34,8 +33,30 @@
  * @package Fed
  * @subpackage ViewHelpers
  */
-class Tx_Fed_ViewHelpers_FlexformViewHelper
-extends Tx_Fed_ViewHelpers_FceViewHelper {
+class Tx_Fed_ViewHelpers_FlexformViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
+
+	/**
+	 * Initialize arguments
+	 */
+	public function initializeArguments() {
+		$this->registerArgument('id', 'string', 'Identifier of this Flexible Content Element', TRUE);
+		$this->registerArgument('label', 'string', 'Label for this Fluid FCE in template file selector', FALSE, NULL);
+		$this->registerArgument('enabled', 'boolean', 'If FALSE, makes the FCE inactive', FALSE, TRUE);
+	}
+
+	/**
+	 * Render method
+	 */
+	public function render() {
+		$this->setStorage(array(
+			'label' => $this->arguments['label'],
+			'enabled' => $this->arguments['enabled'],
+			'id' => $this->arguments['id'],
+			'fields' => array(),
+		));
+		$this->renderChildren();
+		return '';
+	}
 
 }
 

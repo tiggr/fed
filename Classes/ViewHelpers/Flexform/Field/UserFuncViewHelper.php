@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,16 +24,31 @@
  * ************************************************************* */
 
 /**
+ * Flexform Userfunc field ViewHelper
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_UserFuncViewHelper extends Tx_Fed_ViewHelpers_Fce_Field_UserFuncViewHelper {
+class Tx_Fed_ViewHelpers_Flexform_Field_UserFuncViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
+
+	/**
+	 * Initialize
+	 */
+	public function initializeArguments() {
+		parent::initializeArguments();
+		$this->registerArgument('userFunc', 'string', 'Classname->function notation of UserFunc to be called, example "Tx_Fed_Configuration_Wizard_FlexFormCodeEditor->renderField" - Extbase classes need autoload registry for this', TRUE);
+	}
+
+	/**
+	 * Render method
+	 */
+	public function render() {
+		$config = $this->getBaseConfig();
+		$config['type'] = 'user';
+		$config['userFunc'] = $this->arguments['userFunc'];
+		$this->addField($config);
+		$this->renderChildren();
+	}
 
 }
 ?>

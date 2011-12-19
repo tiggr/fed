@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,17 +24,15 @@
  * ************************************************************* */
 
 /**
- * Proxy for FCE GroupViewHelper - exact same feature
+ * Proxy for FlexForm GroupViewHelper - exact same feature
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * DEPRECATED: remains until 1.6 - instead use same ViewHelper in Flexform namespace
+ *
  * @package Fed/Fce
  * @subpackage ViewHelpers/Page
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Page_GroupViewHelper extends Tx_Fed_ViewHelpers_Fce_GroupViewHelper {
-
+class Tx_Fed_ViewHelpers_Page_GroupViewHelper extends Tx_Fed_ViewHelpers_Flexform_GroupViewHelper {
 
 }
 

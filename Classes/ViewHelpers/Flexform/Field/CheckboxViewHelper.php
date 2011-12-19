@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -25,17 +24,22 @@
  * ************************************************************* */
 
 /**
+ * Checkbox FlexForm field ViewHelper
  *
- *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
  */
+class Tx_Fed_ViewHelpers_Flexform_Field_CheckboxViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
 
-class Tx_Fed_ViewHelpers_Flexform_Field_CheckboxViewHelper extends Tx_Fed_ViewHelpers_Fce_Field_CheckboxViewHelper {
+	/**
+	 * Render method
+	 */
+	public function render() {
+		$config = $this->getBaseConfig();
+		$config['type'] = 'check';
+		$this->addField($config);
+		$this->renderChildren();
+	}
 
 }
 

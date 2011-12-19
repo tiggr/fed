@@ -25,40 +25,26 @@
  * ************************************************************* */
 
 /**
- *
+ * Grid container ViewHelper
  *
  * @author Claus Due, Wildside A/S
  * @version $Id$
  * @copyright Copyright belongs to the respective authors
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- * @package Fed/Fce
- * @subpackage ViewHelpers/Fce/Tab
+ * @package Fed
+ * @subpackage ViewHelpers/Flexform
  */
-class Tx_Fed_ViewHelpers_Fce_Tab_TableViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFceViewHelper {
-
-	/**
-	 * Initialize arguments
-	 */
-	public function initializeArguments() {
-
-	}
+class Tx_Fed_ViewHelpers_Flexform_GridViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
 
 	/**
 	 * Render method
 	 */
 	public function render() {
-		/*
-		$group = array(
-			'name' => $this->arguments['name'],
-			'label' => $this->arguments['label'],
-			'fields' => array(),
-			'areas' => array()
-		);
 		$storage = $this->getStorage();
-		array_push($storage, $group);
+		$storage['grid'] = array();
 		$this->setStorage($storage);
 		$this->renderChildren();
-		*/
+		return '';
 	}
 
 }
