@@ -3,12 +3,11 @@
 <f:layout name="FCE" />
 
 <f:section name="Configuration">
-  <fed:fce id="breadcrumb" label="Navigation: Bread Crumb" enabled="TRUE">
-    <fed:fce.field.group name="startingPage" label="Starting page"
-      internalType="db" allowed="pages" maxItems="1" />
-    <fed:fce.field.select name="entryLevel" label="Entry-level"
+  <fed:flexform id="breadcrumb" label="Navigation: Bread Crumb" enabled="TRUE">
+    <fed:flexform.field.tree size="20" parentField="pid" name="startingPage" label="Starting page" table="pages" expandAll="FALSE" />
+    <fed:flexform.field.select name="entryLevel" label="Entry-level"
       commaSeparatedItems="-1,0,1,2,3,4,5,6" />
-  </fed:fce>
+  </fed:flexform>
 </f:section>
 
 <f:section name="Preview">

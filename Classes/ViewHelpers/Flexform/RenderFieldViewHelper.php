@@ -29,7 +29,7 @@
  * @package Fed
  * @subpackage ViewHelpers/Flexform
  */
-class Tx_Fed_ViewHelpers_Flexform_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Fce_FieldViewHelper {
+class Tx_Fed_ViewHelpers_Flexform_RenderFieldViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
 
 	/**
 	 * Initialize
@@ -138,9 +138,9 @@ XML;
 			$switchedConfig .= '</items>' . LF;
 		} else if ($config['table']) {
 			$switchedConfig = implode(LF, array(
-				"<foreign_table>{$config['table']}</foreign_table>",
-				"<foreign_table_where>{$config['condition']}</foreign_table_where>",
-				"<MM>{$config['mm']}</MM>",
+				$config['table'] ? "<foreign_table>{$config['table']}</foreign_table>" : NULL,
+				$config['foreign_table_where'] ? "<foreign_table_where>{$config['condition']}</foreign_table_where>" : NULL,
+				$config['mm'] ? "<MM>{$config['mm']}</MM>" : NULL,
 			));
 		}
 		if ($config['requestUpdate'] === TRUE) {
@@ -223,6 +223,32 @@ XML;
 	<allowed>{$config['allowed']}</allowed>
 	<internal_type>{$config['internal_type']}</internal_type>
 	<uploadfolder>{$config['uploadfolder']}</uploadfolder>
+XML;
+		$xml = $this->getSelectConfiguration($config, $added);
+		return $xml;
+	}
+
+	/**
+	 * Render a tree field XML
+	 *
+	 * @param array $config
+	 * @return string
+	 */
+	protected function getTreeConfiguration($config) {
+		$config['type'] = 'select';
+		$expandAll = $config['expandAll'] ? 'TRUE' : 'FALSE';
+		$showHeader = $config['showHeader'] ? 'TRUE' : 'FALSE';
+		$parentField = $config['parentField'];
+		$added = <<< XML
+<renderMode>tree</renderMode>
+<treeConfig>
+	<parentField>$parentField</parentField>
+	<appearance>
+		<expandAll>$expandAll</expandAll>
+		<showHeader>$showHeader</showHeader>
+		<width>400</width>
+	</appearance>
+</treeConfig>
 XML;
 		$xml = $this->getSelectConfiguration($config, $added);
 		return $xml;

@@ -319,7 +319,7 @@ class Tx_Fed_Utility_FlexForm implements t3lib_Singleton {
 			$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 			$view->setTemplatePathAndFilename($templateFile);
 			$view->assignMultiple($values);
-			$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+			$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 			$groups = array();
 			foreach ($config['fields'] as $field) {
 				$groupKey = $field['group']['name'];

@@ -84,7 +84,7 @@ class Tx_Fed_Backend_FCESelector {
 					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {
-						$config =  $view->getStoredVariable('Tx_Fed_ViewHelpers_FceViewHelper', 'storage', 'Configuration');
+						$config =  $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 						$enabled = $config['enabled'];
 						$label = $config['label'];
 						if ($enabled !== FALSE) {

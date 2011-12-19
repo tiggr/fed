@@ -24,21 +24,21 @@
  * ************************************************************* */
 
 /**
- * Group (select supertype) FlexForm field ViewHelper
+ * Tree (select supertype) FlexForm field ViewHelper
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper {
+class Tx_Fed_ViewHelpers_Flexform_Field_TreeViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper {
 
 	/**
 	 * Initialize
 	 */
 	public function initializeArguments() {
 		parent::initializeArguments();
-		$this->registerArgument('internalType', 'string', 'FlexForm-internalType of this Group Selector', TRUE);
-		$this->registerArgument('allowed', 'string', 'FlexForm-style "allowed" content for a group type field');
-		$this->registerArgument('uploadFolder', 'string', 'Upload folder');
+		$this->registerArgument('parentField', 'string', 'Field containing UID of parent record', TRUE);
+		$this->registerArgument('expandAll', 'boolean', 'If TRUE, expands all branches', FALSE, FALSE);
+		$this->registerArgument('showHeader', 'boolean', 'If TRUE, displays tree header', FALSE, FALSE);
 	}
 
 	/**
@@ -46,10 +46,10 @@ class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Fed_ViewHelpe
 	 */
 	public function render() {
 		$config = $this->getFieldConfig();
-		$config['type'] = 'group';
-		$config['internal_type'] = $this->arguments['internalType'];
-		$config['allowed'] = $this->arguments['allowed'];
-		$config['uploadfolder'] = $this->arguments['uploadFolder'];
+		$config['type'] = 'tree';
+		$config['parentField'] = $this->arguments['parentField'];
+		$config['expandAll'] = $this->arguments['expandAll'];
+		$config['showHeader'] = $this->arguments['showHeader'];
 		$this->addField($config);
 		$this->renderChildren();
 	}
