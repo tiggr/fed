@@ -64,8 +64,13 @@ class Tx_Fed_Service_Content implements t3lib_Singleton {
 			$afterRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $afterContentElementUid . "'");
 			$area = $afterRecord['tx_fed_fcecontentarea'];
 		} else if ($id > 0) {
-			$existingRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $id . "'");
-			$area = $existingRecord['tx_fed_fcecontentarea'];
+			if ($record['tx_fed_fcecontentarea']) {
+				$area = $record['tx_fed_fcecontentarea'];
+			} else {
+					// we need the field's contents from DB since it is not provided in $record
+				$existingRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $id . "'");
+				$area = $existingRecord['tx_fed_fcecontentarea'];
+			}
 		}
 		return $area;
 	}
