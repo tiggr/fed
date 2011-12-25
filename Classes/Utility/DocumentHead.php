@@ -117,9 +117,9 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 			$key = md5($code);
 		}
 		if ($type == 'js') {
-			$this->pageRenderer->addJsInlineCode($key, $code, FALSE, $index == 0);
+			$this->isCached() ? $this->pageRenderer->addJsInlineCode($key, $code, FALSE, $index == 0) : $GLOBALS['TSFE']->additionalHeaderData[md5($key)] = t3lib_div::wrapJS($code);;
 		} else if ($type == 'css') {
-			$this->pageRenderer->addCssInlineBlock($key, $code, FALSE, $index == 0);
+			$this->isCached() ? $this->pageRenderer->addCssInlineBlock($key, $code, FALSE, $index == 0) : $GLOBALS['TSFE']->additionalHeaderData[md5($key)] = '<style type="text/css">' . $code . '</style>';
 		}
 	}
 
@@ -250,9 +250,9 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 			$type = 'js'; // assume Javascript for unknown files - this may change later on...
 		}
 		if ($type == 'js') {
-			$this->pageRenderer->addJsFile($filename, 'text/javascript', $compress, $index == 0);
+			$this->isCached() ? $this->pageRenderer->addJsFile($filename, 'text/javascript', $compress, $index == 0) : $GLOBALS['TSFE']->additionalHeaderData[md5($filename)] = '<script type="text/javascript" src="' . $filename . '"></script>';
 		} else if ($type == 'css') {
-			$this->pageRenderer->addCssFile($filename, 'stylesheet', $attributes['media'] ? $attributes['media'] : 'all', '', $compress, $index == 0);
+			$this->isCached() ? $this->pageRenderer->addCssFile($filename, 'stylesheet', $attributes['media'] ? $attributes['media'] : 'all', '', $compress, $index == 0) : $GLOBALS['TSFE']->additionalHeaderData[md5($filename)] = '<link rel="stylesheet" type="text/css" media="' . $attributes['media'] ? $attributes['media'] : 'all' . '" href="' . $filename . '" />';
 		}
 	}
 

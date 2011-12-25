@@ -52,12 +52,17 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterInlineCodeViewHelper extends Tx
 		if (!$block) {
 			$block = $this->renderChildren();
 		}
-		$this->pageRenderer->addJsFooterInlineCode(
-			$this->arguments['name'],
-			$block,
-			$this->arguments['compress'],
-			$this->arguments['forceOnTop']
-		);
+		if ($this->isCached()) {
+			$this->pageRenderer->addJsFooterInlineCode(
+				$this->arguments['name'],
+				$block,
+				$this->arguments['compress'],
+				$this->arguments['forceOnTop']
+			);
+		} else {
+			// additionalFooterData not possible in USER_INT
+			$GLOBALS['TSFE']->additionalHeaderData[md5($name)] = t3lib_div::wrapJS($block);
+		}
 	}
 
 }

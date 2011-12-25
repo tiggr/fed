@@ -50,19 +50,19 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFileViewHelper extends Tx_Fed_ViewHel
 	 * @param string $file
 	 */
 	public function render($file=NULL) {
-		if ($file === NULL) {
-			$file = $this->renderChildren();
+		if ($this->isCached()) {
+			$this->pageRenderer->addJsFile(
+				$file,
+				$this->arguments['type'],
+				$this->arguments['compress'],
+				$this->arguments['forceOnTop'],
+				$this->arguments['allWrap'],
+				$this->arguments['excludeFromConcatenation']
+			);
+		} else {
+			$GLOBALS['TSFE']->additionalHeaderData[md5($file)] = '<script type="text/javascript" src="' . $file . '"></script>';
 		}
-		$this->pageRenderer->addJsFile(
-			$file,
-			$this->arguments['type'],
-			$this->arguments['compress'],
-			$this->arguments['forceOnTop'],
-			$this->arguments['allWrap'],
-			$this->arguments['excludeFromConcatenation']
-		);
 	}
-
 }
 
 ?>
