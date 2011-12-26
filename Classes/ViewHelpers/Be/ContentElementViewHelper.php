@@ -40,21 +40,6 @@ class Tx_Fed_ViewHelpers_Be_ContentElementViewHelper extends Tx_Fed_Core_ViewHel
 	 */
 	public function render($dblist) {
 		$record = $this->arguments['row'];
-		#$uid = $record['uid'];
-		#$dblist = t3lib_div::makeInstance('tx_cms_layout');
-		#$dblist->backPath = $GLOBALS['BACK_PATH'];
-		#$dblist->thumbs = $this->imagemode;
-		#$dblist->script = 'db_layout.php';
-		#$dblist->showIcon = 1;
-		#$dblist->showInfo = 1;
-		#$dblist->setLMargin = 0;
-		#$dblist->doEdit = TRUE;
-		#$dblist->tt_contentData['nextThree'][$record['uid']] = $record['nextThree'];
-		#$dblist->ext_CALC_PERMS = $GLOBALS['BE_USER']->calcPerms($pageRecord);
-		#$dblist->id = $row['pid'];
-		#$dblist->nextThree = 0;
-		#$dblist->tt_contentData['next'][$uid] = $record['next'];
-		#$dblist->tt_contentData['prev'][$uid] = $record['prev'];
 		$rendered = $dblist->tt_content_drawHeader($record);
 		$rendered .= $dblist->tt_content_drawItem($record);
 		return $rendered;

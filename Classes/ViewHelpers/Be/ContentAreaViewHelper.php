@@ -52,11 +52,16 @@ class Tx_Fed_ViewHelpers_Be_ContentAreaViewHelper extends Tx_Fed_Core_ViewHelper
 		$dblist->script = 'db_layout.php';
 		$dblist->showIcon = 1;
 		$dblist->setLMargin = 0;
-		$dblist->doEdit = TRUE;
+		$dblist->doEdit = 1;
+		$dblist->no_noWrap = 1;
+		$dblist->setLMargin = 0;
 		$dblist->ext_CALC_PERMS = $GLOBALS['BE_USER']->calcPerms($pageRecord);
 		$dblist->id = $row['pid'];
 		$dblist->nextThree = 1;
 		$dblist->showCommands = 1;
+		$dblist->tt_contentConfig['showCommands'] = 1;
+		$dblist->tt_contentConfig['showInfo'] = 1;
+		$dblist->tt_contentConfig['single'] = 0;
 
 		$records = array();
 		$condition = "tx_fed_fcecontentarea = '{$area}:{$row['uid']}' AND deleted = 0";
@@ -68,6 +73,8 @@ class Tx_Fed_ViewHelpers_Be_ContentAreaViewHelper extends Tx_Fed_Core_ViewHelper
 		$content = $this->renderChildren();
 		$this->templateVariableContainer->remove('records');
 		$this->templateVariableContainer->remove('dblist');
+
+		$content = '<div id="' . $area . '-' . $row['uid'] . '-' . $row['pid'] . '-FED">' . $content . '</div>';
 
 		return $content;
 	}

@@ -133,7 +133,7 @@ class Tx_Fed_Backend_TCEMain {
 	 * @param	object		$reference: Reference to the parent object (TCEmain)
 	 * @return	void
 	 */
-	public function processCmdmap_preProcess(&$command, $table, $id, $relativeTo, t3lib_TCEmain &$reference) {
+	public function processCmdmap_preProcess(&$command, $table, $id, &$relativeTo, t3lib_TCEmain &$reference) {
 		if ($table === 'tt_content') {
 			switch ($command) {
 				case 'delete':
@@ -144,11 +144,18 @@ class Tx_Fed_Backend_TCEMain {
 					break;
 				case 'move':
 					if ($relativeTo > 0) {
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => ''));
-					} else {
+						$area = ''; // moving directly to a new page, remove area
+					} else if (is_numeric($relativeTo)) {
 						$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", array('tx_fed_fcecontentarea' => $area));
+					} else if (strpos($relativeTo, 'FED')) {
+						$parts = explode('-', $relativeTo);
+						$parts = array_slice($parts, 1, count($parts) - 2);
+						$pid = array_pop($parts);
+						$area = implode(':', $parts);
+						$relativeTo = $pid;
 					}
+					$data = array('tx_fed_fcecontentarea' => $area);
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", $data);
 					break;
 				default:
 			}
@@ -189,7 +196,7 @@ class Tx_Fed_Backend_TCEMain {
 					}
 				}
 			}
-			$incomingFieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($incomingFieldArray, $id);
+			$incomingFieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($incomingFieldArray, $id);;
 		}
 	}
 

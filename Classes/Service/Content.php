@@ -66,7 +66,7 @@ class Tx_Fed_Service_Content implements t3lib_Singleton {
 		} else if ($id > 0) {
 			if ($record['tx_fed_fcecontentarea']) {
 				$area = $record['tx_fed_fcecontentarea'];
-			} else {
+			} else if ($id !== 'NEW') {
 					// we need the field's contents from DB since it is not provided in $record
 				$existingRecord = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('pid,tx_fed_fcecontentarea', 'tt_content', "uid = '" . $id . "'");
 				$area = $existingRecord['tx_fed_fcecontentarea'];
