@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Fluid Extbase Development Framework',
-	'description' => 'Extensive library of Configuration, Plugins, ViewHelpers and Services for making Fluid Page Templates, Fluid Content Elements, AJAX form validations, AJAX-REST-enabled ExtJS4 Models and so much more. Web site: http://fedext.net',
+	'description' => 'Integrates Fluid and Extbase even further with TYPO3, allowing pages to be rendered through Fluid, content elements based on Fluid templates, dynamic FlexForms based on Fluid. Integrates Scheduler with Extbase CommandControllers. Contains hundreds of ViewHelpers and Widgets. Web site: http://fedext.net',
 	'category' => 'misc',
 	'author' => 'Claus Due',
 	'author_email' => 'claus@wildside.dk',
