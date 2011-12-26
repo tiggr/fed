@@ -23,10 +23,10 @@
 ***************************************************************/
 
 /**
- * Field provider for CommandController Scheduler Task
+ * Field provider for Extbase CommandController Scheduler task
  *
- * @version $Id$
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser Public License, version 3 or later
+ * @package Fed
+ * @subpackage Scheduler
  */
 class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProvider {
 
@@ -39,6 +39,11 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 * @var Tx_Extbase_Object_ObjectManager
 	 */
 	protected $objectManager;
+
+	/**
+	 * @var Tx_Extbase_Reflection_Service
+	 */
+	protected $reflectionService;
 
 	/**
 	 * @var Tx_Fed_Scheduler_Task
@@ -60,6 +65,13 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	}
 
 	/**
+	 * @param Tx_Extbase_Reflection_Service $reflectionService
+	 */
+	public function injectReflectionService(Tx_Extbase_Reflection_Service $reflectionService) {
+		$this->reflectionService = $reflectionService;
+	}
+
+	/**
 	 * CONSTRUCTOR
 	 */
 	public function __construct() {
@@ -67,26 +79,32 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 		$this->injectObjectManager($objectManager);
 		$commandManager = $this->objectManager->get('Tx_Extbase_MVC_CLI_CommandManager');
 		$this->injectCommandManager($commandManager);
+		$reflectionService = $this->objectManager->get('Tx_Extbase_Reflection_Service');
+		$this->injectReflectionService($reflectionService);
 	}
 
 	/**
 	 * Render additional information fields within the scheduler backend.
 	 *
 	 * @param array $taskInfo Array information of task to return
-	 * @param task $task Task object
+	 * @param mixed $task Tx_Fed_Scheduler_Task or tx_scheduler_Execution instance
 	 * @param Tx_Scheduler_Module $schedulerModule Reference to the calling object (BE module of the Scheduler)
 	 * @return array Additional fields
 	 * @see interfaces/tx_scheduler_AdditionalFieldProvider#getAdditionalFields($taskInfo, $task, $schedulerModule)
 	 */
 	public function getAdditionalFields(array &$taskInfo, $task, Tx_Scheduler_Module $schedulerModule) {
 		$this->task = $task;
+		if ($this->task) {
+			$this->task->setScheduler();
+		}
 		$fields = array();
 		$fields['action'] = $this->getCommandControllerActionField();
-		if ($this->task && $this->task->getCommandIdentifier()) {
+		if ($this->task !== NULL && $this->task->getCommandIdentifier()) {
 			$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());
 			$fields['description'] = $this->getCommandControllerActionDescriptionField();
 			$argumentFields = $this->getCommandControllerActionArgumentFields($command->getArgumentDefinitions());
 			$fields = array_merge($fields, $argumentFields);
+			$this->task->save();
 		}
 		return $fields;
 	}
@@ -95,7 +113,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 * Validates additional selected fields
 	 *
 	 * @param array $submittedData
-	 * @param Tx_Scheduler_Task $schedulerModule
+	 * @param Tx_Scheduler_Module $schedulerModule
 	 * @return boolean
 	 */
 	public function validateAdditionalFields(array &$submittedData, Tx_Scheduler_Module $schedulerModule) {
@@ -110,8 +128,8 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 * @return boolean
 	 */
 	public function saveAdditionalFields(array $submittedData, Tx_Scheduler_Task $task) {
-		$task->setCommandIdentifier($submittedData['task_extbase']['action']);
-		$task->setArguments($submittedData['task_extbase']['arguments']);
+		$task->setCommandIdentifier($submittedData['task_fed']['action']);
+		$task->setArguments($submittedData['task_fed']['arguments']);
 		return TRUE;
 	}
 
@@ -123,8 +141,8 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	protected function getCommandControllerActionDescriptionField() {
 		$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());
 		return array(
-			'code' => $command->getDescription(),
-			'label' => 'Description'
+			'code' => '',
+			'label' => '<strong>' . $command->getDescription() . '</strong>'
 		);
 	}
 
@@ -137,22 +155,24 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 		$commands = $this->commandManager->getAvailableCommands();
 		$options = array();
 		foreach ($commands as $command) {
-			if ($command instanceof Tx_Extbase_MVC_CLI_Command) {
+			if ($command->isInternal() === FALSE) {
 				$classNameParts = explode('_', $command->getControllerClassName());
 				$identifier = $command->getCommandIdentifier();
 				$options[$identifier] = $classNameParts[1] . ' ' . str_replace('CommandController', '', $classNameParts[3]) . ': ' . $command->getControllerCommandName();
 			}
 		}
 		$name = "action";
-		$currentlySelectedCommand = $this->task ? $this->task->getCommandIdentifier() : NULL;
+		$currentlySelectedCommand = $this->task !== NULL ? $this->task->getCommandIdentifier() : NULL;
 		return array(
-			'code' => $this->renderSelectField($name, $options, $currentlySelectedCommand) . '<br />(note: save and reopen to define command arguments)',
+			'code' => $this->renderSelectField($name, $options, $currentlySelectedCommand),
 			'label' => $this->getActionLabel()
 		);
 	}
 
 	/**
-	 * Gets a set of fields covering arguments which must be sent to $currentControllerAction
+	 * Gets a set of fields covering arguments which must be sent to $currentControllerAction.
+	 * Also registers the default values of those fields with the Task, allowing
+	 * them to be read upon execution.
 	 *
 	 * @param array $argumentDefinitions
 	 * @return array
@@ -162,60 +182,108 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 		$argumentValues = $this->task->getArguments();
 		foreach ($argumentDefinitions as $index=>$argument) {
 			$name = $argument->getName();
-			$description = $argument->getDescription();
-			$value = $argumentValues[$name];
+			$defaultValue = $this->getDefaultArgumentValue($argument);
+			$this->task->addDefaultValue($name, $defaultValue);
+			$value = isset($argumentValues[$name]) ? $argumentValues[$name] : $defaultValue;
 			$fields[$name] = array(
-				'code' => '<input type="text" name="tx_scheduler[task_fed][arguments][' . $name . ']" value="' . $value . '" />',
-				'label' => $this->getArgumentLabel($name)
+				'code' => $this->renderField($argument, $value),
+				'label' => $this->getArgumentLabel($argument)
 			);
 		}
 		return $fields;
 	}
 
 	/**
-	 * Gets an array of language labels related to the extension providing the
-	 * currently selected command.
+	 * Gets a label for $key based on either provided extension or currently
+	 * selected CommandController extension,´
 	 *
+	 * @param string $localLanguageKey
 	 * @param string $extensionName
-	 * @param string $extensionName
-	 * @return array
+	 * @return string
 	 */
-	protected function getLanguageLabel($key, $extensionName=NULL) {
+	protected function getLanguageLabel($localLanguageKey, $extensionName = NULL) {
 		if (!$extensionName) {
 			list ($extensionName, $commandControllerName, $commandName) = explode(':', $this->task->getCommandIdentifier());
 		}
-		return Tx_Extbase_Utility_Localization::translate($key, $extensionName);
+		$label = Tx_Extbase_Utility_Localization::translate($localLanguageKey, $extensionName);
+		return $label;
+	}
+
+	/**
+	 * Gets the data type required for the argument value
+	 *
+	 * @param Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument
+	 */
+	protected function getArgumentType(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument) {
+		$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());
+		$controllerClassName = $command->getControllerClassName();
+		$methodName = $command->getControllerCommandName() . 'Command';
+		$tags = $this->reflectionService->getMethodTagsValues($controllerClassName, $methodName);
+		foreach ($tags['param'] as $tag) {
+			list ($argumentType, $argumentVariableName) = explode(' ', $tag);
+			if (substr($argumentVariableName, 1) == $argument->getName()) {
+				return $argumentType;
+			}
+		}
+		return NULL;
 	}
 
 	/**
 	 * Get a human-readable label for a command argument
 	 *
-	 * @param string $argumentName
+	 * @param Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument
+	 * @return string
 	 */
-	protected function getArgumentLabel($argumentName) {
+	protected function getArgumentLabel(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument) {
+		$argumentName = $argument->getName();
 		list ($extensionName, $commandControllerName, $commandName) = explode(':', $this->task->getCommandIdentifier());
 		$path = array('command', $commandControllerName, $commandName, 'arguments', $argumentName);
-		$index = implode('.', $path);
-		$label = $this->getLanguageLabel($index);
-		if ($label) {
-			return $label;
-		} else {
-			return 'Argument: ' . $argumentName;
+		$labelNameIndex = implode('.', $path);
+		$label = $this->getLanguageLabel($labelNameIndex);
+		if (!$label) {
+			$label = 'Argument: ' . $argumentName;
 		}
+		$descriptionIndex = $labelNameIndex . '.description';
+		$description = $this->getLanguageLabel($descriptionIndex);
+		if (!$description) {
+			$description = $argument->getDescription();
+		}
+		if ($description) {
+			$label .= '. <em>' . $description . '</em>';
+		}
+		return $label;
+	}
+
+	/**
+	 * Gets the default value of argument
+	 *
+	 * @param Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument
+	 * @return mixed
+	 */
+	protected function getDefaultArgumentValue(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument) {
+		$type = $this->getArgumentType($argument);
+		$argumentName = $argument->getName();
+		$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());
+		$argumentReflection = $this->reflectionService->getMethodParameters($command->getControllerClassName(), $command->getControllerCommandName() . 'Command');
+		$defaultValue = $argumentReflection[$argumentName]['defaultValue'];
+		if ($type === 'boolean') {
+			$defaultValue = ((bool) $defaultValue) ? 1 : 0;
+		}
+		return $defaultValue;
 	}
 
 	/**
 	 * Get a human-readable label for the action field
 	 *
-	 * @param string $name
 	 * @return string
 	 */
 	protected function getActionLabel() {
 		$index = 'task.action';
 		$label = $this->getLanguageLabel($index, 'fed');
 		if (!$label) {
-			return 'CommandController Command';
+			$label = 'CommandController Command. <em>Save and reopen to define command arguments</em>';
 		}
+		return $label;
 	}
 
 	/**
@@ -223,20 +291,43 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 *
 	 * @param string $name
 	 * @param array $options
-	 * return string
+	 * @param string $selectedOptionValue
+	 * @return string
 	 */
-	protected function renderSelectField($name, $options, $selectedOptionValue) {
+	protected function renderSelectField($name, array $options, $selectedOptionValue) {
 		$html = array(
-			'<select name="tx_scheduler[task_extbase][' . $name . ']">'
+			'<select name="tx_scheduler[task_fed][' . $name . ']">'
 		);
 		foreach ($options as $optionValue=>$optionLabel) {
 			$selected = $optionValue == $selectedOptionValue ? ' selected="selected"' : '';
-			array_push($html, '<option value="' . $optionValue . '"' . $selected . '>' . $optionLabel . '</option>');
+			array_push($html, '<option title="test" value="' . $optionValue . '"' . $selected . '>' . $optionLabel . '</option>');
 		}
 		array_push($html, '</select>');
 		return implode(LF, $html);
 	}
 
+	/**
+	 * Renders a field for defining an argument's value
+	 *
+	 * @param string $type
+	 * @param string $name
+	 * @param string $currentValue
+	 * @return string
+	 */
+	protected function renderField(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument, $currentValue) {
+		$type = $this->getArgumentType($argument);
+		$name = $argument->getName();
+		$fieldName = 'tx_scheduler[task_fed][arguments][' . $name . ']';
+		if ($type == 'boolean') {
+				// checkbox field for boolean values.
+			$html = '<input type="hidden" name="' . $fieldName . '" value="0" />';
+			$html .= '<input type="checkbox" name="' . $fieldName . '" value="1" ' . ($currentValue == 1 ? ' checked="checked"' : '') . '/>';
+		} else {
+				// regular string, also the default field type
+			$html = '<input type="text" name="' . $fieldName . '" value="' . $currentValue . '" /> ';
+		}
+		return $html;
+	}
 
 }
 

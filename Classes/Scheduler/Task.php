@@ -25,8 +25,8 @@
 /**
  * Scheduler task to execute CommandController commands
  *
- * @version $Id$
- * @license http://www.gnu.org/licenses/lgpl.html GNU Lesser Public License, version 3 or later
+ * @package Fed
+ * @subpackage Scheduler
  */
 class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 
@@ -39,6 +39,11 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 	 * @var array
 	 */
 	protected $arguments;
+
+	/**
+	 * @var array
+	 */
+	protected $defaults;
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManager
@@ -61,17 +66,13 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 		list ($extensionName, $controllerName, $commandName) = explode(':', $this->commandIdentifier);
 		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->injectObjectManager($objectManager);
-		$request = $this->objectManager->get('Tx_Extbase_MVC_CLI_Request');
+		$request = $this->objectManager->create('Tx_Extbase_MVC_CLI_Request');
 		$dispatcher = $this->objectManager->get('Tx_Extbase_MVC_Dispatcher');
-		$response = $this->objectManager->get('Tx_Extbase_MVC_CLI_Response');
+		$response = $this->objectManager->create('Tx_Extbase_MVC_CLI_Response');
 		try {
-			$controllerObjectNameParts = array(
-				'Tx',
-				Tx_Extbase_Utility_Extension::convertLowerUnderscoreToUpperCamelCase($extensionName),
-				'Command',
-				Tx_Extbase_Utility_Extension::convertLowerUnderscoreToUpperCamelCase($controllerName) . 'CommandController'
-			);
-			$controllerObjectName = implode('_', $controllerObjectNameParts);
+			$upperCamelCaseExtensionName = t3lib_div::underscoredToUpperCamelCase($extensionName);
+			$upperCamelCaseControllerName = t3lib_div::underscoredToUpperCamelCase($controllerName);
+			$controllerObjectName = sprintf('Tx_%s_Command_%sCommandController', $upperCamelCaseExtensionName, $upperCamelCaseControllerName);
 			$request->setControllerCommandName($commandName);
 			$request->setControllerObjectName($controllerObjectName);
 			$request->setArguments((array) $this->arguments);
@@ -109,6 +110,50 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 	 */
 	public function getArguments() {
 		return $this->arguments;
+	}
+
+	/**
+	 * @param array $defaults
+	 */
+	public function setDefaults($defaults) {
+		$this->defaults = $defaults;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDefaults() {
+		return $this->defaults;
+	}
+
+	/**
+	 * @param string $argumentName
+	 * @param mixed $argumentValue
+	 */
+	public function addDefaultValue($argumentName, $argumentValue) {
+		if (is_bool($argumentValue)) {
+			$argumentValue = intval($argumentValue);
+		}
+		$this->defaults[$argumentName] = $argumentValue;
+	}
+
+	/**
+	 * Return a text representation of the selected command and arguments
+	 *
+	 * @return	string	Information to display
+	 */
+	public function getAdditionalInformation() {
+		$label = $this->commandIdentifier;
+		if (count($this->arguments) > 0) {
+			$arguments = array();
+			foreach ($this->arguments as $argumentName=>$argumentValue) {
+				if ($argumentValue != $this->defaults[$argumentName]) {
+					array_push($arguments, $argumentName . '=' . $argumentValue);
+				}
+			}
+			$label .= ' ' . implode(', ', $arguments);
+		}
+		return $label;
 	}
 
 }
