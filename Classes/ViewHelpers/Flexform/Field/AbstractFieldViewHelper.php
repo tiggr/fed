@@ -53,8 +53,8 @@ abstract class Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper extends
 	 * @return array
 	 */
 	protected function getBaseConfig() {
-		if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_FceViewHelper', 'group')) {
-			$group = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FceViewHelper', 'group');
+		if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group')) {
+			$group = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group');
 		} else {
 			$group = array(
 				'name' => 'options',
