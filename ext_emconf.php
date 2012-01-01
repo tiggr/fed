@@ -34,13 +34,13 @@ $EM_CONF[$_EXTKEY] = array(
 		'depends' => array(
 			'typo3' => '4.5-0.0',
 			'cms' => '',
-			'extbase' => '1.3-0.0',
-			'fluid' => '1.3-0.0',
+			'extbase' => '1.3',
+			'fluid' => '1.3',
 		),
 		'conflicts' => array(
 		),
 		'suggests' => array(
-			'gridelements' => '1.1-0.0'
+			'gridelements' => '1.1'
 		),
 	),
 	'suggests' => array(
