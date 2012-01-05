@@ -142,7 +142,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 		$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());
 		return array(
 			'code' => '',
-			'label' => '<strong>' . $command->getDescription() . '</strong>'
+			'label' => '<strong>' . htmlspecialchars($command->getDescription()) . '</strong>'
 		);
 	}
 
@@ -249,7 +249,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 			$description = $argument->getDescription();
 		}
 		if ($description) {
-			$label .= '. <em>' . $description . '</em>';
+			$label .= '. <em>' . htmlspecialchars($description) . '</em>';
 		}
 		return $label;
 	}
@@ -300,7 +300,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 		);
 		foreach ($options as $optionValue=>$optionLabel) {
 			$selected = $optionValue == $selectedOptionValue ? ' selected="selected"' : '';
-			array_push($html, '<option title="test" value="' . $optionValue . '"' . $selected . '>' . $optionLabel . '</option>');
+			array_push($html, '<option title="test" value="' . htmlspecialchars($optionValue) . '"' . $selected . '>' . htmlspecialchars($optionLabel) . '</option>');
 		}
 		array_push($html, '</select>');
 		return implode(LF, $html);
@@ -317,14 +317,14 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	protected function renderField(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument, $currentValue) {
 		$type = $this->getArgumentType($argument);
 		$name = $argument->getName();
-		$fieldName = 'tx_scheduler[task_fed][arguments][' . $name . ']';
+		$fieldName = 'tx_scheduler[task_fed][arguments][' . htmlspecialchars($name) . ']';
 		if ($type == 'boolean') {
 				// checkbox field for boolean values.
 			$html = '<input type="hidden" name="' . $fieldName . '" value="0" />';
 			$html .= '<input type="checkbox" name="' . $fieldName . '" value="1" ' . ($currentValue == 1 ? ' checked="checked"' : '') . '/>';
 		} else {
 				// regular string, also the default field type
-			$html = '<input type="text" name="' . $fieldName . '" value="' . $currentValue . '" /> ';
+			$html = '<input type="text" name="' . $fieldName . '" value="' . htmlspecialchars($currentValue) . '" /> ';
 		}
 		return $html;
 	}
