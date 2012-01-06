@@ -38,6 +38,6 @@ plugin.tx_fed {
 		}
 	}
 	persistence {
-		storagePid = 146
+		storagePid = {$plugin.tx_fed.persistence.storagePid}
 	}
 }
