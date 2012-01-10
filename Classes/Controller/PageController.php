@@ -34,7 +34,7 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 	/**
 	 * @var string
 	 */
-	protected $defaultViewObjectName = 'Tx_Fed_MVC_View_ExposedTemplateView';
+	protected $defaultViewObjectName = 'Tx_Flux_MVC_View_ExposedTemplateView';
 
 	/**
 	 * @var Tx_Fed_Configuration_ConfigurationManager
@@ -65,7 +65,7 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 	/**
 	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
 	 */
-	public function initializeView(Tx_Fed_MVC_View_ExposedTemplateView $view) {
+	public function initializeView(Tx_Flux_MVC_View_ExposedTemplateView $view) {
 		$configuration = $this->pageService->getPageTemplateConfiguration($GLOBALS['TSFE']->id);
 		list ($extensionName, $action) = explode('->', $configuration['tx_fed_page_controller_action']);
 		$paths = $this->configurationManager->getPageConfiguration($extensionName);

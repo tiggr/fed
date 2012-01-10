@@ -81,10 +81,10 @@ class Tx_Fed_Backend_FCESelector {
 				$select .= "<optgroup label='{$groupLabel}'>" . LF;
 				foreach ($files as $fileRelPath) {
 					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
-					$view = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
+					$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {
-						$config =  $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
+						$config =  $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 						$enabled = $config['enabled'];
 						$label = $config['label'];
 						if ($enabled !== FALSE) {

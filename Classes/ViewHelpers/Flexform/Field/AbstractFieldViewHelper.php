@@ -53,10 +53,10 @@ abstract class Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper extends
 	 * @return array
 	 */
 	protected function getBaseConfig() {
-		if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group')) {
-			$group = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FlexformViewHelper', 'group');
+		if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_FlexformViewHelper', 'sheet')) {
+			$shet = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_FlexformViewHelper', 'sheet');
 		} else {
-			$group = array(
+			$sheet = array(
 				'name' => 'options',
 				'label' => 'Options',
 			);
@@ -73,7 +73,7 @@ abstract class Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper extends
 			'requestUpdate' => $this->arguments['requestUpdate'],
 			'exclude' => $this->getFlexFormBoolean($this->arguments['exclude']),
 			'wizards' => $this->arguments['wizards'],
-			'group' => $group
+			'sheet' => $sheet
 		);
 	}
 

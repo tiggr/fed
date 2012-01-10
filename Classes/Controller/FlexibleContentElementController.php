@@ -34,12 +34,12 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 	/**
 	 * @var string
 	 */
-	protected $defaultViewObjectName = 'Tx_Fed_MVC_View_ExposedTemplateView';
+	protected $defaultViewObjectName = 'Tx_Flux_MVC_View_ExposedTemplateView';
 
 	/**
 	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
 	 */
-	public function initializeView(Tx_Fed_MVC_View_ExposedTemplateView $view) {
+	public function initializeView(Tx_Flux_MVC_View_ExposedTemplateView $view) {
 		$cObj = $this->request->getContentObjectData();
 		$this->flexform->setContentObjectData($cObj);
 		$configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
@@ -49,7 +49,7 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$view->setLayoutRootPath($paths['layoutRootPath']);
 		$view->setPartialRootPath($paths['partialRootPath']);
 		$view->setTemplatePathAndFilename($absolutePath);
-		$config = $view->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
+		$config = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 		$view->assignMultiple($this->flexform->getAllAndTransform($config['fields']));
 		$view->assign('page', $GLOBALS['TSFE']->page);
 		$view->assign('record', $cObj);

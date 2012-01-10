@@ -41,7 +41,7 @@ class Tx_Fed_ViewHelpers_Widget_ImageCropViewHelper extends Tx_Fluid_Core_Widget
 	protected $ajaxWidget = TRUE;
 
 	/**
-	 * @var Tx_Person_ViewHelpers_Widget_Controller_ImagecCropController
+	 * @var Tx_Fed_ViewHelpers_Widget_Controller_ImagecCropController
 	 */
 	protected $controller;
 

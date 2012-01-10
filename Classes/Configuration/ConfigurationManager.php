@@ -91,11 +91,11 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 */
 	public function getPageTemplateLabel($extensionName, $templateFile) {
 		$config = $this->getPageConfiguration($extensionName);
-		$exposedView = $this->objectManager->get('Tx_Fed_MVC_View_ExposedStandaloneView');
+		$exposedView = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 		$exposedView->setTemplatePathAndFilename($config['templateRootPath'] . 'Page/' . $templateFile . '.html');
 		$exposedView->setLayoutRootPath($config['layoutRootPath']);
 		$exposedView->setPartialRootPath($config['partialRootPath']);
-		$page = $exposedView->getStoredVariable('Tx_Fed_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
+		$page = $exposedView->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 		return $page['label'] ? $page['label'] : $templateFile . '.html';
 	}
 
