@@ -61,6 +61,7 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 			$file = array_pop($files);
 			if ($this->arguments['as']) {
 				$this->templateVariableContainer->add($this->arguments['as'], $file);
+				return;
 			} else if ($this->arguments['return'] === TRUE) {
 				return $file;
 			} else {
