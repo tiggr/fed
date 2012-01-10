@@ -40,6 +40,7 @@ return array(
 	'tx_fed_utility_path' => $extensionClassesPath . 'Utility/Path.php',
 	'tx_fed_extjs_modelgenerator' => $extensionClassesPath . 'ExtJS/ModelGenerator.php',
 	'tx_fed_mvc_view_exposedtemplateview' => $extensionClassesPath . 'MVC/View/ExposedTemplateView.php',
+	'tx_fed_mvc_view_exposedstandaloneview' => $extensionClassesPath . 'MVC/View/ExposedStandaloneView.php',
 	'tx_fed_persistence_repository' => $extensionClassesPath . 'Persistence/Repository.php',
 	'tx_fed_domain_model_contentelement' => $extensionClassesPath . 'Domain/Model/ContentElement.php',
 	'tx_fed_domain_model_backendlayout' => $extensionClassesPath . 'Domain/Model/BackendLayout.php',
