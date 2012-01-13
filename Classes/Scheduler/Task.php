@@ -140,7 +140,7 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 	/**
 	 * Return a text representation of the selected command and arguments
 	 *
-	 * @return	string	Information to display
+	 * @return string
 	 */
 	public function getAdditionalInformation() {
 		$label = $this->commandIdentifier;
