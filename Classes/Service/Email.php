@@ -28,10 +28,6 @@
  *
  * Contains quick-use emailing functions.
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage Service
  */
@@ -40,11 +36,13 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 	/**
 	 * Send an email. Supports any to-string-convertible parameter types
 	 *
-	 * @param mixed $recipient
 	 * @param mixed $subject
 	 * @param mixed $body
-	 * @param mixed $from
-	 * @return boolean
+	 * @param mixed $recipientEmail
+	 * @param mixed $recipientName
+	 * @param mixed $fromEmail
+	 * @param mixed $fromName
+	 * @return integer the number of recipients who were accepted for delivery
 	 * @api
 	 */
 	public function mail($subject, $body, $recipientEmail, $recipientName=NULL, $fromEmail=NULL, $fromName=NULL) {
@@ -55,12 +53,12 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 		if ($fromEmail) {
 			if ($fromName == NULL) {
 				$fromName = $fromEmail;
-				$mail->setFrom(array($fromEmail => $fromName));
 			}
+			$mail->setFrom(array($fromEmail => $fromName));
 		}
 		$mail->setTo(array($recipientEmail => $recipientName));
 		$mail->setSubject($subject);
-		$mail->setBody($emailBody);
+		$mail->setBody($body);
 		return $mail->send();
 	}
 
@@ -76,10 +74,4 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 	}
 
 }
-
-
-
-
-
-
 ?>
