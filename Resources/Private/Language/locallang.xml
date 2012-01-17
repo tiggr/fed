@@ -24,6 +24,7 @@
 			<label index="task.action">CommandController Command</label>
 			<label index="task.name">Extbase CommandController Task</label>
 			<label index="task.description">Allows Extbase CommandController commands to be configured and executed through the scheduler framework.</label>
+			<label index="fce.selection">Select Fluid FCE type</label>
 		</languageKey>
 	</data>
 </T3locallang>

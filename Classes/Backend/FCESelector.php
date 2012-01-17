@@ -59,26 +59,27 @@ class Tx_Fed_Backend_FCESelector {
 	 * Render a Flexible Content Element type selection field
 	 *
 	 * @param array $parameters
-	 * @param mixed $pObj
+	 * @param mixed $parentObject
 	 * @return string
 	 */
-	public function renderField(&$parameters, &$pObj) {
+	public function renderField(array &$parameters, &$parentObject) {
 		$allTemplatePaths = $this->configurationManager->getContentConfiguration();
 		$name = $parameters['itemFormElName'];
 		$value = $parameters['itemFormElValue'];
-		$select = "<div><select name='{$name}'  class='formField select' onchange='if (confirm(TBE_EDITOR.labels.onChangeAlert) && TBE_EDITOR.checkSubmit(-1)){ TBE_EDITOR.submitForm() };'>" . LF;
-		$select .= "<option value=''>(Select Fluid FCE type)</option>" . LF;
-		foreach ($allTemplatePaths as $key=>$templatePathSet) {
+		$select = '<div><select name="' . htmlspecialchars($name) . '"  class="formField select" onchange="if (confirm(TBE_EDITOR.labels.onChangeAlert) && TBE_EDITOR.checkSubmit(-1)){ TBE_EDITOR.submitForm() };">' . LF;
+		$select .= '<option value="">' . $GLOBALS['LANG']->sL('LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.selection', TRUE) . '</option>' . LF;
+		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$files = $this->getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
+				$groupLabel = '';
 				if (!t3lib_extMgm::isLoaded($key)) {
 					$groupLabel = ucfirst($key);
 				} else {
 					$emConfigFile = t3lib_extMgm::extPath($key, 'ext_emconf.php');
 					require $emConfigFile;
-					$groupLabel = $EM_CONF['']['title'];
+					$groupLabel = empty($EM_CONF['']['title']) ? ucfirst($key) : $EM_CONF['']['title'];
 				}
-				$select .= "<optgroup label='{$groupLabel}'>" . LF;
+				$select .= '<optgroup label="' . htmlspecialchars($groupLabel) . '">' . LF;
 				foreach ($files as $fileRelPath) {
 					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
 					$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
@@ -92,17 +93,17 @@ class Tx_Fed_Backend_FCESelector {
 							if (!$label) {
 								$label = $fileRelPath;
 							}
-							$selected = ($optionValue == $value ? " selected='selected'" : "");
-							$select .= "<option value='{$optionValue}'{$selected}>{$label}</option>" .LF;
+							$selected = ($optionValue === $value ? ' selected="selected"' : '');
+							$select .= '<option value="' . htmlspecialchars($optionValue) . '"' . $selected . '>' . htmlspecialchars($label) . '</option>' . LF;
 						}
 					} catch (Exception $e) {
 						$select .= "<option value=''>INVALID: " . $fileRelPath . " (Exception # " . $e->getMessage() . ")</option>" . LF;
 					}
 				}
-				$select .= "</optgroup>" . LF;
+				$select .= '</optgroup>' . LF;
 			}
 		}
-		$select .= "</select></div>" . LF;
+		$select .= '</select></div>' . LF;
 		return $select;
 
 	}
