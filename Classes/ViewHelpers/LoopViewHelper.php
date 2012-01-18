@@ -55,7 +55,7 @@ class Tx_Fed_ViewHelpers_LoopViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHe
 		while ($i < $max) {
 			if ($this->arguments['iteration']) {
 				$iteration = array(
-					'cycle' => ($i+1),
+					'cycle' => $i+1,
 					'index' => $i,
 					'isOdd' => ($i%2 == 0 ? 1 : 0),
 					'isEven' => $i%2,
