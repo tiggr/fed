@@ -48,6 +48,7 @@ class Tx_Fed_ViewHelpers_Form_Group_CountSelectorViewHelper extends Tx_Fluid_Cor
 	public function initializeArguments() {
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
+		$this->registerArgument('labelZero', 'string', 'If zero is among your options you can use this label text instead of displaying a 0 in the select box');
 	}
 
 	/**
@@ -59,12 +60,12 @@ class Tx_Fed_ViewHelpers_Form_Group_CountSelectorViewHelper extends Tx_Fluid_Cor
 		$amount = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount');
 		$maximum = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum');
 		$options = array();
-		$i = 0;
-		while ($i < $maximum) {
-			$num = $i + 1;
+		$num = 0;
+		while ($num < $maximum) {
+			$label = $num == 0 ? $this->arguments['labelZero'] : $num;
 			$selected = $num == $amount ? ' selected="selected"' : '';
-			$options[] = '<option value="' . $num . '"' . $selected . '>' . $num . '</option>' . LF;
-			$i++;
+			$options[] = '<option value="' . $num . '"' . $selected . '>' . $label . '</option>' . LF;
+			$num++;
 		}
 
 		$this->tag->addAttribute('class', $this->arguments['class'] . ' form-field-group-count');

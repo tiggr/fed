@@ -13,10 +13,9 @@
 			selector.change(function() {
 				var children = element.find('.form-field-group-container');
 				var requestedAmount = parseInt(jQuery(this).val());
-				var divorceIndex = requestedAmount - 1;
 				if (requestedAmount > children.length) {
 						// add groups from buffer
-					var toBeAdded = requestedAmount - options.amount;
+					var toBeAdded = requestedAmount - children.length;
 					while (toBeAdded > 0) {
 						var newContent = jQuery(options.buffer.shift()).not('.form-field-group-exclude');
 						element.append(newContent);

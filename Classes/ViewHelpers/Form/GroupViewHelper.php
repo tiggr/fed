@@ -117,8 +117,10 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
 		$this->registerArgument('amount', 'integer', 'Number of field groups to render', TRUE);
-		$this->registerArgument('maximum', 'integer', 'Maximum number of field groups to render', FALSE, 1);
+		$this->registerArgument('maximum', 'integer', 'Maximum number of field groups to render', FALSE, 10);
+		$this->registerArgument('minimum', 'integer', 'Minimum number of field groups to render', FALSE, 1);
 		$this->registerArgument('iteration', 'string', 'Variable name for iteration, if any');
+		$this->registerArgument('zeroLabel', 'string', 'Optional label for zero items', FALSE, '0');
 	}
 
 	/**
@@ -130,6 +132,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 		$property = $this->arguments['property'];
 		$amount = $this->arguments['amount'];
 		$maximum = $this->arguments['maximum'];
+		$minimum = $this->arguments['minimum'];
 		$fieldNamePrefix = $this->getName();
 		$hasFormObject = $this->viewHelperVariableContainer->exists('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
 		if (!$this->isObjectAccessorMode() || !$hasFormObject) {
@@ -146,17 +149,19 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 
 		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount', $amount);
 		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum', $maximum);
+		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'minimum', $minimum);
 		$this->backupTemplateVariables();
-		for ($i = 0; $i < $this->arguments['maximum']; $i++) {
+		$cycle = 1;
+		for ($i = $minimum; $i <= $maximum; $i++) {
 			$names = $this->createFormFieldNames($properties, $i);
 			$this->templateVariableContainer->add('property', $names);
 			$iteration = array(
-				'isFirst' => ($i == 0),
-				'isLast' => (($i+1) == $this->arguments['maximum']),
+				'isFirst' => ($i == $minimum),
+				'isLast' => (($i+1) == $maximum),
 				'isOdd' => ($i%2 == 1),
 				'isEven' => ($i%2 == 0),
-				'cycle' => $i + 1,
-				'index' => $i
+				'cycle' => $cycle,
+				'index' => ($cycle - 1)
 			);
 			if ($this->arguments['iteration']) {
 				$this->templateVariableContainer->add($this->arguments['iteration'], $iteration);
@@ -171,9 +176,11 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 			if ($this->arguments['iteration']) {
 				$this->templateVariableContainer->remove($this->arguments['iteration']);
 			}
+			$cycle++;
 		}
 		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount');
 		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum');
+		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'minimum');
 		$this->restoreTemplateVariables();
 		if ($this->arguments['id']) {
 			$domElementId = $this->arguments['id'];
