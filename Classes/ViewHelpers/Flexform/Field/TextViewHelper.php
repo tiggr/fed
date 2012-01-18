@@ -28,40 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_TextViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
-
-	const RTE_DEFAULT = "richtext[*]:rte_transform[mode=ts_css]";
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('validate', 'string', 'FlexForm-type validation configuration for this input', FALSE, 'trim');
-		$this->registerArgument('cols', 'int', 'Number of columns in editor', FALSE, 85);
-		$this->registerArgument('rows', 'int', 'Number of rows in editor', FALSE, 10);
-		$this->registerArgument('defaultExtras', 'string', 'FlexForm-syntax "defaultExtras" definition, example: "richtext[*]:rte_transform[mode=ts_css]"', FALSE, '');
-		$this->registerArgument('enableRichText', 'boolean', 'Shortcut for adding "richtext[*]:rte_transform[mode=ts_css]" to "defaultExtras"', FALSE, FALSE);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getBaseConfig();
-		$config['type'] = 'text';
-		$config['validate'] = $this->arguments['validate'];
-		$config['cols'] = $this->arguments['cols'];
-		$config['rows'] = $this->arguments['rows'];
-		if ($this->arguments['enableRichText'] && $this->arguments['defaultExtras'] == '') {
-			$config['defaultExtras'] = self::RTE_DEFAULT;
-		} else {
-			$config['defaultExtras'] = $this->arguments['defaultExtras'];
-		}
-		$this->addField($config);
-		$this->renderChildren();
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_TextViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_TextViewHelper {
 
 }
 

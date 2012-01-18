@@ -28,18 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_CheckboxViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getBaseConfig();
-		$config['type'] = 'check';
-		$this->addField($config);
-		$this->renderChildren();
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_CheckboxViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_CheckboxViewHelper {
 
 }
 

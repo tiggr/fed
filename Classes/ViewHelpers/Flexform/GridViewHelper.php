@@ -27,25 +27,11 @@
 /**
  * Grid container ViewHelper
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Flexform
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_GridViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$storage = $this->getStorage();
-		$storage['grid'] = array();
-		$this->setStorage($storage);
-		$this->renderChildren();
-		return '';
-	}
+class Tx_Fed_ViewHelpers_Flexform_GridViewHelper extends Tx_Flux_ViewHelpers_Flexform_GridViewHelper {
 
 }
 

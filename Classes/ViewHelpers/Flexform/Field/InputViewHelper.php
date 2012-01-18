@@ -28,38 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_InputViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('eval', 'string', 'FlexForm-type validation configuration for this input', FALSE, 'trim');
-		$this->registerArgument('size', 'integer', 'Size of field', FALSE, 32);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getBaseConfig();
-		$this->addField($config);
-		$this->renderChildren();
-	}
-
-	/**
-	 * Gets a basic array of field configuration
-	 * @return array
-	 */
-	protected function getBaseConfig() {
-		$config = parent::getBaseConfig();
-		$config['eval'] = $this->arguments['eval'];
-		$config['size'] = $this->arguments['size'];
-		$config['type'] = 'input';
-		return $config;
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_InputViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_InputViewHelper {
 
 }
 

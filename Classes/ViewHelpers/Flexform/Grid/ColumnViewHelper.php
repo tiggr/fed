@@ -26,44 +26,11 @@
 /**
  * Flexform Grid Column ViewHelper
  *
- * @author Claus Due, Wildside A/S
- * @version $Id$
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Grid
+ * @subpackage
  */
-class Tx_Fed_ViewHelpers_Flexform_Grid_ColumnViewHelper extends Tx_Fed_Core_ViewHelper_AbstractFlexformViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		$this->registerArgument('colspan', 'integer', 'Column span');
-		$this->registerArgument('rowspan', 'integer', 'Column span');
-		$this->registerArgument('width', 'string', 'Width of column, fx "50%" or "500px"', FALSE, 'auto');
-		$this->registerArgument('repeat', 'integer', 'number of times to repeat this colum while appending $iteration to name', FALSE, 1);
-	}
-
-	/**
-	 * @return array
-	 */
-	public function render() {
-		for ($i=0; $i<$this->arguments['repeat']; $i++) {
-			$column = array(
-				'colspan' => $this->arguments['colspan'],
-				'rowspan' => $this->arguments['rowspan'],
-				'width' => $this->arguments['width'],
-				'repeat' => $this->arguments['repeat'],
-				'areas' => array()
-			);
-			$this->addGridColumn($column);
-			$this->templateVariableContainer->add('cycle', $i+1);
-			$this->renderChildren();
-			$this->templateVariableContainer->remove('cycle');
-		}
-		return '';
-	}
+class Tx_Fed_ViewHelpers_Flexform_Grid_ColumnViewHelper extends Tx_Flux_ViewHelpers_Flexform_Grid_ColumnViewHelper {
 
 }
 

@@ -28,31 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('internalType', 'string', 'FlexForm-internalType of this Group Selector', TRUE);
-		$this->registerArgument('allowed', 'string', 'FlexForm-style "allowed" content for a group type field');
-		$this->registerArgument('uploadFolder', 'string', 'Upload folder');
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getFieldConfig();
-		$config['type'] = 'group';
-		$config['internal_type'] = $this->arguments['internalType'];
-		$config['allowed'] = $this->arguments['allowed'];
-		$config['uploadfolder'] = $this->arguments['uploadFolder'];
-		$this->addField($config);
-		$this->renderChildren();
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_GroupViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_GroupViewHelper {
 
 }
 

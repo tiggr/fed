@@ -28,27 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_UserFuncViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_AbstractFieldViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('userFunc', 'string', 'Classname->function notation of UserFunc to be called, example "Tx_Fed_Configuration_Wizard_FlexFormCodeEditor->renderField" - Extbase classes need autoload registry for this', TRUE);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getBaseConfig();
-		$config['type'] = 'user';
-		$config['userFunc'] = $this->arguments['userFunc'];
-		$this->addField($config);
-		$this->renderChildren();
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_UserFuncViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_UserFuncViewHelper {
 
 }
 ?>

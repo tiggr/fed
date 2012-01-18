@@ -28,31 +28,9 @@
  *
  * @package Fed
  * @subpackage ViewHelpers/Flexform/Field
+ * @deprecated
  */
-class Tx_Fed_ViewHelpers_Flexform_Field_TreeViewHelper extends Tx_Fed_ViewHelpers_Flexform_Field_SelectViewHelper {
-
-	/**
-	 * Initialize
-	 */
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('parentField', 'string', 'Field containing UID of parent record', TRUE);
-		$this->registerArgument('expandAll', 'boolean', 'If TRUE, expands all branches', FALSE, FALSE);
-		$this->registerArgument('showHeader', 'boolean', 'If TRUE, displays tree header', FALSE, FALSE);
-	}
-
-	/**
-	 * Render method
-	 */
-	public function render() {
-		$config = $this->getFieldConfig();
-		$config['type'] = 'tree';
-		$config['parentField'] = $this->arguments['parentField'];
-		$config['expandAll'] = $this->arguments['expandAll'];
-		$config['showHeader'] = $this->arguments['showHeader'];
-		$this->addField($config);
-		$this->renderChildren();
-	}
+class Tx_Fed_ViewHelpers_Flexform_Field_TreeViewHelper extends Tx_Flux_ViewHelpers_Flexform_Field_TreeViewHelper {
 
 }
 
