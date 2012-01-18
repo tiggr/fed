@@ -55,10 +55,22 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	protected $pageRenderer;
 
 	/**
+	 * @var Tx_Fed_Utility_DocumentHead
+	 */
+	protected $documentHead;
+
+	/**
 	 * @param t3lib_PageRenderer $pageRenderer
 	 */
 	public function injectPageRenderer(t3lib_PageRenderer $pageRenderer) {
 		$this->pageRenderer = $pageRenderer;
+	}
+
+	/**
+	 * @param Tx_Fed_Utility_DocumentHead $documentHead
+	 */
+	public function injectDocumentHead(Tx_Fed_Utility_DocumentHead $documentHead) {
+		$this->documentHead = $documentHead;
 	}
 
 	/**
@@ -93,7 +105,9 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 */
 	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion=FALSE, $jQueryUITheme=FALSE, $compatibility=FALSE) {
 		$file = $this->buildPackageUri('jquery', $jQueryVersion, 'jquery.min.js');
-		$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, TRUE, FALSE, TRUE);
+		#$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, TRUE, FALSE, TRUE);
+		$this->documentHead->includeFile($file);
+		#die($file);
 		if ($jQueryVersion) {
 			$this->includeJQueryUI($jQueryUIVersion, $return);
 		}
@@ -114,7 +128,8 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 */
 	public function includeJQueryUI($jQueryUIVersion=NULL) {
 		$file = $this->buildPackageUri('jqueryui', $jQueryUIVersion, 'jquery-ui.min.js');
-		$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, FALSE, FALSE, TRUE);
+		#$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, FALSE, FALSE, TRUE);
+		$this->documentHead->includeFile($file);
 	}
 
 	/**
@@ -123,7 +138,8 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * @api
 	 */
 	public function includeJQueryUITheme($jQueryUITheme=NULL) {
-		$this->pageRenderer->addCssFile($jQueryUITheme, 'stylesheet', 'all', 'JQuery Theme CSS', TRUE, TRUE, FALSE, FALSE);
+		#$this->pageRenderer->addCssFile($jQueryUITheme, 'stylesheet', 'all', 'JQuery Theme CSS', TRUE, TRUE, FALSE, FALSE);
+		$this->documentHead->includeFile($jQueryUITheme);
 	}
 
 	/**
@@ -133,7 +149,8 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 */
 	public function includeJQueryNoConflict() {
 		$script = 'jQuery.noConflict();';
-		$this->pageRenderer->addJsInlineCode('jquery-compat', $script, FALSE);
+		#$this->pageRenderer->addJsInlineCode('jquery-compat', $script, FALSE);
+		$this->documentHead->includeHeader($script, 'js');
 	}
 
 	/**

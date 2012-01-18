@@ -46,14 +46,14 @@ class Tx_Fed_ViewHelpers_JQueryViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	protected $tagName = 'div';
 
 	/**
-	 * @var Tx_Fed_Utility_CDN
+	 * @var Tx_Fed_Service_Cdn
 	 */
 	protected $cdn;
 
 	/**
-	 * @param Tx_Fed_Utility_CDN $cdn
+	 * @param Tx_Fed_Service_Cdn $cdn
 	 */
-	public function injectCDNService(Tx_Fed_Utility_CDN $cdn) {
+	public function injectCDNService(Tx_Fed_Service_Cdn $cdn) {
 		$this->cdn = $cdn;
 	}
 
