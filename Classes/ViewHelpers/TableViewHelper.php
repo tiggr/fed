@@ -95,11 +95,13 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		$this->registerArgument('bPaginate', 'boolean', 'Display pagination change options - depends on sortable=TRUE', FALSE, TRUE);
 		$this->registerArgument('bSaveState', 'boolean', 'Set to TRUE to save the state of the table in a cookie', FALSE, FALSE);
 		$this->registerArgument('bFilter', 'boolean', 'Display filtering search box - depends on sortable=TRUE', FALSE, TRUE);
+		$this->registerArgument('bJQueryUI', 'boolean', 'Enable theming with JQueryUI theme roller', FALSE, TRUE);
 		$this->registerArgument('bInfo', 'boolean', 'Display table information - depends on sortable=TRUE', FALSE, TRUE);
 		$this->registerArgument('sPaginationType', 'string', 'Which pagination method to use. "two_button", "scroll" or "full_numbers", default "full_numbers"', FALSE, 'full_numbers');
 		$this->registerArgument('aLengthMenu', 'string', 'aLengthMenu-format notation for the "display X items" dropdown. See DataTables jQuery plugin documentation.', FALSE, '[[20, 50, 100, -1], [20, 50, 100, "-"]]');
 		$this->registerArgument('instanceName', 'string', 'If specified uses this name for a global variable containing a reference to the jQuery instance');
 		$this->registerArgument('registerWith', 'string', 'If specified tries to call this global Javascript method to register the instance - only on parameter is used which is the jQuery instance');
+
 		parent::initializeArguments();
 	}
 
@@ -117,7 +119,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		}
 
 		$headers = $this->arguments['headers'];
-		$properties = $this->argumets['properties'];
+		$properties = $this->arguments['properties'];
 		$objects = $this->arguments['objects'];
 		$source = $this->arguments['dataSource'];
 		$data = $this->arguments['data'];
@@ -377,6 +379,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		$scriptFile1 = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/com/jquery/plugins/jquery.dataTables.min.js';
 		$bPaginate = $this->jsBoolean($this->arguments['bPaginate']);
 		$bFilter = $this->jsBoolean($this->arguments['bFilter']);
+		$bJQueryUI = $this->jsBoolean($this->arguments['bJQueryUI']);
 		$bInfo = $this->jsBoolean($this->arguments['bInfo']);
 		$bSaveState = $this->jsBoolean($this->arguments['bSaveState']);
 		$oLanguage = json_encode($this->arguments['oLanguage']);
@@ -401,6 +404,7 @@ jQuery(document).ready(function() {
 		"aaSorting" : {$this->arguments['aaSorting']},
 		"bPaginate" : {$bPaginate},
 		"bFilter" : {$bFilter},
+		"bJQueryUI" : {$bJQueryUI},
 		"bSaveState" : {$bSaveState},
 		"bInfo" : {$bInfo},
 		"oLanguage" : {$oLanguage},
