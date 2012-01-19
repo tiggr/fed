@@ -28,8 +28,6 @@
  * ViewHelper used to render a meta tag
  *
  * @author Georg Ringer
- * @copyright Copyright belongs to the respective authors
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  * @package Fed
  * @subpackage ViewHelpers/Page/Head
  */
