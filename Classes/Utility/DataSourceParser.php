@@ -3,7 +3,7 @@
 *  Copyright notice
 *
 *  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
-*  
+*
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,7 +24,7 @@
 ***************************************************************/
 
 /**
- * 
+ *
  * @author Claus Due, Wildside A/S
  * @package Fed
  * @subpackage Utility
@@ -34,19 +34,19 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 	const URLMETHOD_JSON = 0;
 	const URLMETHOD_XML = 1;
 	const URLMETHOD_URI = 2;
-	
+
 	/**
 	 * @var Tx_Fed_Utility_JSON
 	 */
 	protected $jsonHandler;
-	
+
 	/**
 	 * @param Tx_Fed_Utility_JSON $jsonHandler
 	 */
 	protected function injectJSONHandler(Tx_Fed_Utility_JSON $jsonHandler) {
 		$this->jsonHandler = $jsonHandler;
 	}
-	
+
 	/**
 	 * @param array $sources
 	 * @return array
@@ -58,7 +58,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 		}
 		return $sources;
 	}
-	
+
 	/**
 	 * @param Tx_Fed_Domain_Model_DataSource $source
 	 * @return Tx_Fed_Domain_Model_DataSource
@@ -69,13 +69,13 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 		$source->setData($data);
 		return $source;
 	}
-	
+
 	/**
 	 * Gather data from source by running the type of data gathering. NOT marked
 	 * as API method; use "parseSource" or "parseSources" - future filtering etc.
-	 * will be added through these functions while this function will remain a 
+	 * will be added through these functions while this function will remain a
 	 * "uncached raw data output" function which MAY be marked API in the future.
-	 * 
+	 *
 	 * @param Tx_Fed_Domain_Model_DataSource $source
 	 * @return array
 	 */
@@ -93,13 +93,13 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 		} else {
 			throw new Exception('Could not fetch data from DataSource - no usable source defined');
 		}
-		
+
 		return (array) $data;
 	}
-	
+
 	/**
 	 * Fetch data by $query
-	 * 
+	 *
 	 * @param string $query
 	 * @return array
 	 */
@@ -109,9 +109,10 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
 			array_push($array, $row);
 		}
+		$GLOBALS['TYPO3_DB']->sql_free_result($result);
 		return (array) $array;
 	}
-	
+
 	/**
 	 * Fetch data by $url and $method
 	 * @param string $url
@@ -135,7 +136,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Fetch data by $function call
 	 * @param string $function
@@ -150,5 +151,5 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 			return (array) $function();
 		}
 	}
-	
+
 }

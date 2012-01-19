@@ -47,7 +47,7 @@ class Tx_Fed_ViewHelpers_Fce_RenderContentViewHelper extends Tx_Fed_Core_ViewHel
 	 * @return string
 	 */
 	public function render() {
-		$html = "";
+		$html = '';
 		$record = $this->templateVariableContainer->get('record');
 		$order = $this->arguments['order'] . ' ' . $this->arguments['sortDirection'];
 		$conditions = "tx_fed_fcecontentarea = '{$this->arguments['area']}:{$record['uid']}'
@@ -61,6 +61,7 @@ class Tx_Fed_ViewHelpers_Fce_RenderContentViewHelper extends Tx_Fed_Core_ViewHel
 			);
 			$html .= $GLOBALS['TSFE']->cObj->RECORDS($conf);
 		}
+		$GLOBALS['TYPO3_DB']->sql_free_result($res);
 		return $html;
 	}
 

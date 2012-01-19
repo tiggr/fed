@@ -74,18 +74,19 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 				// important force-return here to avoid error messages caused by processing of $result
 				return NULL;
 			} else {
-				return "<div>Invalid SQL query! Error was: " . mysql_error(). "</div>";
+				return "<div>Invalid SQL query! Error was: " . $GLOBALS['TYPO3_DB']->sql_error(). "</div>";
 			}
 		}
 		$rows = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
 			array_push($rows, $row);
 		}
-		if (count($rows) == 0) {
-			$value = "0";
-		} else if (count($rows) == 1) {
+		$GLOBALS['TYPO3_DB']->sql_free_result($result);
+		if (count($rows) === 0) {
+			$value = '0';
+		} else if (count($rows) === 1) {
 			$value = array_pop($rows);
-			if (count($value) == 1) {
+			if (count($value) === 1) {
 				$value = array_pop($value);
 			}
 		} else {

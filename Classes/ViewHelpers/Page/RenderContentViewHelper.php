@@ -116,6 +116,7 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 				);
 				array_push($content, $GLOBALS['TSFE']->cObj->RECORDS($conf));
 			}
+			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 			if (count($content) && !$slideCollect){
 				break;
 			}
