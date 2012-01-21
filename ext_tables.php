@@ -75,65 +75,8 @@ if (TYPO3_MODE == 'BE') {
 			'Fluid Content Element'
 		);
 		t3lib_extMgm::addPlugin(array('Fluid Content Element', 'fed_fce'), 'CType');
-		Tx_Flux_Core::registerFluidFlexFormContentObject(
-			$_EXTKEY,
-			'fed_fce',
-			function(&$row) {
-				$templatePathAndFilename = $row['tx_fed_fcefile'];
-				list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-				$paths = array();
-				$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-				$paths = $configurationManager->getContentConfiguration($extensionName);
-				$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
-				return $templatePathAndFilename;
-			},
-			function(&$row) {
-				$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-				$flexFormUtility = $objectManager->get('Tx_Fed_Utility_FlexForm');
-				$templatePathAndFilename = $row['tx_fed_fcefile'];
-				list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-				$paths = array();
-				$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-				$paths = $configurationManager->getContentConfiguration($extensionName);
-				$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
-				$view = $objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
-				$view->setTemplatePathAndFilename($templatePathAndFilename);
-				$flexFormUtility->setContentObjectData($row);
-				$flexform = $flexFormUtility->getAll();
-				$view->assignMultiple($flexform);
-				$view->assignMultiple((array) $variables);
-				try {
-					$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
-					$stored['sheets'] = array();
-					foreach ($stored['fields'] as $field) {
-						$groupKey = $field['sheets']['name'];
-						$groupLabel = $field['sheets']['label'];
-						if (is_array($stored['sheets'][$groupKey]) === FALSE) {
-							$stored['sheets'][$groupKey] = array(
-								'name' => $groupKey,
-								'label' => $groupLabel,
-								'fields' => array()
-							);
-						}
-						array_push($stored['sheets'][$groupKey]['fields'], $field);
-					}
-					return $stored;
-				} catch (Exception $e) {
-					t3lib_div::sysLog('FED Flexible Content Element error: ' . $e->getMessage(), 'fed');
-					return NULL;
-				}
-			},
-			'Configuration',
-			function(&$row) {
-				$templatePathAndFilename = $row['tx_fed_fcefile'];
-				list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-				$paths = array();
-				$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-				$paths = $configurationManager->getContentConfiguration($extensionName);
-				return $paths;
-			}
+		Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider');
 
-		);
 		$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_fce'] = 'pi_flexform';
 		$TCA['tt_content']['types']['fed_fce']['showitem'] = '
 		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
@@ -249,82 +192,7 @@ if (TYPO3_MODE == 'BE') {
 		),
 	), 1);
 
-	Tx_Flux_Core::registerFluidFlexFormTable(
-		'pages',
-		'tx_fed_page_flexform',
-		function(&$row) {
-			$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-			$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-			$pageService = $objectManager->get('Tx_Fed_Service_Page');
-			$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
-			if ($configuration['tx_fed_page_controller_action']) {
-				$action = $configuration['tx_fed_page_controller_action'];
-				list ($extensionName, $action) = explode('->', $action);
-				$paths = $configurationManager->getPageConfiguration($extensionName);
-				$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-			} else {
-				$templatePathAndFilename = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
-			}
-			return $templatePathAndFilename;
-		},
-		function(&$row) {
-			$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-			$pageService = $objectManager->get('Tx_Fed_Service_Page');
-			$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-			$flexFormUtility = $objectManager->get('Tx_Fed_Utility_FlexForm');
-			$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
-			$flexform = $flexFormUtility->getAll();
-			$templatePathAndFilename = $row['tx_fed_fcefile'];
-			list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-			$paths = array();
-			$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-			$paths = $configurationManager->getPageConfiguration($extensionName);
-			$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
-			$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
-			if ($configuration['tx_fed_page_controller_action']) {
-				$action = $configuration['tx_fed_page_controller_action'];
-				list ($extensionName, $action) = explode('->', $action);
-				$paths = $configurationManager->getPageConfiguration($extensionName);
-				$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-			} else {
-				$templatePathAndFilename = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
-			}
-			$view = $objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
-			$view->setTemplatePathAndFilename($templatePathAndFilename);
-			$view->assignMultiple($flexform);
-			$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
-			$stored['sheets'] = array();
-			foreach ($stored['fields'] as $field) {
-				$groupKey = $field['sheets']['name'];
-				$groupLabel = $field['sheets']['label'];
-				if (is_array($stored['sheets'][$groupKey]) === FALSE) {
-					$stored['sheets'][$groupKey] = array(
-						'name' => $groupKey,
-						'label' => $groupLabel,
-						'fields' => array()
-					);
-				}
-				array_push($stored['sheets'][$groupKey]['fields'], $field);
-			}
-			return $stored;
-		},
-		'Configuration',
-		function(&$row) {
-			$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-			$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-			$pageService = $objectManager->get('Tx_Fed_Service_Page');
-			$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
-			if ($configuration['tx_fed_page_controller_action']) {
-				$action = $configuration['tx_fed_page_controller_action'];
-				list ($extensionName, $action) = explode('->', $action);
-			} else {
-				$extensionName = 'fed';
-			}
-			$paths = $configurationManager->getPageConfiguration($extensionName);
-			return $paths;
-		}
-	);
-
+	Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_PageConfigurationProvider');
 	require_once t3lib_extMgm::extPath($_EXTKEY , 'Configuration/Wizard/FlexFormCodeEditor.php');
 
 }
