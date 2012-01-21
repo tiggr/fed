@@ -102,21 +102,26 @@ if (TYPO3_MODE == 'BE') {
 				$flexform = $flexFormUtility->getAll();
 				$view->assignMultiple($flexform);
 				$view->assignMultiple((array) $variables);
-				$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
-				$stored['sheets'] = array();
-				foreach ($stored['fields'] as $field) {
-					$groupKey = $field['sheets']['name'];
-					$groupLabel = $field['sheets']['label'];
-					if (is_array($stored['sheets'][$groupKey]) === FALSE) {
-						$stored['sheets'][$groupKey] = array(
-							'name' => $groupKey,
-							'label' => $groupLabel,
-							'fields' => array()
-						);
+				try {
+					$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
+					$stored['sheets'] = array();
+					foreach ($stored['fields'] as $field) {
+						$groupKey = $field['sheets']['name'];
+						$groupLabel = $field['sheets']['label'];
+						if (is_array($stored['sheets'][$groupKey]) === FALSE) {
+							$stored['sheets'][$groupKey] = array(
+								'name' => $groupKey,
+								'label' => $groupLabel,
+								'fields' => array()
+							);
+						}
+						array_push($stored['sheets'][$groupKey]['fields'], $field);
 					}
-					array_push($stored['sheets'][$groupKey]['fields'], $field);
+					return $stored;
+				} catch (Exception $e) {
+					t3lib_div::sysLog('FED Flexible Content Element error: ' . $e->getMessage(), 'fed');
+					return NULL;
 				}
-				return $stored;
 			},
 			'Configuration',
 			function(&$row) {
