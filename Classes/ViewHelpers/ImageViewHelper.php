@@ -191,13 +191,13 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			$this->tag->addAttribute('height', $imagesize[1]);
 			$this->tag->addAttribute('src', $convertedImageFilename[0]);
 			if ($large && $this->arguments['clickenlarge'] === TRUE) {
-				$this->tag->addAttribute('onclick', "fedImgXL('{$uniqid}', '{$large[$k]}');");
+				$this->tag->addAttribute('onclick', 'fedImgXL(\'' . $uniqid . '\', \'' . $large[$k][0] . '\');');
 				$this->tag->addAttribute('class', 'small');
 				$this->tag->removeAttribute('id'); // avoid DOM ID collisions
 			}
 			if ($this->arguments['mouseoverSuffix'] != '') {
-				$this->tag->addAttribute('onmouseover', "this.src='{$convertedImageFilename[1]}'");
-				$this->tag->addAttribute('onmouseout', "this.src='{$convertedImageFilename[0]}'");
+				$this->tag->addAttribute('onmouseover', 'this.src="' . $convertedImageFilename[1] . '"');
+				$this->tag->addAttribute('onmouseout', 'this.src="' . $convertedImageFilename[0] . '"');
 			}
 			$lines[] = $this->tag->render();
 		}
