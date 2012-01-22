@@ -56,7 +56,8 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 }
 
 if (TYPO3_MODE == 'BE') {
-	if (t3lib_extMgm::isLoaded('scheduler')) {
+	$versionNumbers = explode('.', TYPO3_version);
+	if ($versionNumbers[0] >= 4 && $versionNumbers[1] >= 6) {
 		$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_Fed_Scheduler_Task'] = array(
 			'extension'        => $_EXTKEY,
 			'title'            => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml:task.name',
