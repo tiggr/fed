@@ -31,7 +31,76 @@ require_once t3lib_extMgm::extPath('fluid', '/Tests/Unit/ViewHelpers/ViewHelperB
  */
 class Tx_Fed_Tests_Unit_ViewHelpers_Data_FuncViewHelperTest extends Tx_Fluid_ViewHelpers_ViewHelperBaseTestcase {
 
+	/**
+	 * var Tx_Fluid_ViewHelpers_RenderViewHelper
+	 */
+	protected $viewHelper;
 
+	public function setUp() {
+		parent::setUp();
+		$this->templateVariableContainer = new Tx_Fluid_Core_ViewHelper_TemplateVariableContainer();
+		$this->renderingContext->injectTemplateVariableContainer($this->templateVariableContainer);
+		$this->viewHelper = $this->getAccessibleMock('Tx_Fed_ViewHelpers_Data_FuncViewHelper', array('dummy', 'renderChildren'));
+		$this->injectDependenciesIntoViewHelper($this->viewHelper);
+	}
+
+	/**
+	 * @test
+	 */
+	public function canExecuteFunction() {
+		$this->viewHelper->setArguments(array('func' => 'strtolower', 'arguments' => array('FOO')));
+		$this->viewHelper->initialize();
+		$this->assertEquals('foo', $this->viewHelper->render());
+	}
+
+	/**
+	 * @test
+	 */
+	public function canExecuteReference() {
+		$myNamedStrtolower = function($value = '') {
+			return strtolower($value);
+		};
+
+		$this->viewHelper->setArguments(array('func' => $myNamedStrtolower, 'arguments' => array('FOO')));
+		$this->viewHelper->initialize();
+		$this->assertEquals('foo', $this->viewHelper->render());
+	}
+
+	/**
+	 * @test
+	 */
+	public function canExecuteObjectMethod() {
+		$this->viewHelper->setArguments(array('instance' => $this, 'func' => 'myStrtolower', 'arguments' => array('FOO')));
+		$this->viewHelper->initialize();
+		$this->assertEquals('foo', $this->viewHelper->render());
+	}
+
+	/**
+	 * @test
+	 */
+	public function canExecuteStaticMethod() {
+		$this->viewHelper->setArguments(array('instance' => 'Tx_Fed_Tests_Unit_ViewHelpers_Data_FuncViewHelperTest', 'func' => 'myStaticStrtolower', 'arguments' => array('FOO')));
+		$this->viewHelper->initialize();
+		$this->assertEquals('foo', $this->viewHelper->render());
+	}
+
+	/**
+	 * @test
+	 */
+	public function canAssignResult() {
+		$this->viewHelper->setArguments(array('instance' => 'Tx_Fed_Tests_Unit_ViewHelpers_Data_FuncViewHelperTest', 'func' => 'myStaticStrtolower', 'arguments' => array('FOO'), 'as' => 'res'));
+		$this->viewHelper->initialize();
+		$this->assertEquals('', $this->viewHelper->render());
+		$this->assertEquals('foo', $this->templateVariableContainer->get('res'));
+	}
+
+	public function myStrtolower($value = '') {
+		return strtolower($value);
+	}
+
+	static public function myStaticStrtolower($value = '') {
+		return strtolower($value);
+	}
 
 }
 ?>

@@ -59,7 +59,7 @@ class Tx_Fed_ViewHelpers_Data_FuncViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 			$method = $func;
 		}
 		if (count($arguments) === 1) {
-			$output = $method(array_pop($arguments));
+			$output = call_user_func($method, array_pop($arguments));
 		} else {
 			$output = call_user_func_array($method, $arguments);
 		}
