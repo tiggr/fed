@@ -47,6 +47,33 @@ class Tx_Fed_Utility_Path implements t3lib_Singleton {
 		}
 		return $path;
 	}
+
+
+	/**
+	 * Get a list of files (recursively) located in and below $basePath
+	 *
+	 * @param string $basePath
+	 * @param boolean $recursive
+	 * @param string $appendBasePath
+	 * @return array
+	 */
+	public static function getFiles($basePath, $recursive=FALSE, $appendBasePath=NULL) {
+		$files = scandir($basePath . $appendBasePath);
+		$addFiles = array();
+		foreach ($files as $file) {
+			if (substr($file, 0, 1) === '.') {
+				continue;
+			} else if (is_dir($basePath . $appendBasePath . $file) && $recursive) {
+				foreach (self::getFiles($basePath, $recursive, $appendBasePath . $file . DIRECTORY_SEPARATOR) as $addFile) {
+					$addFiles[] = $appendBasePath . $addFile;
+				}
+			} else if (is_file($basePath . $appendBasePath . $file)) {
+				$addFiles[] = $appendBasePath . $file;
+			}
+		}
+		sort($addFiles);
+		return (array) $addFiles;
+	}
 }
 
 ?>

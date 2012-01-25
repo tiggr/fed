@@ -69,7 +69,7 @@ class Tx_Fed_Backend_FCESelector {
 		$select = '<div><select name="' . htmlspecialchars($name) . '"  class="formField select" onchange="if (confirm(TBE_EDITOR.labels.onChangeAlert) && TBE_EDITOR.checkSubmit(-1)){ TBE_EDITOR.submitForm() };">' . LF;
 		$select .= '<option value="">' . $GLOBALS['LANG']->sL('LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.selection', TRUE) . '</option>' . LF;
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
-			$files = $this->getFiles($templatePathSet['templateRootPath'], TRUE);
+			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
 				$groupLabel = '';
 				if (!t3lib_extMgm::isLoaded($key)) {
@@ -93,6 +93,10 @@ class Tx_Fed_Backend_FCESelector {
 							if (!$label) {
 								$label = $fileRelPath;
 							}
+							$translatedLabel = Tx_Extbase_Utility_Localization::translate($label, $key);
+							if ($translatedLabel !== NULL) {
+								$label = $translatedLabel;
+							}
 							$selected = ($optionValue === $value ? ' selected="selected"' : '');
 							$select .= '<option value="' . htmlspecialchars($optionValue) . '"' . $selected . '>' . htmlspecialchars($label) . '</option>' . LF;
 						}
@@ -105,34 +109,8 @@ class Tx_Fed_Backend_FCESelector {
 		}
 		$select .= '</select></div>' . LF;
 		return $select;
-
 	}
 
-	/**
-	 * Get a list of files (recursively) located in and below $basePath
-	 *
-	 * @param string $basePath
-	 * @param boolean $recursive
-	 * @param string $appendBasePath
-	 * @return array
-	 */
-	protected function getFiles($basePath, $recursive=FALSE, $appendBasePath=NULL) {
-		$files = scandir($basePath . $appendBasePath);
-		$addFiles = array();
-		foreach ($files as $file) {
-			if (substr($file, 0, 1) === '.') {
-				continue;
-			} else if (is_dir($basePath . $appendBasePath . $file) && $recursive) {
-				foreach ($this->getFiles($basePath, $recursive, $appendBasePath . $file . DIRECTORY_SEPARATOR) as $addFile) {
-					$addFiles[] = $appendBasePath . $addFile;
-				}
-			} else if (is_file($basePath . $appendBasePath . $file)) {
-				$addFiles[] = $appendBasePath . $file;
-			}
-		}
-		sort($addFiles);
-		return (array) $addFiles;
-	}
 
 }
 

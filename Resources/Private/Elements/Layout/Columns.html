@@ -9,8 +9,8 @@
 	<f:if condition="{columns} < 1">
 		<fed:data.var name="columns" type="integer">1</fed:data.var>
 	</f:if>
-	<fed:fce id="content-columns" label="Layout: Columns" enabled="TRUE">
-		<fed:fce.field.select name="columnClass" label="Choose a layout"
+	<flux:flexform id="contentColumns" label="LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.elements.layout.columns.label" description="LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.elements.layout.columns.description" enabled="TRUE">
+		<flux:flexform.field.select name="columnClass" label="LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.elements.layout.columns.fields.class"
 			items="{
 				0: {0: '50-50', 1: '50% - 50%'},
 				1: {0: '33-66', 1: '33% - 66%'},
@@ -22,21 +22,21 @@
 				7: {0: '25-50-25', 1: '25% - 50% - 25%'},
 				8: {0: '25-25-50', 1: '25% - 25% - 50%'}
 				}" maxItems="1" />
-		<fed:fce.grid>
-			<fed:fce.grid.row>
+		<flux:flexform.grid>
+			<flux:flexform.grid.row>
 				<fed:data.func func="floor" as="gridColumnWidth"><fed:math>100/{columns}</fed:math></fed:data.func>
 				<f:for each="{columnClass->fed:explode(glue: '-')}" as="className" iteration="iteration">
-					<fed:fce.grid.column width="{columnClass}%">
-						<fed:fce.content name="column{iteration.cycle}" label="Content column #{iteration.cycle}" />
-					</fed:fce.grid.column>
+					<flux:flexform.grid.column width="{columnClass}%">
+						<flux:flexform.content name="column{iteration.cycle}" label="LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.elements.layout.columns.areas.column.{iteration.cycle}" />
+					</flux:flexform.grid.column>
 				</f:for>
-			</fed:fce.grid.row>
-		</fed:fce.grid>
-	</fed:fce>
+			</flux:flexform.grid.row>
+		</flux:flexform.grid>
+	</flux:flexform>
 </f:section>
 
 <f:section name="Preview">
-	Content columns ({columnClass})
+	<f:translate key="LLL:EXT:fed/Resources/Private/Language/locallang.xml:fce.elements.layout.columns.fields.class" />: {columnClass}
 	<flux:widget.grid />
 </f:section>
 
@@ -46,7 +46,7 @@
 		<f:for each="{fed:data.func(func: 'explode', arguments: {0: '-', 1: columnClass})}" as="className" iteration="iteration">
 			<div class="content-column content-column-{className} column{iteration.cycle}">
 				<div class="content-column-padding">
-					<fed:fce.renderContent area="column{iteration.cycle}" />
+					<flux:flexform.renderContent area="column{iteration.cycle}" />
 				</div>
 			</div>
 		</f:for>

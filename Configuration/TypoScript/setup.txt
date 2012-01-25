@@ -21,11 +21,6 @@ config.tx_extbase.persistence.classes {
 }
 
 plugin.tx_fed {
-	fce.fed {
-		templateRootPath = EXT:fed/Resources/Private/Elements/
-		partialRootPath = EXT:fed/Resources/Private/Partials/
-		layoutRootPath = EXT:fed/Resources/Private/Layouts/
-	}
 	fluid {
 		allowedFunctions = pow,exp,abs,sin,cos,tan,strlen,substr,strpos,stripos,strstr,stristr,trim
 		disallowedConstructs = print,echo,require,include,require_once,if,else,while,for,switch,exit,break,die

@@ -131,6 +131,7 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processCmdmap_preProcess(&$command, $table, $id, &$relativeTo, t3lib_TCEmain &$reference) {
+		/*
 		if ($table === 'tt_content') {
 			switch ($command) {
 				case 'delete':
@@ -157,6 +158,7 @@ class Tx_Fed_Backend_TCEMain {
 				default:
 			}
 		}
+		*/
 	}
 
 	/**
@@ -184,6 +186,7 @@ class Tx_Fed_Backend_TCEMain {
 			$action = 'create';
 		}
 		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
+		/*
 		if ($table === 'tt_content' && $id) {
 			foreach ((array) $incomingFieldArray['pi_flexform']['data']['options']['lDEF'] as $key=>$value) {
 				if (strpos($key, 'tt_content') === 0) {
@@ -195,6 +198,7 @@ class Tx_Fed_Backend_TCEMain {
 			}
 			$incomingFieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($incomingFieldArray, $id);;
 		}
+		*/
 	}
 
 	/**
@@ -221,6 +225,7 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
+		/*
 		if ($table == 'tt_content' && $fieldArray['CType'] == 'fed_fce') {
 			switch ($status) {
 				case 'new':
@@ -238,6 +243,7 @@ class Tx_Fed_Backend_TCEMain {
 				default:
 			}
 		}
+		*/
 	}
 
 }
