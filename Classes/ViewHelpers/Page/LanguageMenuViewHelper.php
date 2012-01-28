@@ -113,7 +113,7 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 			} else {
 				$class = '';
 			}
-			$html[] = '<' . $tagName . $class . '><a href=' . htmlspecialchars($var['url']) . '>' . $this->getLayout($var) . '</a></' . $tagName . '>';
+			$html[] = '<' . $tagName . $class . '><a href="' . htmlspecialchars($var['url']) . '">' . $ths->getLayout($var) . '</a></' . $tagName . '>';
 		}
 		return implode(LF, $html);
 	}
