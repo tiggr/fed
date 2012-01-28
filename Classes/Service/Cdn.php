@@ -105,7 +105,7 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 		#$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, TRUE, FALSE, TRUE);
 		$this->documentHead->includeFile($file);
 		#die($file);
-		if ($jQueryVersion) {
+		if ($jQueryUIVersion) {
 			$this->includeJQueryUI($jQueryUIVersion, $return);
 		}
 		if ($jQueryUITheme) {
