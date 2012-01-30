@@ -54,7 +54,6 @@
 			for (var i=0; i<options.files.length; i++) {
 				addFile(uploader, options.files[i]);
 			};
-			field.val('');
 			tableHeader.attr('id', options.editorId);
 			tableHeader.find('.plupload_filelist_header').append('<td class="plupload_cell plupload_file_delete"></td>');
 			jQuery(this).find('.remove').live('click', function() {
