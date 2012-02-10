@@ -38,12 +38,14 @@ FED.FormValidator = {
 					if (json.autosubmit) {
 						form.submit();
 					} else {
+						FED.FormValidator.triggeredByField.removeClass('f3-form-error').removeClass('loading');
 						return true;
 					};
 				} else if (typeof data == 'object') {
 					FED.FormValidator.triggeredByField.removeClass('f3-form-error').removeClass('loading');
 					FED.FormValidator.highlightErrorFields(form, json, data);
 				} else {
+					FED.FormValidator.triggeredByField.removeClass('f3-form-error').removeClass('loading');
 					//console.warn('Unsupported return type: ' + typeof data);
 				};
 			}
