@@ -64,6 +64,8 @@ return array(
 	'tx_fed_viewhelpers_fce_fieldviewhelper' => $extensionClassesPath . 'ViewHelpers/Fce/FieldViewHelper.php',
 	'tx_fed_scheduler_task' => $extensionClassesPath . 'Scheduler/Task.php',
 	'tx_fed_scheduler_fieldprovider' => $extensionClassesPath . 'Scheduler/FieldProvider.php',
+	'tx_fed_provider_configuration_contentobjectconfigurationprovider' => $extensionClassesPath . 'Provider/Configuration/ContentObjectConfigurationProvider.php',
+	'tx_fed_provider_configuration_pageconfigurationprovider' => $extensionClassesPath . 'Provider/Configuration/PageConfigurationProvider.php'
 );
 
 ?>

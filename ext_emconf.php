@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'author_email' => 'claus@wildside.dk',
 	'author_company' => 'Wildside A/S',
 	'shy' => '',
-	'dependencies' => 'cms,extbase,fluid',
+	'dependencies' => 'cms,extbase,fluid,flux',
 	'conflicts' => '',
 	'priority' => '',
 	'module' => '',
@@ -36,6 +36,7 @@ $EM_CONF[$_EXTKEY] = array(
 			'cms' => '',
 			'extbase' => '1.3',
 			'fluid' => '1.3',
+			'flux' => '',
 		),
 		'conflicts' => array(
 		),
