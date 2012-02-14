@@ -26,7 +26,6 @@
 /**
  * Record Selector Widget
  *
- * @author Claus Due, Wildside A/S
  * @package Fed
  * @subpackage ViewHelpers/Widget
  */
@@ -66,6 +65,7 @@ class Tx_Fed_ViewHelpers_Widget_RecordSelectorViewHelper extends Tx_Fluid_Core_W
 		$this->registerArgument('allowAdd', 'boolean', 'Allow adding of elements if a match could not be found', FALSE, FALSE);
 		$this->registerArgument('allUrl', 'string', 'URL on which a JSON array of objects used in the selection list can be found', FALSE);
 		$this->registerArgument('sections', 'array', 'Array of section names to render, in sequence', FALSE);
+		$this->registerArgument('multiple', 'boolean', 'If TRUE, allows multiple selections', FALSE, FALSE);
 	}
 
 	/**

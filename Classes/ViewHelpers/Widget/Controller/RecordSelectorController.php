@@ -26,7 +26,6 @@
 /**
  * Record Selector Widget Controller
  *
- * @author Claus Due, Wildside A/S
  * @package Fed
  * @subpackage ViewHelpers/Widget
  */
@@ -140,6 +139,8 @@ class Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController extends Tx_F
 		if (strpos($this->relationType, '<') !== FALSE) {
 			$this->multiple = TRUE;
 			$this->relationType = $this->infoService->parseObjectStorageAnnotation($this->relationType);
+		} else if ($this->widgetConfiguration['multiple']) {
+			$this->multiple = (bool) $this->widgetConfiguration['multiple'];
 		} else {
 			$this->multiple = FALSE;
 		}
