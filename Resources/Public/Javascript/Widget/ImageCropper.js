@@ -14,6 +14,7 @@
 			var large = element.find('.large img');
 			var original = large.attr('src');
 			var cropper = jQuery.Jcrop(large);
+			var originalWidth;
 			var maxWidth = options.maxWidth;
 			var maxHeight = options.maxHeight;
 			var thumbnail = element.find('.preview img');
@@ -46,14 +47,14 @@
 							"marginLeft": "-" + Math.round(newOffsetX) + "px",
 							"marginTop": "-" + Math.round(newOffsetY) + "px"
 						});
-						coordinates.scale = scale;
-						coordinates.x *= scale;
-						coordinates.y *= scale;
-						coordinates.w *= scale;
-						coordinates.h *= scale;
-						coordinates.x2 *= scale;
-						coordinates.y2 *= scale;
 						cropData = coordinates;
+						cropData.scale = scale;
+						cropData.x *= scale;
+						cropData.y *= scale;
+						cropData.w *= scale;
+						cropData.h *= scale;
+						cropData.x2 *= scale;
+						cropData.y2 *= scale;
 						button.show();
 						reset.show();
 					}
@@ -61,20 +62,22 @@
 			};
 
 			function adjustScale() {
-				if (large.width() > maxWidth) {
-					scale = large.width() / maxWidth;
+				large.css({"width": 'auto', "height": 'auto', "maxWidth": 'auto'});
+				originalWidth = large.width();
+				if (originalWidth > maxWidth) {
+					scale = originalWidth / maxWidth;
+					large.css({"maxWidth": maxWidth + 'px'});
 				} else {
 					scale = 1;
+					large.css({"maxWidth": 'auto'});
 				};
-				large.css({
-					"max-width": maxWidth + 'px'
-				});
 				thumbnail.css({
 					"width": options.previewWidth + 'px',
 					"height": (options.previewHeight * (large.height() / large.width())) + 'px',
 					"marginLeft": '0px',
 					"marginTop": '0px'
 				});
+				makeCropper();
 			};
 
 			function updateField() {
@@ -90,6 +93,7 @@
 					thumbnail.attr('src', options.path + file.name);
 					element.show();
 					thumbnail.show();
+					imageCropped = false;
 				});
 			};
 			if (large.hasClass('placeholder')) {
@@ -98,11 +102,8 @@
 			};
 
 			large.load(function() {
-				large.css({width: 'auto', height: 'auto', maxWidth: 'auto'});
-				setTimeout(function() {
-					adjustScale();
-					makeCropper();
-				}, 0);
+				adjustScale();
+				makeCropper();
 			});
 
 			reset.hide();
@@ -123,10 +124,10 @@
 					},
 					complete: function(request) {
 						var src = request.responseText;
-						large.css({width: 'auto', height: 'auto', maxWidth: 'auto'});
 						large.attr('src', options.path + src);
 						thumbnail.attr('src', options.path + src);
 						updateField();
+						imageCropped = true;
 					}
 				})
 				event.cancelled = true;
@@ -135,5 +136,3 @@
 		});
 	};
 })(jQuery);
-
-
