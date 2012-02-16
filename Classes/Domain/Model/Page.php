@@ -39,7 +39,7 @@ class Tx_Fed_Domain_Model_Page extends Tx_Extbase_DomainObject_AbstractEntity {
 	protected $title;
 
 	/**
-	 * @var type
+	 * @var string
 	 */
 	protected $subtitle;
 
