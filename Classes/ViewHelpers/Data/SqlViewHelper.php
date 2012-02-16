@@ -60,7 +60,10 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 		$offset = $this->arguments['offset'];
 		$limit = $this->arguments['limit'];
 		$groupBy = $this->arguments['groupBy'];
-		$orderBy = $this->arguments['orderBy'] . ' ' . $this->arguments['order'];
+		$orderBy = $this->arguments['orderBy'];
+		if ($orderBy && $this->arguments['order']) {
+			$orderBy .= ' ' . $this->arguments['order'];
+		}
 		$silent = $this->arguments['silent'];
 
 		if (!$query && !$table) {
