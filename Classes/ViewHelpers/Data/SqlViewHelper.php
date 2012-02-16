@@ -43,6 +43,7 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 		$this->registerArgument('groupBy', 'string', 'Field to group by in GROUP BY statement', FALSE, NULL);
 		$this->registerArgument('orderBy', 'string', 'Field to order by in ORDER statement', FALSE, NULL);
 		$this->registerArgument('order', 'string', 'Which direction to order the results of statement', FALSE, NULL);
+		$this->registerArgument('pruneResult', 'boolean', 'If TRUE, changes return type of result: one result row => row; one result cell => cell value; no result => "0"', FALSE, FALSE);
 		$this->registerArgument('silent', 'boolean', 'If TRUE, returns the output instead of registering it as a template variable', FALSE, FALSE);
 	}
 
@@ -85,9 +86,9 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 			array_push($rows, $row);
 		}
 		$GLOBALS['TYPO3_DB']->sql_free_result($result);
-		if (count($rows) === 0) {
+		if ($this->arguments['pruneResult'] && count($rows) === 0) {
 			$value = '0';
-		} else if (count($rows) === 1) {
+		} else if ($this->arguments['pruneResult'] && count($rows) === 1) {
 			$value = array_pop($rows);
 			if (count($value) === 1) {
 				$value = array_pop($value);
