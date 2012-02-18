@@ -84,9 +84,9 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 			if ($groups instanceof Tx_Extbase_Domain_Model_FrontendUserGroup) {
 				return $currentFrontendUserGroups->contains($groups);
 			} else if ($groups instanceof Tx_Extbase_Persistence_ObjectStorage) {
-				$before = $currentFrontendUserGroups->count();
-				$currentFrontendUserGroups->removeAll($groups);
-				return ($before !== $currentFrontendUserGroups->count());
+				$currentFrontendUserGroupsClone = clone $currentFrontendUserGroups;
+				$currentFrontendUserGroupsClone->removeAll($groups);
+				return ($currentFrontendUserGroups->count() !== $currentFrontendUserGroupsClone->count());
 			}
 		}
 		return ($currentFrontendUserGroups->count() > 0);
