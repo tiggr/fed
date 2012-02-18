@@ -5,12 +5,6 @@ if (!defined ('TYPO3_MODE')){
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
 
-Tx_Extbase_Utility_Extension::registerPlugin(
-	$_EXTKEY,
-	'Hash',
-	'FED Hasher'
-);
-
 t3lib_div::loadTCA('tt_content');
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {

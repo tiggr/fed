@@ -11,25 +11,11 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	array(
 		'Page' => 'render',
 		'Hash' => 'request',
-		'Tool' => 'clearCache,inspectCookie,removeCookie,setCookie,inspectSession,setSession,removeSession,validate'
-	),
-	array(
-		'Hash' => 'request',
-		'Tool' => 'clearCache,inspectCookie,removeCookie,setCookie,inspectSession,setSession,removeSession,validate'
-	)
-);
-
-Tx_Extbase_Utility_Extension::configurePlugin(
-	$_EXTKEY,
-	'Hash',
-	array(
-		'Hash' => 'request',
 	),
 	array(
 		'Hash' => 'request',
 	)
 );
-
 
 t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 	[GLOBAL]
@@ -57,21 +43,6 @@ t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
 		}
 	}
 
-	FedPDFBridge = PAGE
-	FedPDFBridge {
-		typeNum = 48151623420
-		config {
-			no_cache = 1
-			disableAllHeaderCode = 1
-		}
-		headerData >
-		4815162342 = USER_INT
-		4815162342 {
-			userFunc = tx_fed_utility_pdf->run
-			extensionName = Fed
-			pluginName = API
-		}
-	}
 ");
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
@@ -116,7 +87,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 
 
 }
-
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
@@ -274,14 +244,12 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['moveRecordClass']['fed'] = 'EXT:fed/Classes/Backend/TCEMain.php:Tx_Fed_Backend_TCEMain';
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typo3/class.db_list.inc']['makeQueryArray']['fed'] = 'EXT:fed/Classes/Backend/MakeQueryArray.php:Tx_Fed_Backend_MakeQueryArray';
 
-	#if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableIntegratedBackendLayouts']) {
+	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableIntegratedBackendLayouts']) {
 		$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/classes/class.tx_cms_backendlayout.php']['tx_cms_BackendLayout']['fed'] = 'EXT:fed/Classes/Backend/BackendLayout.php:Tx_Fed_Backend_BackendLayout';
-	#}
+	}
 }
 
 if (count($fedWizardElements) > 0) {
-	#var_dump($fedWizardElements);
-	#exit();
 	t3lib_extMgm::addPageTSConfig('
 		mod.wizards.newContentElement.wizardItems.fed {
 			header = Fluid Content Elements
@@ -290,11 +258,8 @@ if (count($fedWizardElements) > 0) {
 		}');
 }
 
-
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCacheLifetime']) {
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_extbase_reflection']['options']['defaultLifetime'] = 86400;
 }
-
-
 
 ?>
