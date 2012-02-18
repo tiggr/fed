@@ -1,20 +1,21 @@
 {namespace fed=Tx_Fed_ViewHelpers}
+{namespace flux=Tx_Flux_ViewHelpers}
 
 <f:layout name="Page" />
 
 <f:section name="Configuration">
-	<fed:page id="DemoPage">
-		<fed:page.group name="help" label="Help">
-			<fed:page.field.checkbox name="hideHelp" label="Hide help messages in the frontend" />
-		</fed:page.group>
-		<fed:page.group name="jQuery" label="jQuery">
-			<fed:page.field.checkbox name="includeJQuery" label="Use jQuery" />
-			<fed:page.field.input name="themeUrl" label="JQueryUI Theme url" default="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/black-tie/jquery-ui.css" />
-		</fed:page.group>
-		<fed:page.group name="content" label="Shared content">
-			<fed:page.field.group internalType="db" allowed="pages" maxItems="1" name="footerContentPageUid" label="Page containing content elements for footer" />
-		</fed:page.group>
-	</fed:page>
+	<flux:flexform id="DemoPage">
+		<flux:flexform.sheet name="help" label="Help">
+			<flux:flexform.field.checkbox name="hideHelp" label="Hide help messages in the frontend" />
+		</flux:flexform.sheet>
+		<flux:flexform.sheet name="jQuery" label="jQuery">
+			<flux:flexform.field.checkbox name="includeJQuery" label="Use jQuery" />
+			<flux:flexform.field.input name="themeUrl" label="JQueryUI Theme url" default="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/black-tie/jquery-ui.css" />
+		</flux:flexform.sheet>
+		<flux:flexform.sheet name="content" label="Shared content">
+			<flux:flexform.field.group internalType="db" allowed="pages" maxItems="1" name="footerContentPageUid" label="Page containing content elements for footer" />
+		</flux:flexform.sheet>
+	</flux:flexform>
 </f:section>
 
 <f:section name="Resources">
