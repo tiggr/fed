@@ -65,6 +65,7 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 		$this->registerArgument('useCHash', 'boolean', 'Use cHash for typolink', FALSE, TRUE);
 		$this->registerArgument('flagPath', 'string', 'Overwrites the path to the flag folder', FALSE, 'typo3/sysext/t3skin/images/flags/');
 		$this->registerArgument('flagImageType', 'string', 'Sets type of flag image: png, gif, jpeg', FALSE, 'png');
+		$this->registerArgument('linkCurrent', 'boolean', 'Sets flag to link current language or not', FALSE, TRUE);
 	}
 
 	/**
@@ -113,7 +114,11 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 			} else {
 				$class = '';
 			}
-			$html[] = '<' . $tagName . $class . '><a href="' . htmlspecialchars($var['url']) . '">' . $ths->getLayout($var) . '</a></' . $tagName . '>';
+			if ((bool) $this->arguments['linkCurrent'] === TRUE) {
+				$html[] = '<' . $tagName . $class . '><a href="' . htmlspecialchars($var['url']) . '">' . $ths->getLayout($var) . '</a></' . $tagName . '>';
+			} else {
+				$html[] = '<' . $tagName . $class . '>' . $ths->getLayout($var) . '</' . $tagName . '>';
+			}
 		}
 		return implode(LF, $html);
 	}
