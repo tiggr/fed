@@ -25,13 +25,9 @@
  * ************************************************************* */
 
 /**
- *
- *
- * @author Claus Due, Wildside A/S
  * @package Fed
  * @subpackage Backend
  */
-
 class Tx_Fed_Backend_TCEMain {
 
 	/**
@@ -39,11 +35,6 @@ class Tx_Fed_Backend_TCEMain {
 	 */
 	protected $objectManager;
 
-	/**
-	 *
-	 * @var Tx_Fed_Utility_FlexForm
-	 */
-	protected $flexFormService;
 
 	/**
 	 * @var Tx_Fed_Utility_DomainObjectInfo
@@ -51,24 +42,11 @@ class Tx_Fed_Backend_TCEMain {
 	protected $infoService;
 
 	/**
-	 * @var Tx_Extbase_Reflection_Service
-	 */
-	protected $reflectionService;
-
-	/**
-	 * @var Tx_Fed_Service_Content
-	 */
-	protected $contentService;
-
-	/**
 	 * CONSTRUCTOR
 	 */
 	public function __construct() {
 		$this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$this->flexFormService = $this->objectManager->get('Tx_Fed_Utility_FlexForm');
 		$this->infoService = $this->objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
-		$this->reflectionService = $this->objectManager->get('Tx_Extbase_Reflection_Service');
-		$this->contentService = $this->objectManager->get('Tx_Fed_Service_Content');
 	}
 
 	/**
@@ -131,34 +109,6 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processCmdmap_preProcess(&$command, $table, $id, &$relativeTo, t3lib_TCEmain &$reference) {
-		/*
-		if ($table === 'tt_content') {
-			switch ($command) {
-				case 'delete':
-					$rows = $this->contentService->getChildContentElementUids($id);
-					foreach ($rows as $row) {
-						$reference->deleteAction($table, $row['uid']);
-					}
-					break;
-				case 'move':
-					if ($relativeTo > 0) {
-						$area = ''; // moving directly to a new page, remove area
-					} else if (is_numeric($relativeTo)) {
-						$area = $this->contentService->getFlexibleContentElementArea(array('pid' => $relativeTo));
-					} else if (strpos($relativeTo, 'FED')) {
-						$parts = explode('-', $relativeTo);
-						$parts = array_slice($parts, 1, count($parts) - 2);
-						$pid = array_pop($parts);
-						$area = implode(':', $parts);
-						$relativeTo = $pid;
-					}
-					$data = array('tx_fed_fcecontentarea' => $area);
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $id . "'", $data);
-					break;
-				default:
-			}
-		}
-		*/
 	}
 
 	/**
@@ -186,19 +136,6 @@ class Tx_Fed_Backend_TCEMain {
 			$action = 'create';
 		}
 		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
-		/*
-		if ($table === 'tt_content' && $id) {
-			foreach ((array) $incomingFieldArray['pi_flexform']['data']['options']['lDEF'] as $key=>$value) {
-				if (strpos($key, 'tt_content') === 0) {
-					$realKey = array_pop(explode('.', $key));
-					if (isset($incomingFieldArray[$realKey])) {
-						$incomingFieldArray[$realKey] = $value['vDEF'];
-					}
-				}
-			}
-			$incomingFieldArray['tx_fed_fcecontentarea'] = $this->contentService->getFlexibleContentElementArea($incomingFieldArray, $id);;
-		}
-		*/
 	}
 
 	/**
@@ -225,25 +162,6 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
-		/*
-		if ($table == 'tt_content' && $fieldArray['CType'] == 'fed_fce') {
-			switch ($status) {
-				case 'new':
-					$newUid = $reference->substNEWwithIDs[$id];
-					$oldUid = $fieldArray['t3_origuid'];
-					$children = $this->contentService->getChildContentElementUids($oldUid);
-					foreach ($children as $child) {
-						$areaAndUid = explode(':', $child['tx_fed_fcecontentarea']);
-						$areaAndUid[1] = $newUid; // re-assign parent UID
-						$overrideValues = array('tx_fed_fcecontentarea' => implode(':', $areaAndUid));
-						$childUid = $reference->copyRecord($table, $child['uid'], $fieldArray['pid']);
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery($table, "uid = '" . $childUid . "'", $overrideValues);
-					}
-					break;
-				default:
-			}
-		}
-		*/
 	}
 
 }
