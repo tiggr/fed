@@ -87,9 +87,17 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @api
 	 */
 	public function getPageTemplateLabel($extensionName, $templateFile) {
+		if ($extensionName === NULL) {
+			$extensionName = 'fed';
+		}
 		$config = $this->getPageConfiguration($extensionName);
+		if (file_exists($templateFile) === TRUE) {
+			$templatePathAndFilename = $templateFile;
+		} else {
+			$templatePathAndFilename = $config['templateRootPath'] . 'Page/' . $templateFile . '.html';
+		}
 		$exposedView = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
-		$exposedView->setTemplatePathAndFilename($config['templateRootPath'] . 'Page/' . $templateFile . '.html');
+		$exposedView->setTemplatePathAndFilename($templatePathAndFilename);
 		$exposedView->setLayoutRootPath($config['layoutRootPath']);
 		$exposedView->setPartialRootPath($config['partialRootPath']);
 		$page = $exposedView->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
@@ -110,6 +118,9 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 			return $output;
 		}
 		foreach ($typoScript as $extensionName=>$group) {
+			if (isset($group['enable']) === TRUE && $group['enable'] < 1) {
+				continue;
+			}
 			$path = $group['templateRootPath'] . 'Page' . DIRECTORY_SEPARATOR;
 			$files = scandir($path);
 			$output[$extensionName] = array();

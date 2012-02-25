@@ -38,7 +38,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	/**
 	 * @var string
 	 */
-	protected $fieldName = 'tx_fed_page_flexform';
+	protected $fieldName = '';
 
 	/**
 	 * @var string
@@ -55,17 +55,14 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	 * @return string
 	 */
 	public function getTemplatePathAndFilename(array $row) {
-		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-		$pageService = $objectManager->get('Tx_Fed_Service_Page');
-		$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
+		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
 		if ($configuration['tx_fed_page_controller_action']) {
 			$action = $configuration['tx_fed_page_controller_action'];
 			list ($extensionName, $action) = explode('->', $action);
-			$paths = $configurationManager->getPageConfiguration($extensionName);
+			$paths = $this->configurationManager->getPageConfiguration($extensionName);
 			$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
-			$templatePathAndFilename = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
+		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
+			$templatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
 		}
 		return $templatePathAndFilename;
 	}
@@ -75,31 +72,27 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	 * @return array
 	 */
 	public function getTemplateVariables(array $row) {
-		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$pageService = $objectManager->get('Tx_Fed_Service_Page');
-		$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-		$flexFormUtility = $objectManager->get('Tx_Fed_Utility_FlexForm');
+		$flexFormUtility = $this->objectManager->get('Tx_Fed_Utility_FlexForm');
 		$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
 		$flexform = $flexFormUtility->getAll();
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
 		list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
 		$paths = array();
-		$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-		$paths = $configurationManager->getPageConfiguration($extensionName);
+		$paths = $this->configurationManager->getPageConfiguration($extensionName);
 		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
-		$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
+		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
 		if ($configuration['tx_fed_page_controller_action']) {
 			$action = $configuration['tx_fed_page_controller_action'];
 			list ($extensionName, $action) = explode('->', $action);
-			$paths = $configurationManager->getPageConfiguration($extensionName);
+			$paths = $this->configurationManager->getPageConfiguration($extensionName);
 			$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
-			$templatePathAndFilename = t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
+		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
+			$templatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
 		} else {
 			return array();
 		}
 
-		$view = $objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
+		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
 		$view->assignMultiple($flexform);
 		$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
@@ -124,17 +117,14 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	 * @return array
 	 */
 	public function getTemplatePaths(array $row) {
-		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$configurationManager = t3lib_div::makeInstance('Tx_Fed_Configuration_ConfigurationManager');
-		$pageService = $objectManager->get('Tx_Fed_Service_Page');
-		$configuration = $pageService->getPageTemplateConfiguration($row['uid']);
+		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
 		if ($configuration['tx_fed_page_controller_action']) {
 			$action = $configuration['tx_fed_page_controller_action'];
 			list ($extensionName, $action) = explode('->', $action);
 		} else {
 			$extensionName = 'fed';
 		}
-		$paths = $configurationManager->getPageConfiguration($extensionName);
+		$paths = $this->configurationManager->getPageConfiguration($extensionName);
 		return $paths;
 	}
 

@@ -37,15 +37,18 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 
 	/**
 	 * @var Tx_Extbase_Object_ObjectManager
-	 * @inject
 	 */
 	protected $objectManager;
 
 	/**
 	 * @var Tx_Fed_Domain_Repository_ContentElementRepository
-	 * @inject
 	 */
 	protected $contentElementRepository;
+
+	/**
+	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 */
+	protected $configurationManager;
 
 	/**
 	 * @param Tx_Extbase_Object_ObjectManager $objectManager
@@ -59,6 +62,13 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 */
 	public function injectContentElementRepository(Tx_Fed_Domain_Repository_ContentElementRepository $contentElementRepository) {
 		$this->contentElementRepository = $contentElementRepository;
+	}
+
+	/**
+	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	 */
+	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+		$this->configurationManager = $configurationManager;
 	}
 
 	/**
@@ -131,6 +141,25 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 				$row['tx_fed_page_controller_action'] = $row['tx_fed_page_controller_action_sub'];
 				return $row;
 			}
+		}
+	}
+
+	/**
+	 * Gets the fallback Fluid Page Template defined in TypoScript
+	 *
+	 * @param boolean $translatePath If FALSE, does not translate the TypoScript path
+	 * @return string
+	 */
+	public function getFallbackPageTemplatePathAndFilename($translatePath=TRUE) {
+		$settings = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'fed', 'API');
+		$fallbackTemplatePathAndFilename = $settings['defaults.']['templates.']['fallbackFluidPageTemplate'];
+		if ($translatePath === TRUE) {
+			$fallbackTemplatePathAndFilename = t3lib_div::getFileAbsFileName($fallbackTemplatePathAndFilename);
+		}
+		if (file_exists($fallbackTemplatePathAndFilename) || ($translatePath === FALSE)) {
+			return $fallbackTemplatePathAndFilename;
+		} else {
+			return t3lib_extMgm::extPath('fed', 'Resources/Private/Templates/Page/Render.html');
 		}
 	}
 

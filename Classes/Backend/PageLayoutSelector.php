@@ -41,11 +41,17 @@ class Tx_Fed_Backend_PageLayoutSelector {
 	protected $recognizedFormats = array('html', 'xml', 'txt', 'json', 'js', 'css');
 
 	/**
+	 * @var Tx_Fed_Service_Page
+	 */
+	protected $pageService;
+
+	/**
 	 * CONSTRUCTOR
 	 */
 	public function __construct() {
 		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->configurationManager = $objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
+		$this->pageService = $objectManager->get('Tx_Fed_Service_Page');
 	}
 
 	/**
@@ -62,8 +68,21 @@ class Tx_Fed_Backend_PageLayoutSelector {
 		if (strpos($name, 'tx_fed_controller_action_sub') === FALSE) {
 			$onChange = 'onchange="if (confirm(TBE_EDITOR.labels.onChangeAlert) && TBE_EDITOR.checkSubmit(-1)){ TBE_EDITOR.submitForm() };"';
 		}
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate'] && empty($value) === TRUE) {
+			$fallbackTemplatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
+			#die($fallbackTemplatePathAndFilename);
+			if (strpos($fallbackTemplatePathAndFilename, '->')) {
+				list ($extensionName, $templateFileBase) = explode('->', $fallbackTemplatePathAndFilename);
+				$fallbackTemplateIdentifier = trim($fallbackTemplatePathAndFilename, '.html');
+			} else {
+				$extensionName = NULL;
+				$fallbackTemplateIdentifier = $fallbackTemplatePathAndFilename;
+			}
+			$value = $fallbackTemplateIdentifier;
+			$emptyLabel = $this->configurationManager->getPageTemplateLabel($extensionName, $fallbackTemplateIdentifier);
+		}
 		$selector = '<select name="' . $name . '" class="formField select" ' . $onChange . '>' . LF;
-		$selector .= '<option value=""></option>' . LF;
+		$selector .= '<option value="">' . $emptyLabel . '</option>' . LF;
 		foreach ($availableTemplates as $extension=>$group) {
 			if (!t3lib_extMgm::isLoaded($extension)) {
 				$groupTitle = ucfirst($extension);
