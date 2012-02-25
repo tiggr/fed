@@ -68,9 +68,9 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 		$this->registerArgument('animated', 'boolean', 'Boolean, wether or not to animate tab changes');
 		$this->registerArgument('active', 'boolean', 'Set this to TRUE to indicate which tab should be active - use only on a single tab');
 		$this->registerArgument('disabled', 'boolean', 'Set this to true to deactivate entire tab sets or individual tabs');
-		$this->registerArgument('deselectable', 'boolean', 'Tabs are deselectable	');
+		$this->registerArgument('deselectable', 'boolean', 'Tabs are deselectable');
 		$this->registerArgument('collapsible', 'boolean', 'Tabs are collapsible');
-		$this->registerArgument('cookie', 'boolean', 'Set a cookie to remember the active tab');
+		$this->registerArgument('cookie', 'mixed', 'Set a cookie to remember the active tab. Use array of indexes "expires", "name", "secure", "domain" and "path"', FALSE, NULL);
 		parent::initializeArguments();
 	}
 
@@ -96,7 +96,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 
 		// render tab group
 		$this->templateVariableContainer->add('tabs', array());
-		$this->templateVariableContainer->add('selectedIndex', 0);
+		$this->templateVariableContainer->add('selectedIndex', NULL);
 		$this->templateVariableContainer->add('disabledIndices', array());
 		$this->templateVariableContainer->add('currentIndex', 0);
 		$content = $this->renderChildren();
@@ -119,9 +119,11 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 
 	protected function renderTabSelector() {
 		$html = "<ul>" . LF;
+		$absoluteUrlViewHelper = $this->objectManager->get('Tx_Fed_ViewHelpers_Page_AbsoluteUrlViewHelper');
+		$absoluteUrl = $absoluteUrlViewHelper->render();
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
-			$lid = md5($tab['title']);
-			$html .= '<li><a href="javascript:;" title="' . $lid . '">' . $tab['title'] . '</a></li>' . LF;
+			$lid = strtolower(preg_replace('/[^a-z0-9]/i', '_', $tab['title']));
+			$html .= '<li><a href="#' . $lid . '" title="' . $lid . '">' . $tab['title'] . '</a></li>' . LF;
 		}
 		$html .= "</ul>" . LF;
 		return $html;
@@ -130,7 +132,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 	protected function renderTabs() {
 		$html = "";
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
-			$lid = md5($tab['title']);
+			$lid = strtolower(preg_replace('/[^a-z0-9]/i', '_', $tab['title']));
 			$html .= '<div id="' . $lid . '">' . $tab['content'] . '</div>' . LF;
 		}
 		return $html;
@@ -173,25 +175,27 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 	 */
 	protected function addScript() {
 		$selectedIndex = $this->templateVariableContainer->get('selectedIndex');
-		$deselectable = $this->getBooleanForJavascript('deselectable');
-		$cookie = $this->getBooleanForJavascript('cookie');
-		$collapsible = $this->getBooleanForJavascript('collapsible');
-		$csvOfDisabledTabIndices = implode(',' ,$this->templateVariableContainer->get('disabledIndices'));
+
+		$csvOfDisabledTabIndices = (array) $this->templateVariableContainer->get('disabledIndices');
+		$options = array();
+		if ($selectedIndex != NULL)
+			$options['selected'] = $selectedIndex;
+		if ($this->arguments['cookie'])
+			$options['cookie'] = $this->arguments['cookie'];
 		if ($this->arguments['animated'] === TRUE) {
-			$animation = '"fx" : { opacity : \'toggle\' },';
+			$options['fx'] = array('opacity' => 'toggle');
+ 		}
+		if ($this->arguments['deselectable']) {
+			$options['deselectable'] = TRUE;
 		}
-		$script = <<< SCRIPT
-jQuery(document).ready(function() {
-	jQuery("#{$this->uniqId}").tabs({
-		"selected" : {$selectedIndex},
-		"disabled" : [{$csvOfDisabledTabIndices}],
-		{$animation}
-		"deselectable" : {$deselectable},
-		"cookie" : {$cookie},
-		"collapsible" : {$collapsible}
-	});
-});
-SCRIPT;
+		if ($this->arguments['collapsible']) {
+			$options['collapsible'] = TRUE;
+		}
+		if (count($csvOfDisabledTabIndices) > 0) {
+			$options['disabled'] = $csvOfDisabledTabIndices;
+		}
+		$json = json_encode($options);
+		$script = 'jQuery(document).ready(function($) { $("#' . $this->uniqId . '").tabs(' . $json . '); });';
 		$this->includeHeader($script, 'js');
 	}
 
