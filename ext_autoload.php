@@ -1,61 +1,18 @@
 <?php
-
-$extensionClassesPath = t3lib_extMgm::extPath('fed', 'Classes/');
-$extensionPath = t3lib_extMgm::extPath('fed');
-$extbaseClassesPath = t3lib_extMgm::extPath('extbase', 'Classes/');
-return array(
-	'tx_extbase_service_cacheservice' => $extbaseClassesPath . "Service/CacheService.php",
-	'tx_extbase_service_typoscriptservice' => $extbaseClassesPath . "Service/TypoScriptService.php",
-	'tx_fed_tests_unit_basetestcase' => $extensionPath . 'Tests/Unit/BaseTestCase.php',
-	'tx_fed_core' => $extensionClassesPath . 'Core.php',
-	'tx_fed_core_bootstrap' => $extensionClassesPath . 'Core/Bootstrap.php',
-	'tx_fed_configuration_configurationmanager' => $extensionClassesPath . 'Configuration/ConfigurationManager.php',
-	'tx_fed_core_abstractcontroller' => $extensionClassesPath . 'Core/AbstractController.php',
-	'tx_fed_core_viewhelper_abstractviewhelper' => $extensionClassesPath . 'Core/ViewHelper/AbstractViewHelper.php',
-	'tx_fed_controller_pagecontroller' => $extensionClassesPath . 'Controller/PageController.php',
-	'tx_fed_service_content' => $extensionClassesPath . 'Service/Content.php',
-	'tx_fed_service_page' => $extensionClassesPath . 'Service/Page.php',
-	'tx_fed_service_auth' => $extensionClassesPath . 'Service/Auth.php',
-	'tx_fed_service_cdn' => $extensionClassesPath . 'Service/Cdn.php',
-	'tx_fed_service_clone' => $extensionClassesPath . 'Service/Clone.php',
-	'tx_fed_service_domain' => $extensionClassesPath . 'Service/Domain.php',
-	'tx_fed_service_email' => $extensionClassesPath . 'Service/Email.php',
-	'tx_fed_service_file' => $extensionClassesPath . 'Service/File.php',
-	'tx_fed_service_json' => $extensionClassesPath . 'Service/Json.php',
-	'tx_fed_service_recursion' => $extensionClassesPath . 'Service/Recursion.php',
-	'tx_fed_service_render' => $extensionClassesPath . 'Service/Render.php',
-	'tx_fed_service_user' => $extensionClassesPath . 'Service/User.php',
-	'tx_fed_utility_pdf' => $extensionClassesPath . 'Utility/PDF.php',
-	'tx_fed_utility_extjs' => $extensionClassesPath . 'Utility/ExtJS.php',
-	'tx_fed_utility_recursionhandler' => $extensionClassesPath . 'Utility/RecursionHandler.php',
-	'tx_fed_utility_domainobjectinfo' => $extensionClassesPath . 'Utility/DomainObjectInfo.php',
-	'tx_fed_utility_flexform' => $extensionClassesPath . 'Utility/FlexForm.php',
-	'tx_fed_utility_json' => $extensionClassesPath . 'Utility/JSON.php',
-	'tx_fed_utility_documenthead' => $extensionClassesPath . 'Utility/DocumentHead.php',
-	'tx_fed_utility_debug' => $extensionClassesPath . 'Utility/Debug.php',
-	'tx_fed_utility_datacomparison' => $extensionClassesPath . 'Utility/DataComparison.php',
-	'tx_fed_utility_path' => $extensionClassesPath . 'Utility/Path.php',
-	'tx_fed_extjs_modelgenerator' => $extensionClassesPath . 'ExtJS/ModelGenerator.php',
-	'tx_fed_persistence_repository' => $extensionClassesPath . 'Persistence/Repository.php',
-	'tx_fed_domain_model_contentelement' => $extensionClassesPath . 'Domain/Model/ContentElement.php',
-	'tx_fed_domain_model_backendlayout' => $extensionClassesPath . 'Domain/Model/BackendLayout.php',
-	'tx_fed_domain_model_datasource' => $extensionClassesPath . 'Domain/Model/DataSource.php',
-	'tx_fed_domain_model_page' => $extensionClassesPath . 'Domain/Model/Page.php',
-	'tx_fed_domain_model_address' => $extensionClassesPath . 'Domain/Model/Address.php',
-	'tx_fed_domain_repository_contentelementrepository' => $extensionClassesPath . 'Domain/Repository/ContentElementRepository.php',
-	'tx_fed_domain_repository_backendlayoutrepository' => $extensionClassesPath . 'Domain/Repository/BackendLayoutRepository.php',
-	'tx_fed_domain_repository_datasourcerepository' => $extensionClassesPath . 'Domain/Repository/DataSourceRepository.php',
-	'tx_fed_domain_repository_pagerepository' => $extensionClassesPath . 'Domain/Repository/PageRepository.php',
-	'tx_fed_domain_repository_addressrepository' => $extensionClassesPath . 'Domain/Repository/AddressRepository.php',
-	'tx_fed_backend_tcemain' => $extensionClassesPath . 'Backend/TCEMain.php',
-	'tx_fed_backend_pagelayoutselector' => $extensionClassesPath . 'Backend/PageLayoutSelector.php',
-	'tx_fed_backend_fceselector' => $extensionClassesPath . 'Backend/FCESelector.php',
-	'tx_fed_backend_fceparser' => $extensionClassesPath . 'Backend/FCEParser.php',
-	'tx_fed_backend_hiddenfield' => $extensionClassesPath . 'Backend/HiddenField.php',
-	'tx_fed_scheduler_task' => $extensionClassesPath . 'Scheduler/Task.php',
-	'tx_fed_scheduler_fieldprovider' => $extensionClassesPath . 'Scheduler/FieldProvider.php',
-	'tx_fed_provider_configuration_contentobjectconfigurationprovider' => $extensionClassesPath . 'Provider/Configuration/ContentObjectConfigurationProvider.php',
-	'tx_fed_provider_configuration_pageconfigurationprovider' => $extensionClassesPath . 'Provider/Configuration/PageConfigurationProvider.php'
-);
-
+$classPrefix = 'Tx_Fed_';
+$classPath = t3lib_extMgm::extPath('fed', 'Classes/');
+if ($GLOBALS['autoload_cache'][$classPath]) {
+	return $GLOBALS['autoload_cache'][$classPath];
+}
+$files = t3lib_div::getAllFilesAndFoldersInPath(array(), $classPath);
+$autoloadRegistry = array();
+foreach ($files as $filename) {
+	$relativeName = substr($filename, strlen($classPath));
+	$relativeName = substr($relativeName, 0, -4);
+	$className = $classPrefix . str_replace('/', '_', $relativeName);
+	$key = strtolower($className);
+	$autoloadRegistry[$key] = $filename;
+}
+$GLOBALS['autoload_cache'][$classPath] = $autoloadRegistry;
+return $autoloadRegistry;
 ?>
