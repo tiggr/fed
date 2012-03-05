@@ -89,6 +89,8 @@ var recordSelector = function(id, name, multiple, removeIcon, searchProperty, al
 					listElement.removeClass('loading');
 				}
 			});
+		} else {
+			listElement.fadeIn();
 		};
 	};
 	if (multiple) {
