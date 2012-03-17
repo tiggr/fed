@@ -34,7 +34,7 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	public function initializeArguments() {
 		$this->registerArgument('name', 'string', 'Name of the variable to get or set', TRUE, NULL, TRUE);
 		$this->registerArgument('value', 'mixed', 'If specified, takes value from content of this argument', FALSE, NULL, TRUE);
-		$this->registerArgument('type', 'string', 'Data-type for this variable. Empty means string', FALSE, NULL, TRUE);
+		$this->registerArgument('type', 'string', 'Data-type for this variable. Casts the value if set.', FALSE, NULL, TRUE);
 	}
 
 	/**
@@ -50,20 +50,9 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		}
 		if ($value) {
 				// we are setting a variable
-			if ($type === NULL) {
-				if (is_object($value)) {
-					$type = 'object';
-				} else if (is_string($value)) {
-					$type = 'string';
-				} else if (is_int($value)) {
-					$type = 'integer';
-				} else if (is_float($value)) {
-					$type = 'float';
-				} else if (is_array($value)) {
-					$type = 'array';
-				}
+			if ($type !== NULL) {
+				$value = $this->typeCast($value, $type);
 			}
-			$value = $this->typeCast($value, $type);
 			if ($this->templateVariableContainer->exists($name)) {
 				$this->templateVariableContainer->remove($name);
 			}
@@ -111,7 +100,6 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 				}
 				break;
 			case 'string':
-			default:
 				$value = (string) $value;
 		}
 		return $value;
