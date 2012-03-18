@@ -113,6 +113,26 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 					$value = explode(',', $value);
 				}
 				break;
+			case 'DateTime':
+				// TODO: remove first if-part if TYPO3 4.5 is not supported anymore:
+				if (!class_exists('t3lib_utility_Math')) {
+					if (t3lib_div::testInt($value)) {
+						$value = date(DateTime::W3C, $value);
+					}
+					$value = DateTime::createFromFormat(DateTime::W3C, $value);
+					if ($value === FALSE) {
+						throw new Exception('fed.data.var ViewHelper: The given value could not be converted to DateTime. Use this format: "' . DateTime::W3C . '"', 1307719788);
+					}
+				} else {
+					// pretty easy assumption: integer = Unix timestamp
+					if (t3lib_utility_Math::canBeInterpretedAsInteger($value)) {
+						// Convert to interpretable string to respect the local timezone
+						$value = date(DateTime::W3C, $value);
+					}
+					$converter = new Tx_Extbase_Property_TypeConverter_DateTimeConverter();
+					$value = $converter->convertFrom($value, 'DateTime');
+				}
+				break;
 			case 'string':
 				$value = (string) $value;
 		}
