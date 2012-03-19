@@ -25,3 +25,6 @@ enableIntegratedBackendLayouts = 0
 
   # cat=basic/enable; type=boolean; label=Cache Optimization: Increase the default Extbase object cache lifetime to 24 hours instead of the default 1 hour. Do not enable this on 4.5 installs!
 increaseExtbaseCacheLifetime = 0
+
+  # cat=basic/enable; type=boolean; label=Disable automatic TypoScript inclusion: By default FED includes some TypoScript if you enable features like "Fluid Content Elements", "Fallback Fluid Page Template", "SolrFeatures" etc. With this setting you can disable it. Important: The features won't work without proper TypoScript settings. Disable the inclusion only if you know what you are doing.
+disableAutomaticTypoScriptInclusion = 0

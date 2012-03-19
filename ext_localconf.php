@@ -17,28 +17,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
-t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
-	config.tx_extbase.persistence.classes.Tx_Fed_Persistence_FileObjectStorage.mapping {
-		tableName = 0
-	}
-	FedFrameworkBridge = PAGE
-	FedFrameworkBridge {
-		typeNum = 4815162342
-		config {
-			no_cache = 1
-			disableAllHeaderCode = 1
-		}
-		headerData >
-		4815162342 = USER_INT
-		4815162342 {
-			userFunc = tx_fed_core_bootstrap->run
-			extensionName = Fed
-			pluginName = API
-		}
-	}
-
-");
-
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
 	Tx_Extbase_Utility_Extension::configurePlugin(
 		$_EXTKEY,
@@ -83,27 +61,11 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 }
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
-	t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
-		'[GLOBAL]
-		page = PAGE
-		page.typeNum = 0
-		page.5 = USER
-		page.5.userFunc = tx_fed_core_bootstrap->run
-		page.5.extensionName = Fed
-		page.5.pluginName = API
-		page.10 >
-	');
-	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
-		t3lib_extMgm::addTypoScript($_EXTKEY,'setup',
-			'[GLOBAL]
-			plugin.tx_fed.page.fed {
-				enable = 1
-				templateRootPath = EXT:fed/Resources/Private/Templates/
-				layoutRootPath = EXT:fed/Resources/Private/Layouts/
-				partialRootPath = EXT:fed/Resources/Private/Partials/
-			}
-			plugin.tx_fed.settings.templates.fallbackFluidPageTemplate = EXT:fed/Resources/Private/Templates/Page/Render.html
-		');
+	if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['disableAutomaticTypoScriptInclusion']) {
+		t3lib_extMgm::addTypoScriptSetup('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:fed/Configuration/TypoScript/Page/setup.txt">');
+		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
+			t3lib_extMgm::addTypoScriptSetup('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:fed/Configuration/TypoScript/Page/fallbacktemplate.txt">');
+		}
 	}
 	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] == '' ? '' : ',') . 'tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,';
 }
@@ -120,22 +82,9 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 		),
 		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
 	);
-	t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
-		FedSolrBridge = PAGE
-		FedSolrBridge {
-			typeNum = 1324054607
-			config {
-				no_cache = 1
-				disableAllHeaderCode = 1
-			}
-			headerData >
-			1324054607 = USER_INT
-			1324054607 {
-				userFunc = tx_fed_core_bootstrap->run
-				extensionName = Fed
-				pluginName = Solr
-			}
-		}");
+	if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['disableAutomaticTypoScriptInclusion']) {
+		t3lib_extMgm::addTypoScriptSetup('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:fed/Configuration/TypoScript/Solr/setup.txt">');
+	}
 }
 
 $fedWizardElements = array();

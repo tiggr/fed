@@ -42,3 +42,7 @@ plugin.tx_fed {
 		storagePid = {$plugin.tx_fed.persistence.storagePid}
 	}
 }
+
+config.tx_extbase.persistence.classes.Tx_Fed_Persistence_FileObjectStorage.mapping {
+	tableName = 0
+}

@@ -1,0 +1,7 @@
+plugin.tx_fed.page.fed {
+	enable = 1
+	templateRootPath = EXT:fed/Resources/Private/Templates/
+	layoutRootPath = EXT:fed/Resources/Private/Layouts/
+	partialRootPath = EXT:fed/Resources/Private/Partials/
+}
+plugin.tx_fed.settings.templates.fallbackFluidPageTemplate = EXT:fed/Resources/Private/Templates/Page/Render.html

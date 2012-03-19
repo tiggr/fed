@@ -1,0 +1,15 @@
+FedSolrBridge = PAGE
+FedSolrBridge {
+	typeNum = 1324054607
+	config {
+		no_cache = 1
+		disableAllHeaderCode = 1
+	}
+	headerData >
+	1324054607 = USER_INT
+	1324054607 {
+		userFunc = tx_fed_core_bootstrap->run
+		extensionName = Fed
+		pluginName = Solr
+	}
+}

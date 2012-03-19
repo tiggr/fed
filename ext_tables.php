@@ -129,6 +129,7 @@ if (TYPO3_MODE == 'BE') {
 	}
 
 	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'FED Fluid Extbase Development Framework');
+	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/FrameworkBridge', 'FED Fluid Extbase Development Framework Bridge - Used by some ViewHelpers (AJAX)');
 
 	$TCA['tt_content']['types']['fed_template']['showitem'] = '
 	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
