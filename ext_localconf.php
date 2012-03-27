@@ -156,6 +156,12 @@ if (TYPO3_MODE == 'BE') {
 	}
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
+			// Setting some global vars:
+		$GLOBALS['EXEC_TIME'] = time();					// $EXEC_TIME is set so that the rest of the script has a common value for the script execution time
+		$GLOBALS['SIM_EXEC_TIME'] = $GLOBALS['EXEC_TIME'];			// $SIM_EXEC_TIME is set to $EXEC_TIME but can be altered later in the script if we want to simulate another execution-time when selecting from eg. a database
+		$GLOBALS['ACCESS_TIME'] = $GLOBALS['EXEC_TIME'] - ($GLOBALS['EXEC_TIME'] % 60);		// $ACCESS_TIME is a common time in minutes for access control
+		$GLOBALS['SIM_ACCESS_TIME'] = $GLOBALS['ACCESS_TIME'];		// if $SIM_EXEC_TIME is changed this value must be set accordingly
+
 		$GLOBALS['TYPO3_DB'] = new t3lib_DB();
 		$GLOBALS['TYPO3_DB']->connectDB();
 		$template = t3lib_div::makeInstance("t3lib_tsparser_ext");
@@ -211,6 +217,13 @@ if (TYPO3_MODE == 'BE') {
 				}
 			}
 		}
+		unset(
+			$GLOBALS['EXEC_TIME'],
+			$GLOBALS['SIM_EXEC_TIME'],
+			$GLOBALS['ACCESS_TIME'],
+			$GLOBALS['SIM_ACCESS_TIME'],
+			$GLOBALS['TYPO3_DB']
+		);
 	}
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
