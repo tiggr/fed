@@ -35,6 +35,7 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		$this->registerArgument('name', 'string', 'Name of the variable to get or set', TRUE, NULL, TRUE);
 		$this->registerArgument('value', 'mixed', 'If specified, takes value from content of this argument', FALSE, NULL, TRUE);
 		$this->registerArgument('type', 'string', 'Data-type for this variable. Casts the value if set.', FALSE, NULL, TRUE);
+		$this->registerArgument('scope', 'string', 'Scope in which to get the variable - switch this to "php" to read PHP variables by path', FALSE, 'fluid');
 	}
 
 	/**
@@ -45,6 +46,7 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		$name = $this->arguments['name'];
 		$value = $this->arguments['value'];
 		$type = $this->arguments['type'];
+		$parts = array();
 		if ($value === NULL) {
 			$value = $this->renderChildren();
 		}
@@ -63,6 +65,18 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 			if (strpos($name, '.')) {
 				$parts = explode('.', $name);
 				$name = array_shift($parts);
+			}
+			if ($this->arguments['scope'] === 'php') {
+				global $$name;
+				$allVariables = get_defined_vars();
+				if (isset($allVariables[$name])) {
+					$rootVariable = $allVariables[$name];
+					if (count($parts) > 0) {
+						return Tx_Extbase_Reflection_ObjectAccess::getPropertyPath($rootVariable, implode('.', $parts));
+					} else {
+						return $rootVariable;
+					}
+				}
 			}
 			if ($this->templateVariableContainer->exists($name)) {
 				$value = $this->templateVariableContainer->get($name);
