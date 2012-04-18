@@ -281,6 +281,7 @@ if (count($fedWizardElements) > 0) {
 			position = 0
 		}');
 }
+unset($fedWizardElements);
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCacheLifetime']) {
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_extbase_reflection']['options']['defaultLifetime'] = 86400;
