@@ -18,12 +18,6 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 );
 
 t3lib_extMgm::addTypoScript($_EXTKEY, 'setup', "
-	[GLOBAL]
-	plugin.tx_fed.fce.fed {
-		templateRootPath = EXT:fed/Resources/Private/Elements/
-		partialRootPath = EXT:fed/Resources/Private/Partials/
-		layoutRootPath = EXT:fed/Resources/Private/Layouts/
-	}
 	config.tx_extbase.persistence.classes.Tx_Fed_Persistence_FileObjectStorage.mapping {
 		tableName = 0
 	}

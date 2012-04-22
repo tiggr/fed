@@ -42,6 +42,7 @@ $EM_CONF[$_EXTKEY] = array(
 		),
 		'suggests' => array(
 			'gridelements' => '1.1',
+			'fluidcontent' => '',
 		),
 	),
 	'suggests' => array(
