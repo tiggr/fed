@@ -81,7 +81,7 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 			if ($this->templateVariableContainer->exists($name)) {
 				$value = $this->templateVariableContainer->get($name);
 				if (is_array($parts) && count($parts) > 0) {
-					$value = $this->recursiveValueRead($value, $parts);
+					$value = Tx_Extbase_Reflection_ObjectAccess::getPropertyPath($value, implode('.', $parts));
 				}
 				return $value;
 			} else {
