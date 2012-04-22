@@ -172,14 +172,6 @@ if (TYPO3_MODE == 'BE') {
 			$key = trim($key, '.');
 			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
-				$groupLabel = '';
-				if (!t3lib_extMgm::isLoaded($key)) {
-					$groupLabel = ucfirst($key);
-				} else {
-					$emConfigFile = t3lib_extMgm::extPath($key, 'ext_emconf.php');
-					require $emConfigFile;
-					$groupLabel = empty($EM_CONF['']['title']) ? ucfirst($key) : $EM_CONF['']['title'];
-				}
 				foreach ($files as $fileRelPath) {
 					$contentConfiguration = array();
 					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
