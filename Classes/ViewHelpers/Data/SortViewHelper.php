@@ -32,18 +32,6 @@
 class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractTagBasedViewHelper {
 
 	/**
-	 * @var Tx_Extbase_Object_ObjectManager
-	 */
-	protected $objectManager;
-
-	/**
-	 * @param Tx_Extbase_Object_ObjectManager $objectManager
-	 */
-	public function injectObjectManager(Tx_Extbase_Object_ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-	}
-
-	/**
 	 * Initialize arguments
 	 */
 	public function initializeArguments() {
