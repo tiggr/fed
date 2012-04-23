@@ -29,8 +29,16 @@
  * @package Fed
  * @subpackage ViewHelpers\Data
  */
-class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
+class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper implements Tx_Fluid_Core_ViewHelper_Facets_ChildNodeAccessInterface {
 
+	/**
+	 * @var array<Tx_Fluid_Core_Parser_SyntaxTree_AbstractNode>
+	 */
+	protected $childNodes;
+
+	/**
+	 * Initialize arguments
+	 */
 	public function initializeArguments() {
 		$this->registerArgument('name', 'string', 'Name of the variable to get or set', TRUE, NULL, TRUE);
 		$this->registerArgument('value', 'mixed', 'If specified, takes value from content of this argument', FALSE, NULL, TRUE);
@@ -43,14 +51,15 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	 * @return mixed
 	 */
 	public function render() {
+		$value = NULL;
 		$name = $this->arguments['name'];
 		$value = $this->arguments['value'];
 		$type = $this->arguments['type'];
 		$parts = array();
-		if ($value === NULL) {
+		if (count($this->childNodes) > 0 && isset($this->arguments['value']) === FALSE) {
 			$value = $this->renderChildren();
 		}
-		if ($value) {
+		if ($value !== NULL || isset($this->arguments['value']) === TRUE) {
 				// we are setting a variable
 			if ($type !== NULL) {
 				$value = $this->typeCast($value, $type);
@@ -139,15 +148,14 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		return $value;
 	}
 
-	private function recursiveValueRead($value, &$parts) {
-		if ((!is_array($value) && !is_object($value)) || count($parts) === 0) {
-			return $value;
-		}
-		$field = array_shift($parts);
-		if ($field) {
-			$newValue = Tx_Extbase_Reflection_ObjectAccess::getProperty($value, $field);
-			return $this->recursiveValueRead($newValue, $parts);
-		}
+	/**
+	 * Sets the direct child nodes of the current syntax tree node.
+	 *
+	 * @param array<Tx_Fluid_Core_Parser_SyntaxTree_AbstractNode> $childNodes
+	 * @return void
+	 */
+	public function setChildNodes(array $childNodes) {
+		$this->childNodes = $childNodes;
 	}
 }
 
