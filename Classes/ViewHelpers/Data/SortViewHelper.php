@@ -100,7 +100,8 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	 * @return Tx_Extbase_Persistence_ObjectStorage
 	 */
 	protected function sortObjectStorage($storage) {
-		$temp = $this->objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
+        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_ObjectStorage');
+		$temp = $objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
 		foreach ($storage as $item) {
 			$temp->attach($item);
 		}
@@ -117,7 +118,7 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 		} else {
 			krsort($sorted);
 		}
-		$storage = $this->objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
+		$storage = $objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
 		foreach ($sorted as $item) {
 			$storage->attach($item);
 		}
