@@ -189,11 +189,10 @@ if (TYPO3_MODE == 'BE') {
 					if ($contentConfiguration['enabled'] === 'FALSE') {
 						continue;
 					}
-					$icon = $config['icon'] ? $config['icon'] : '../typo3conf/ext/fed/Resources/Public/Icons/Plugin.png';
 					$id = md5($templateFilename);
 					t3lib_extMgm::addPageTSConfig('
 						mod.wizards.newContentElement.wizardItems.fed.elements.' . $id . ' {
-							icon = ' . $icon . '
+							icon = ' . ($contentConfiguration['icon'] ? $contentConfiguration['icon'] : '../' . t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Icons/Plugin.png') . '
 							title = ' . $contentConfiguration['label'] . '
 							description = ' . $contentConfiguration['description'] . '
 							tt_content_defValues {
