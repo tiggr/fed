@@ -167,6 +167,9 @@ if (TYPO3_MODE == 'BE') {
 		$template->generateConfig();
 		$allTemplatePaths = $template->setup['plugin.']['tx_fed.']['fce.'];
 		$allTemplatePaths = Tx_Fed_Utility_Path::translatePath($allTemplatePaths);
+		if (is_array($allTemplatePaths) === FALSE) {
+			$allTemplatePaths = array();
+		}
 		unset($GLOBALS['TYPO3_DB']);
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$key = trim($key, '.');
