@@ -62,8 +62,8 @@ class Tx_Fed_ViewHelpers_Form_OptionViewHelper extends Tx_Fluid_ViewHelpers_Form
 		} else if ($this->viewHelperVariableContainer->exists('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'value')) {
 			$value = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_SelectViewHelper', 'value');
 			
-			if (is_string($this->arguments['value'])) {
-				$selected = $this->arguments['value'] == $value ? 'selected' : '';
+			if (is_object($this->arguments['value']) === FALSE && is_array($this->arguments['value']) === FALSE) {
+				$selected = (string) $this->arguments['value'] == (string) $value ? 'selected' : '';
             }
             if (is_array($this->arguments['value'])) {
 				$selected = in_array($this->arguments['value'], $value) ? 'selected' : '';
