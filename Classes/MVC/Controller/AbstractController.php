@@ -57,11 +57,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $documentHead;
 
 	/**
-	 * @var Tx_Fed_Utility_Debug
-	 */
-	protected $debugService;
-
-	/**
 	 * @var Tx_Fed_Service_File
 	 */
 	protected $fileService;
@@ -104,13 +99,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 */
 	public function injectDocumentHead(Tx_Fed_Utility_DocumentHead $documentHead) {
 		$this->documentHead = $documentHead;
-	}
-
-	/**
-	 * @param Tx_Fed_Utility_Debug $debugService
-	 */
-	public function injectDebugService(Tx_Fed_Utility_Debug $debugService) {
-		$this->debugService = $debugService;
 	}
 
 	/**
