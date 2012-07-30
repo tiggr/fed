@@ -59,9 +59,9 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	}
 
 	/**
-	 * @param Tx_Extbase_Object_Manager $objectManager
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager
 	 */
-	public function injectObjectManager(Tx_Extbase_Object_Manager $objectManager) {
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {
 		$this->objectManager = $objectManager;
 	}
 
