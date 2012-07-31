@@ -70,6 +70,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	public function render() {
 		$this->tagName = $this->arguments['tagName'];
 		$this->pageSelect = new t3lib_pageSelect();
+		$this->pageSelect->init(FALSE);
 		$pageUid = $this->arguments['pageUid'];
 		$entryLevel = $this->arguments['entryLevel'];
 		$rootLine = $this->pageSelect->getRootLine($GLOBALS['TSFE']->id);
