@@ -107,7 +107,7 @@ abstract class Tx_Fed_ViewHelpers_Auth_AbstractAuthViewHelper extends Tx_Fluid_C
 		if ($this->arguments['anyBackendUser']) {
 			$evaluations['anyBackendUser'] = intval($this->authService->assertBackendUserLoggedIn());
 		}
-		if ($this->arguments['anyBackendUserGrouo']) {
+		if ($this->arguments['anyBackendUserGroup']) {
 			$evaluations['anyBackendUserGroup'] = intval($this->authService->assertBackendUserGroupLoggedIn());
 		}
 		if ($this->arguments['backendUser']) {
@@ -128,7 +128,7 @@ abstract class Tx_Fed_ViewHelpers_Auth_AbstractAuthViewHelper extends Tx_Fluid_C
 		if ($evaluationType === 'AND') {
 			return (count($evaluations) === array_sum($evaluations));
 		} else {
-			return (count($evaluations) > 0);
+			return (array_sum($evaluations) > 0);
 		}
 	}
 
