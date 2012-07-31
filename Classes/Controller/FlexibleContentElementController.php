@@ -32,14 +32,12 @@
 class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_AbstractController {
 
 	/**
-	 * @var string
+	 * Show template as defined in flexform
+	 * @return string
 	 */
-	protected $defaultViewObjectName = 'Tx_Flux_MVC_View_ExposedTemplateView';
-
-	/**
-	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
-	 */
-	public function initializeView(Tx_Flux_MVC_View_ExposedTemplateView $view) {
+	public function renderAction() {
+		/** @var Tx_Flux_MVC_View_ExposedTemplateView $view */
+		$view = $this->objectManager->create('Tx_Flux_MVC_View_ExposedTemplateView');
 		$cObj = $this->configurationManager->getContentObject();
 		$this->flexform->setContentObjectData($cObj->data);
 		$configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
@@ -49,19 +47,17 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$view->setLayoutRootPath($paths['layoutRootPath']);
 		$view->setPartialRootPath($paths['partialRootPath']);
 		$view->setTemplatePathAndFilename($absolutePath);
+		$view->setControllerContext($this->controllerContext);
 		$config = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
-		$view->assignMultiple($this->flexform->getAllAndTransform($config['fields']));
-		$view->assign('page', $GLOBALS['TSFE']->page);
-		$view->assign('record', $cObj->data);
-		$view->assign('contentObject', $cObj);
-	}
-
-	/**
-	 * Show template as defined in flexform
-	 * @return string
-	 */
-	public function renderAction() {
-		return $this->view->render();
+		$variables = $this->flexform->getAllAndTransform($config['fields']);
+		$variables['page'] = $GLOBALS['TSFE']->page;
+		$variables['record'] = $cObj->data;
+		$variables['contentObject'] = $cObj;
+		#$view->assignMultiple();
+		#$view->assign('page', $GLOBALS['TSFE']->page);
+		#$view->assign('record', $cObj->data);
+		#$view->assign('contentObject', $cObj);
+		return $view->renderStandaloneSection('Main', $variables);
 	}
 
 }
