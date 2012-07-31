@@ -53,10 +53,6 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$variables['page'] = $GLOBALS['TSFE']->page;
 		$variables['record'] = $cObj->data;
 		$variables['contentObject'] = $cObj;
-		#$view->assignMultiple();
-		#$view->assign('page', $GLOBALS['TSFE']->page);
-		#$view->assign('record', $cObj->data);
-		#$view->assign('contentObject', $cObj);
 		return $view->renderStandaloneSection('Main', $variables);
 	}
 
