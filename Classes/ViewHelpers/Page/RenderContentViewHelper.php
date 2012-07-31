@@ -28,10 +28,31 @@
  * ViewHelper used to render content elements in Fluid page templates
  *
  * @author Claus Due, Wildside A/S
+ * @author Dominique Feyer, <dfeyer@ttree.ch>
+ * @author Daniel Schöne, <daniel@schoene.it>
  * @package Fed
  * @subpackage ViewHelpers/Page
  */
 class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
+
+	/**
+	 * @var tslib_cObj
+	 */
+	protected $contentObject;
+
+	/**
+	 * @var Tx_Extbase_Configuration_ConfigurationManagerInterface
+	 */
+	protected $configurationManager;
+
+	/**
+	 * @param Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager
+	 * @return void
+	 */
+	public function injectConfigurationManager(Tx_Extbase_Configuration_ConfigurationManagerInterface $configurationManager) {
+		$this->configurationManager = $configurationManager;
+		$this->contentObject = $this->configurationManager->getContentObject();
+	}
 
 	/**
 	 * Initialize
@@ -46,6 +67,7 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 		$this->registerArgument('slide', 'integer', 'Enables Content Sliding - amount of levels which shall get walked up the rootline. For infinite sliding (till the rootpage) set to -1)', FALSE, 0);
 		$this->registerArgument('slideCollect', 'integer', 'Enables collecting of Content Elements - amount of levels which shall get walked up the rootline. For infinite sliding (till the rootpage) set to -1 (lesser value for slide and slide.collect applies))', FALSE, 0);
 		$this->registerArgument('slideCollectReverse', 'boolean', 'Normally when collecting content elements the elements from the actual page get shown on the top and those from the parent pages below those. You can invert this behaviour (actual page elements at bottom) by setting this flag))', FALSE, 0);
+		$this->registerArgument('loadRegister', 'array', 'List of LOAD_REGISTER variable');
 	}
 
 	/**
@@ -74,11 +96,14 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 	/**
 	 * Get content records based on column and pid
 	 *
-	 * @author Claus Due, Wildside A/S
-	 * @author Daniel SchÃ¶ne, schoene.it (added "slide" feature)
 	 * @return array
 	 */
 	protected function getContentRecords() {
+		$loadRegister = FALSE;
+		if (empty($this->arguments['loadRegister']) === FALSE) {
+			$this->contentObject->cObjGetSingle('LOAD_REGISTER', $this->arguments['loadRegister']);
+			$loadRegister = TRUE;
+		}
 		$pid = $this->arguments['pageUid'] ? $this->arguments['pageUid'] : $GLOBALS['TSFE']->id;
 		$order = $this->arguments['order'] . ' ' . $this->arguments['sortDirection'];
 		$colPos = $this->arguments['column'];
@@ -121,6 +146,10 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 				break;
 			}
 		} while($slide !== FALSE && --$slide !== -1);
+
+		if ($loadRegister) {
+			$this->contentObject->cObjGetSingle('RESTORE_REGISTER', '');
+		}
 
 		return $content;
 	}
