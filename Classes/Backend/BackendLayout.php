@@ -91,12 +91,6 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 		$backendLayout['__colPosList'] = $colPosList;
 		$backendLayout['__items'] = $items;
 
-		#header("Content-type: text/plain");
-		#var_dump($backendLayout);
-		#exit();
-			// need to set:
-			// __items array -> array(name, colPos, ?)
-
 	}
 
 	/**

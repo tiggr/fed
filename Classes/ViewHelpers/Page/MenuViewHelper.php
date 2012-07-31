@@ -123,7 +123,8 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		foreach ($menu as $page) {
 			$class = trim($page['class'])!='' ? ' class="' . $page['class'] . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
-			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
+			$target = $page['target']!='' ? ' target="'.$page['target'].'"' : '';
+			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . $target . '>' . $page['title'] . '</a></' . $tagName . '>';
 		}
 		return implode(LF, $html);
 	}
