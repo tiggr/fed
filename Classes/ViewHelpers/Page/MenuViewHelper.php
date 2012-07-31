@@ -74,7 +74,11 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		$entryLevel = $this->arguments['entryLevel'];
 		$rootLine = $this->pageSelect->getRootLine($GLOBALS['TSFE']->id);
 		if (!$pageUid) {
-			$pageUid = $rootLine[$entryLevel]['uid'];
+			if ($rootLine[$entryLevel]['uid'] !== NULL) {
+				$pageUid = $rootLine[$entryLevel]['uid'];
+			} else {
+				return '';
+			}
 		}
 		$menu = $this->pageSelect->getMenu($pageUid);
 		$menu = $this->parseMenu($menu, $rootLine);
@@ -116,11 +120,10 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		$tagName = $this->arguments['tagNameChildren'];
 		$substElementUid = $this->arguments['substElementUid'];
 		$html = array();
-		foreach ($menu as $key => $page) {
+		foreach ($menu as $page) {
 			$class = trim($page['class'])!='' ? ' class="' . $page['class'] . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
 			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
-			$i++;
 		}
 		return implode(LF, $html);
 	}
