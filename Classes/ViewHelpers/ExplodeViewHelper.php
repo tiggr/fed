@@ -49,8 +49,10 @@ class Tx_Fed_ViewHelpers_ExplodeViewHelper extends Tx_Fed_Core_ViewHelper_Abstra
 	 * @return mixed
 	 */
 	public function render($content=NULL) {
+		$contentWasSource = FALSE;
 		if (!$content) {
 			$content = $this->renderChildren();
+			$contentWasSource = TRUE;
 		}
 		$glue = $this->resolveGlue();
 		$output = explode($glue, $content);
@@ -59,6 +61,13 @@ class Tx_Fed_ViewHelpers_ExplodeViewHelper extends Tx_Fed_Core_ViewHelper_Abstra
 				$this->templateVariableContainer->remove($this->arguments['as']);
 			}
 			$this->templateVariableContainer->add($this->arguments['as'], $output);
+			if ($contentWasSource === FALSE) {
+				$content = $this->renderChildren();
+				$this->templateVariableContainer->remove($this->arguments['as']);
+				return $content;
+			} else {
+				return '';
+			}
 		} else {
 			return $output;
 		}
