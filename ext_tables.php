@@ -70,14 +70,17 @@ if (TYPO3_MODE == 'BE') {
 
 	$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_sandbox'] = 'pi_flexform';
 
+	$GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['fed_fce'] = 'apps-pagetree-root';
+
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_fce']['pluginType'] = 'CType';
 		Tx_Extbase_Utility_Extension::registerPlugin(
 			$_EXTKEY,
 			'Fce',
-			'Fluid Content Element'
+			'Fluid Content Element',
+			t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'
 		);
-		t3lib_extMgm::addPlugin(array('Fluid Content Element', 'fed_fce'), 'CType');
+		t3lib_extMgm::addPlugin(array('Fluid Content Element', 'fed_fce', t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'), 'CType');
 		Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider');
 
 		$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_fce'] = 'pi_flexform';
@@ -201,4 +204,3 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCache
 	}
 }
 
-?>
