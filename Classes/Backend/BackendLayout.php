@@ -128,5 +128,3 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 	}
 
 }
-
-?>

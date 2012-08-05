@@ -58,6 +58,4 @@ class Tx_Fed_ViewHelpers_Form_OptgroupViewHelper extends Tx_Fluid_Core_ViewHelpe
 		return $this->tag->render();
 	}
 
-
 }
-?>

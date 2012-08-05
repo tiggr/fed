@@ -79,5 +79,3 @@ class Tx_Fed_ViewHelpers_Map_TableViewHelper extends Tx_Fed_ViewHelpers_TableVie
 		return $this->tag->render();
 	}
 }
-	
-?>

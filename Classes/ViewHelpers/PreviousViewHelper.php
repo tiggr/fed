@@ -44,5 +44,3 @@ class Tx_Fed_ViewHelpers_PreviousViewHelper extends Tx_Fed_ViewHelpers_ContainsV
 	}
 
 }
-
-?>

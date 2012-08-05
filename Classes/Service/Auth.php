@@ -151,5 +151,3 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 	}
 
 }
-
-?>

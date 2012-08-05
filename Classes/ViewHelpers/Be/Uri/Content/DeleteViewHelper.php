@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_Be_Uri_Content_DeleteViewHelper extends Tx_Fed_Core_Vie
 		#return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

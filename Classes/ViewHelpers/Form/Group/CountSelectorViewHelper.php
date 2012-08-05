@@ -71,5 +71,3 @@ class Tx_Fed_ViewHelpers_Form_Group_CountSelectorViewHelper extends Tx_Fluid_Cor
 	}
 
 }
-
-?>

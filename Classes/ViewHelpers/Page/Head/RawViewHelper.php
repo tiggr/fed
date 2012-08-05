@@ -36,15 +36,13 @@ class Tx_Fed_ViewHelpers_Page_Head_RawViewHelper extends Tx_Fed_Core_ViewHelper_
 	/**
 	 * Render method
 	 *
-	 * @return string
+	 * @return void
 	 */
 	public function render() {
 		if (TYPO3_MODE == 'BE') {
-			return '';
+			return;
 		}
 
 		$GLOBALS['TSFE']->getPageRenderer()->addHeaderData($this->renderChildren());
 	}
 }
-
-?>

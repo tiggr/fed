@@ -41,5 +41,3 @@ class Tx_Fed_Utility_PartialRender extends Tx_Fed_Service_Render implements t3li
 	}
 
 }
-
-?>

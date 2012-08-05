@@ -33,5 +33,3 @@
 abstract class Tx_Fed_Core_AbstractController extends Tx_Fed_MVC_Controller_AbstractController {
 
 }
-
-?>

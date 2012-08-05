@@ -133,5 +133,3 @@ abstract class Tx_Fed_ViewHelpers_Auth_AbstractAuthViewHelper extends Tx_Fluid_C
 	}
 
 }
-
-?>

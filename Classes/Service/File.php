@@ -184,7 +184,6 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 			return $newFilename;
 		} else {
 			throw new Exception('Could not move file ' . $sourceFilename . ' to ' . $destinationFilename, 1311895077);
-			return FALSE;
 		}
 	}
 
@@ -219,7 +218,6 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 		$copied = copy($sourceFilename, $targetFile);
 		if ($copied === FALSE) {
 			throw new Exception('Could not copy file ' . $sourceFilename . ' to ' . $targetFile, 1311895454);
-			return FALSE;
 		}
 		return $newFilename;
 	}
@@ -250,6 +248,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 			}
 			return $unlinked;
 		}
+		return FALSE;
 	}
 
 	/**
@@ -271,10 +270,10 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	}
 
 	/**
-	 * @param type $sourceFileName
-	 * @param type $targetDir
-	 * @param type $filename
-	 * @param type $chunk
+	 * @param string $sourceFileName
+	 * @param string $targetDir
+	 * @param string $filename
+	 * @param integer $chunk
 	 */
 	public function copyChunk($sourceFileName, $targetDir, $filename, $chunk) {
 		list ($in, $out) = $this->getFileCopyPointers($sourceFileName, $targetDir, $filename, $chunk);
@@ -286,5 +285,3 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	}
 
 }
-
-?>

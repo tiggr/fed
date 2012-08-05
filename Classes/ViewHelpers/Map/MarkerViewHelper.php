@@ -116,6 +116,3 @@ class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapView
 	}
 
 }
-
-
-?>

@@ -52,5 +52,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddInlineSettingViewHelper extends Tx_Fed_
 	}
 
 }
-
-?>

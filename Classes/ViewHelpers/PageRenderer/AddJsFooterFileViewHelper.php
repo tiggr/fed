@@ -63,5 +63,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterFileViewHelper extends Tx_Fed_V
 	}
 
 }
-
-?>

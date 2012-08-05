@@ -328,5 +328,3 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 		return FALSE;
 	}
 }
-
-?>

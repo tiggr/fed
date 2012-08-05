@@ -71,7 +71,6 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		$content = $this->renderChildren();
 		$tags = $this->processTags();
 
-
 		if ($this->arguments['tags']) {
 			// tags were supplied as argument, combine with ones rendered in tag content if combine=TRUE, else overwrite
 			if (count($tags) > 0) {
@@ -128,7 +127,7 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		$totalTagOccurrences = 0;
 		$min = $this->arguments['fontSizeMin'];
 		$max = $this->arguments['fontSizeMax'];
-		foreach ($tags as $name=>$tag) {
+		foreach ($tags as $tag) {
 			$totalTagOccurrences += $tag['occurrences'];
 		}
 		foreach ($tags as $name=>$tag) {
@@ -360,6 +359,3 @@ TAG;
 	}
 
 }
-
-
-?>

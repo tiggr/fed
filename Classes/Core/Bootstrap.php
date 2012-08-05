@@ -56,7 +56,7 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 		$requestHandler = $requestHandlerResolver->resolveRequestHandler();
 		$response = $requestHandler->handleRequest();
 		if ($response === NULL) {
-			return;
+			return NULL;
 		}
 		$this->resetSingletons();
 
@@ -114,5 +114,3 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 	}
 
 }
-
-?>

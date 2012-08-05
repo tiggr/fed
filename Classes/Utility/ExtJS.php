@@ -91,9 +91,9 @@ class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 	 * of data based on the source code annotations and uses proper setters to
 	 * set values. The result can be updated or added using the corresponding
 	 * Repository
-	 * @param Tx_Extbase_DomainObject_AbstractDomainEntity $object
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
 	 * @param object $data
-	 * @return Tx_Extbase_DomainObject_AbstractDomainEntity
+	 * @return Tx_Extbase_DomainObject_DomainObjectInterface
 	 */
 	public function mapDataFromExtJS($object, $data) {
 		unset($data['uid']);
@@ -106,7 +106,7 @@ class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 	 * Maps data onto an stdClass object - recursively - based on the ExtJS source
 	 * annotations.
 	 *
-	 * @param Tx_Extbase_DomainObject_AbstractDomainEntity $object
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
 	 * @return stdClass
 	 */
 	public function exportDataToExtJS($object) {
@@ -115,5 +115,3 @@ class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 	}
 
 }
-
-?>

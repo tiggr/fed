@@ -147,6 +147,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount', $amount);
 		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum', $maximum);
 		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'minimum', $minimum);
+		$this->viewHelperVariableContainer->add('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'fieldNamePrefix', $fieldNamePrefix);
 		$this->backupTemplateVariables();
 		$cycle = 1;
 		for ($i = $minimum; $i <= $maximum; $i++) {
@@ -178,6 +179,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount');
 		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum');
 		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'minimum');
+		$this->viewHelperVariableContainer->remove('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'fieldNamePrefix');
 		$this->restoreTemplateVariables();
 		if ($this->arguments['id']) {
 			$domElementId = $this->arguments['id'];
@@ -267,5 +269,3 @@ JS;
 
 
 }
-
-?>

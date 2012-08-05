@@ -57,5 +57,3 @@ class Tx_Fed_ViewHelpers_Form_Group_RepeatViewHelper extends Tx_Fluid_Core_ViewH
 	}
 
 }
-
-?>

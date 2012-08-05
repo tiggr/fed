@@ -243,8 +243,7 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 			$inactive = ($pageArray[$key] || $key == $this->defaultLangUid) ? 0 : 1;
 			$languageMenu[$key]['current'] = $current;
 			$languageMenu[$key]['inactive'] = $inactive;
-			$langUrl = $this->getLanguageUrl($key, $inactive);
-			$languageMenu[$key]['url'] = ($current) ? t3lib_div::getIndpEnv('REQUEST_URI') : $this->getLanguageUrl($key);
+			$languageMenu[$key]['url'] = ($current) ? t3lib_div::getIndpEnv('REQUEST_URI') : $this->getLanguageUrl($key, $inactive);
 			$languageMenu[$key]['flagSrc'] = $this->getLanguageFlagSrc($value['flag']);
 			if ($this->arguments['hideNotTranslated'] && $inactive) {
 				unset($languageMenu[$key]);
@@ -276,4 +275,3 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 		return $this->cObj->typoLink('', $config);
 	}
 }
-?>

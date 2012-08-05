@@ -68,12 +68,10 @@ class Tx_Fed_ViewHelpers_Map_GeocodeViewHelper extends Tx_Fed_ViewHelpers_MapVie
 		$coords = $this->geocoder->geocode($address);
 		if ($this->arguments['as']) {
 			$this->templateVariableContainer->add($this->arguments['as'], $coords);
+			return NULL;
 		} else {
 			return $coords;
 		}
 	}
 
 }
-
-
-?>

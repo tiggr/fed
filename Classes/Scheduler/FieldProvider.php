@@ -180,7 +180,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	protected function getCommandControllerActionArgumentFields(array $argumentDefinitions) {
 		$fields = array();
 		$argumentValues = $this->task->getArguments();
-		foreach ($argumentDefinitions as $index=>$argument) {
+		foreach ($argumentDefinitions as $argument) {
 			$name = $argument->getName();
 			$defaultValue = $this->getDefaultArgumentValue($argument);
 			$this->task->addDefaultValue($name, $defaultValue);
@@ -203,7 +203,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 */
 	protected function getLanguageLabel($localLanguageKey, $extensionName = NULL) {
 		if (!$extensionName) {
-			list ($extensionName, $commandControllerName, $commandName) = explode(':', $this->task->getCommandIdentifier());
+			$extensionName = array_shift(explode(':', $this->task->getCommandIdentifier()));
 		}
 		$label = Tx_Extbase_Utility_Localization::translate($localLanguageKey, $extensionName);
 		return $label;
@@ -237,6 +237,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	protected function getArgumentLabel(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument) {
 		$argumentName = $argument->getName();
 		list ($extensionName, $commandControllerName, $commandName) = explode(':', $this->task->getCommandIdentifier());
+		unset($extensionName);
 		$path = array('command', $commandControllerName, $commandName, 'arguments', $argumentName);
 		$labelNameIndex = implode('.', $path);
 		$label = $this->getLanguageLabel($labelNameIndex);
@@ -330,5 +331,3 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	}
 
 }
-
-?>

@@ -58,5 +58,3 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 	}
 
 }
-
-?>

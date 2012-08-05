@@ -44,5 +44,3 @@ class Tx_Fed_ViewHelpers_Be_Uri_Content_NewViewHelper extends Tx_Fed_Core_ViewHe
 		return '';
 	}
 }
-
-?>

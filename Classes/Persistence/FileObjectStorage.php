@@ -217,5 +217,3 @@ class Tx_Fed_Persistence_FileObjectStorage extends SplObjectStorage {
 
 
 }
-
-?>

@@ -40,5 +40,3 @@ class Tx_Fed_ViewHelpers_Resource_ArchiveViewHelper extends Tx_Fed_ViewHelpers_R
 
 	}
 }
-
-?>

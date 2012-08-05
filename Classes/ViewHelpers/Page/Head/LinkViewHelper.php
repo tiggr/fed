@@ -59,12 +59,10 @@ class Tx_Fed_ViewHelpers_Page_Head_LinkViewHelper extends Tx_Fluid_Core_ViewHelp
 	*/
 	public function render() {
 		if (TYPO3_MODE == 'BE') {
-			return '';
+			return;
 		}
 
 		$GLOBALS['TSFE']->getPageRenderer()->addMetaTag($this->tag->render());
 	}
 
 }
-
-?>

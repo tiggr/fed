@@ -75,5 +75,3 @@ class Tx_Fed_Utility_Path implements t3lib_Singleton {
 		return (array) $addFiles;
 	}
 }
-
-?>

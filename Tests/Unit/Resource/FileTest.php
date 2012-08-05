@@ -32,4 +32,3 @@ class Tx_Fed_Tests_Unit_Resource_FileTest extends Tx_Extbase_Tests_Unit_BaseTest
 
 
 }
-?>

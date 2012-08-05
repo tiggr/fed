@@ -152,5 +152,3 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	}
 
 }
-
-?>

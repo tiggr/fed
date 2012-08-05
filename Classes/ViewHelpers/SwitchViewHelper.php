@@ -62,7 +62,7 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	 */
 	public function render() {
 		$content = "";
-		$context = $this->getRenderingContext();
+		$context = $this->renderingContext;
 		if ($context->getViewHelperVariableContainer()->exists('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchCaseValue')) {
 			$this->storeBackup($context);
 		}
@@ -87,10 +87,10 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 		}
 		if ($this->arguments['as']) {
 			$this->templateVariableContainer->add($this->arguments['as'], $content);
+			return NULL;
 		} else {
 			return $content;
 		}
-
 	}
 
 	protected function storeBackup($context) {
@@ -108,14 +108,10 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	}
 
 	protected function determineBooleanOf($context, $var) {
-		if ($context->getViewHelperVariableContainer()->exists('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchBreakRequested')) {
-			return $context->getViewHelperVariableContainer()->get('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchBreakRequested');
+		if ($context->getViewHelperVariableContainer()->exists('Tx_Fed_ViewHelpers_SwitchViewHelper', $var)) {
+			return $context->getViewHelperVariableContainer()->get('Tx_Fed_ViewHelpers_SwitchViewHelper', $var);
 		}
+		return FALSE;
 	}
 
-
-
-
 }
-
-?>

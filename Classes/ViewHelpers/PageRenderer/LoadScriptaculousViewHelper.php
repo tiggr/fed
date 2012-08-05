@@ -40,5 +40,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_LoadScriptaculousViewHelper extends Tx_Fed
 	}
 
 }
-
-?>

@@ -58,11 +58,10 @@ class Tx_Fed_ViewHelpers_ImplodeViewHelper extends Tx_Fed_ViewHelpers_ExplodeVie
 				$this->templateVariableContainer->remove($this->arguments['as']);
 			}
 			$this->templateVariableContainer->add($this->arguments['as'], $output);
+			return NULL;
 		} else {
 			return $output;
 		}
 	}
 
 }
-
-?>

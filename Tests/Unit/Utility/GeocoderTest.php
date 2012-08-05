@@ -47,5 +47,3 @@ class Tx_Fed_Tests_Unit_Utility_GeocoderTest extends Tx_Fed_Tests_Unit_BaseTestC
 	}
 
 }
-
-?>

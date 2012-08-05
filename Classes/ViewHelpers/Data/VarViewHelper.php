@@ -97,7 +97,6 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 				return NULL;
 			}
 		}
-		return NULL;
 	}
 
 	/**
@@ -158,5 +157,3 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 		$this->childNodes = $childNodes;
 	}
 }
-
-?>

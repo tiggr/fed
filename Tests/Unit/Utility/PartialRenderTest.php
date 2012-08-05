@@ -43,6 +43,4 @@ class Tx_Fed_Tests_Unit_Utility_PartialRenderTest extends Tx_Fed_Tests_Unit_Base
 		$this->assertTrue(is_object($this->partialRender));
 	}
 
-
 }
-?>

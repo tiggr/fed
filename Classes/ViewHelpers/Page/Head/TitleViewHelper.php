@@ -50,7 +50,7 @@ class Tx_Fed_ViewHelpers_Page_Head_TitleViewHelper extends Tx_Fluid_Core_ViewHel
 	*/
 	public function render() {
 		if (TYPO3_MODE == 'BE') {
-			return '';
+			return;
 		}
 
 		if (!empty($this->arguments['title'])) {
@@ -62,5 +62,3 @@ class Tx_Fed_ViewHelpers_Page_Head_TitleViewHelper extends Tx_Fluid_Core_ViewHel
 	}
 
 }
-
-?>

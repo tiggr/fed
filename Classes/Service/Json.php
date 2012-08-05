@@ -119,9 +119,7 @@ class Tx_Fed_Service_Json implements t3lib_Singleton {
 			),
 			'id' => 'id'
 		);
-		return $this->encode($data);;
+		return $this->encode($data);
 	}
 
 }
-
-?>

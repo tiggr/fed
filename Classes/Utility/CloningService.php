@@ -37,5 +37,3 @@
 class Tx_Fed_Utility_CloningService extends Tx_Fed_Service_Clone implements t3lib_Singleton {
 
 }
-
-?>

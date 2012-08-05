@@ -223,6 +223,3 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 	);
 
 }
-
-
-?>

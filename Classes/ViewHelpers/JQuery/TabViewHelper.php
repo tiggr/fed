@@ -76,6 +76,8 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		if ($this->templateVariableContainer->exists('tabs') === TRUE) {
@@ -90,7 +92,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 			}
 			$this->addTab($this->arguments['title'], $this->renderChildren());
 			$this->setCurrentIndex($index + 1);
-			return;
+			return NULL;
 		}
 
 
@@ -119,8 +121,6 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 
 	protected function renderTabSelector() {
 		$html = "<ul>" . LF;
-		$absoluteUrlViewHelper = $this->objectManager->get('Tx_Fed_ViewHelpers_Page_AbsoluteUrlViewHelper');
-		$absoluteUrl = $absoluteUrlViewHelper->render();
 		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
 			$lid = strtolower(preg_replace('/[^a-z0-9]/i', '_', $tab['title']));
 			$html .= '<li><a href="#' . $lid . '" title="' . $lid . '">' . $tab['title'] . '</a></li>' . LF;
@@ -200,5 +200,3 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 	}
 
 }
-
-?>

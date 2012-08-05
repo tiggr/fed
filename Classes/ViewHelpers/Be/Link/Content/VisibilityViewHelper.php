@@ -39,8 +39,8 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_VisibilityViewHelper extends Tx_Fed_Cor
 	public function render() {
 		$pid = $this->arguments['row']['pid'];
 		$uid = $this->arguments['row']['uid'];
-		$sysLang = $this->arguments['row']['sys_language_uid'];
-		$colPos = 255;
+		#$sysLang = $this->arguments['row']['sys_language_uid'];
+		#$colPos = 255;
 
 		if ($row['hidden'] == 1) {
 			$iconFile = 'actions-edit-unhide';
@@ -63,5 +63,3 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_VisibilityViewHelper extends Tx_Fed_Cor
 		return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

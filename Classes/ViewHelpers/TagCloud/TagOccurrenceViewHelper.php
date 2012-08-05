@@ -56,5 +56,3 @@ class Tx_Fed_ViewHelpers_TagCloud_TagOccurrenceViewHelper extends Tx_Fed_ViewHel
 	}
 
 }
-
-?>

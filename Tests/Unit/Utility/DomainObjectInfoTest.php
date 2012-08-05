@@ -189,4 +189,3 @@ class Tx_Fed_Tests_Unit_Utility_DomainObjectInfoTest extends Tx_Extbase_Tests_Un
 	}
 
 }
-?>

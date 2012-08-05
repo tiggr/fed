@@ -194,7 +194,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 				$isValid = $validator->validate($instance);
 				$errors = $isValid->getFlattenedErrors();
 			} else {
-				$isValid = $validator->isValid($instance);
+				$validator->isValid($instance);
 				$errors = $validator->getErrors();
 			}
 
@@ -307,7 +307,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 
 	/**
 	 * PURELY INTERNAL - CAN BE OVERRIDDEN
-	 * @return stdClas
+	 * @return object
 	 */
 	protected function performRestCreate() {
 		$data = $this->fetchRestBodyData();
@@ -338,7 +338,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 
 	/**
 	 * PURELY INTERNAL - CAN BE OVERRIDDEN
-	 * @return stdClas
+	 * @return object
 	 */
 	protected function performRestUpdate() {
 		$data = $this->fetchRestBodyData();
@@ -352,7 +352,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 
 	/**
 	 * PURELY INTERNAL - CAN BE OVERRIDDEN
-	 * @return void
+	 * @return string
 	 */
 	protected function performRestDestroy() {
 		$data = $this->fetchRestBodyData();
@@ -408,7 +408,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	/**
 	 * Formats $data into a format agreable with ExtJS4 REST
 	 *
-	 * @param type $data Empty for NULL response
+	 * @param mixed $data Empty for NULL response
 	 * @return mixed
 	 */
 	public function formatRestResponseData($data=NULL) {
@@ -442,5 +442,3 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 
 
 }
-
-?>

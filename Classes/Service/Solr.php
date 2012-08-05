@@ -101,5 +101,3 @@ class Tx_Fed_Service_Solr implements t3lib_Singleton {
 	}
 
 }
-
-?>

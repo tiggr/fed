@@ -34,4 +34,3 @@ class Tx_Fed_Tests_Unit_ViewHelpers_Debug_DumpViewHelperTest extends Tx_Fluid_Vi
 
 
 }
-?>

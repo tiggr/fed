@@ -191,8 +191,6 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	}
 
 	protected function getStoreUri($object, $actionName) {
-		$uriBuilder = new Tx_Extbase_MVC_Web_Routing_UriBuilder();
-		#$request =
 		$uriBuilder = $this->objectManager->get('Tx_Extbase_MVC_Web_Routing_UriBuilder');
 		$uriBuilder->setTargetPageType($this->typeNum);
 		$uriBuilder->setTargetPageUid($GLOBALS['TSFE']->id);
@@ -218,5 +216,3 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	}
 
 }
-
-?>

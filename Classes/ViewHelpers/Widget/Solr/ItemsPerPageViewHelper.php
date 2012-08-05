@@ -55,18 +55,13 @@ class Tx_Fed_ViewHelpers_Widget_Solr_ItemsPerPageViewHelper extends Tx_Fluid_Cor
 	public function render() {
 		$this->tag->addAttribute('class', 'fed-solr-items-per-page');
 		$options = $this->arguments['options'];
-		$useKey = TRUE;
 		if (is_string($options)) {
 			$options = explode(',', $options);
-			$useKey = FALSE;
 		}
 		$content = '';
-		foreach ($options as $label=>$value) {
+		foreach ($options as $value) {
 			$option = new Tx_Fluid_Core_ViewHelper_TagBuilder();
 			$option->setTagName('option');
-			if (!$useKey) {
-				$label = $value;
-			}
 			if ($this->arguments['value'] == $value || ($this->arguments['value'] < 1 && $this->arguments['default'] == $value)) {
 				$option->addAttribute('selected', 'selected');
 			}
@@ -77,5 +72,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_ItemsPerPageViewHelper extends Tx_Fluid_Cor
 	}
 
 }
-
-?>

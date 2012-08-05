@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddHeaderDataViewHelper extends Tx_Fed_Vie
 	}
 
 }
-
-?>

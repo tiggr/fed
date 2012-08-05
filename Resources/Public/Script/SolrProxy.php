@@ -37,5 +37,3 @@ function modifyUrl($url, $mod) {
     }
     return $url;
 }
-
-?>

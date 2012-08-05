@@ -52,7 +52,7 @@ class Tx_Fed_ViewHelpers_Social_DisqusViewHelper extends Tx_Fed_Core_ViewHelper_
 	/**
 	 * Render disqus thread
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function render() {
 		//$this->tag->addAttribute('id', $this->arguments['identifier']);
@@ -66,9 +66,5 @@ class Tx_Fed_ViewHelpers_Social_DisqusViewHelper extends Tx_Fed_Core_ViewHelper_
 					})();';
 		$scriptTag = $this->documentHead->wrap($code, NULL, 'js');
 		return $scriptTag;
-		#$this->documentHead->includeHeader($code, 'js');
-		#return $this->tag->render();
 	}
 }
-
-?>

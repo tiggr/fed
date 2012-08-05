@@ -63,12 +63,15 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 	public function render() {
 		$this->tagName = $this->arguments['tagName'];
 		$this->pageSelect = new t3lib_pageSelect();
-		$pageUid = $this->arguments['pageUid'];
-		$entryLevel = $this->arguments['entryLevel'];
-		$rootLine = $this->pageSelect->getRootLine($GLOBALS['TSFE']->id);
+		$pageUid = $this->arguments['pageUid'] > 0 ? $this->arguments['pageUid'] : $GLOBALS['TSFE']->id;
+		$entryLevel = intval($this->arguments['entryLevel']);
+		$rootLine = $this->pageSelect->getRootLine($pageUid);
 		$rootLine = array_reverse($rootLine);
 		$rootLine = array_slice($rootLine, $this->arguments['entryLevel']);
-		$rootLine = $this->parseMenu($rootLine);
+		$rootLine = $this->parseMenu($rootLine, $entryLevel);
+		if (count($rootLine) === 0) {
+			return NULL;
+		}
 		$backupVars = array('rootLine', 'page');
 		$backups = array();
 		foreach ($backupVars as $var) {
@@ -103,7 +106,6 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 		$tagName = $this->arguments['tagNameChildren'];
 		$html = array();
 		foreach ($rootLine as $page) {
-			$link = $this->getItemLink($page['uid']);
 			$class = $page['class'] ? ' class="' . $page['class'] . '"' : '';
 			$html[] = '<' . $tagName . $class .'>' . $this->arguments['bullet'] . '<a href="' . $page['url'] . '"' . $class . '>' . $page['title'] . '</a></' . $tagName . '>';
 		}
@@ -135,10 +137,10 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 	*/
 	protected function allowedDoktypeList() {
 		return array(
-		constant('t3lib_pageSelect::DOKTYPE_DEFAULT'),
-		constant('t3lib_pageSelect::DOKTYPE_LINK'),
-		constant('t3lib_pageSelect::DOKTYPE_SHORTCUT'),
-		constant('t3lib_pageSelect::DOKTYPE_MOUNTPOINT')
+			constant('t3lib_pageSelect::DOKTYPE_DEFAULT'),
+			constant('t3lib_pageSelect::DOKTYPE_LINK'),
+			constant('t3lib_pageSelect::DOKTYPE_SHORTCUT'),
+			constant('t3lib_pageSelect::DOKTYPE_MOUNTPOINT')
 		);
 	}
 
@@ -168,23 +170,25 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 	* Filter the fetched menu according to visibility etc.
 	*
 	* @param array $rootLine
+	* @param integer $entryLevel
 	* @return array
 	*/
-	protected function parseMenu(array $rootLine) {
+	protected function parseMenu(array $rootLine, $entryLevel=0) {
 		$filtered = array();
-		foreach($rootLine as $key => $val) {
+		$level = 0;
+		foreach($rootLine as $val) {
 			$doktype = $val['doktype'];
 			$pageUid = $val['uid'];
 			$exclude = ($val['tx_realurl_exclude'] && $this->arguments['resolveExclude']) ? TRUE : FALSE;
-			if (in_array($doktype, $this->allowedDoktypeList()) && !$exclude) {
+			if (in_array($doktype, $this->allowedDoktypeList()) && !$exclude && $entryLevel >= $level) {
 				$rootArr['uid'] = $pageUid;
 				$rootArr['title'] = $this->getNavigationTitle($pageUid);
 				$rootArr['url'] = $this->getItemLink($pageUid, $doktype);
 				$filtered[] = $rootArr;
 			}
+			$level++;
 		}
 		return $filtered;
 	}
 
 }
-?>

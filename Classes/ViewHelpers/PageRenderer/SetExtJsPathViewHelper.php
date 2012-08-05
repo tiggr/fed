@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_SetExtJsPathViewHelper extends Tx_Fed_View
 	}
 
 }
-
-?>

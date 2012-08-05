@@ -63,5 +63,3 @@ class Tx_Fed_ViewHelpers_TyposcriptViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 	}
 
 }
-
-?>

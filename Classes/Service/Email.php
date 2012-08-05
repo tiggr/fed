@@ -74,4 +74,3 @@ class Tx_Fed_Service_Email implements t3lib_Singleton {
 	}
 
 }
-?>

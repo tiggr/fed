@@ -68,7 +68,3 @@ class Tx_Fed_ViewHelpers_ExtJS_ComponentViewHelper extends Tx_Fed_Core_ViewHelpe
 		return $this->tag->render();
 	}
 }
-
-
-
-?>

@@ -43,33 +43,32 @@ class Tx_Fed_Configuration_Wizard_FlexFormCodeEditor {
 		require_once $t3editorWizard;
 		$t3editor = t3lib_div::makeInstance('tx_t3editor');
 		if (!$t3editor->isEnabled()) {
-				return;
+			return '';
 		}
 		if ($parameters['params']['format'] !== '') {
-				$t3editor->setModeByType($parameters['params']['format']);
+			$t3editor->setModeByType($parameters['params']['format']);
 		} else {
-				$t3editor->setMode(tx_t3editor::MODE_MIXED);
+			$t3editor->setMode(tx_t3editor::MODE_MIXED);
 		}
 
 		$doc = $GLOBALS['SOBE']->doc;
 		$attributes = 'rows="40" ' .
-				'cols="" ' .
-				'wrap="off" ' .
-				'style="width:98%; height: 500px;" ' .
-				'onchange="' . $parameters['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" ';
+			'cols="" ' .
+			'wrap="off" ' .
+			'style="width:98%; height: 500px;" ' .
+			'onchange="' . $parameters['fieldChangeFunc']['TBE_EDITOR_fieldChanged'] . '" ';
 
 		$editor = $t3editor->getCodeEditor(
-				$parameters['itemFormElName'], //name of field
-				'fixed-font enable-tab',
-				$parameters['itemFormElValue'], //value of field
-				$attributes,
-				'HTML > Fluid' , // text in footer of editor
-				array(
-						'target' => intval($pObj->target)
-				)
+			$parameters['itemFormElName'], //name of field
+			'fixed-font enable-tab',
+			$parameters['itemFormElValue'], //value of field
+			$attributes,
+			'HTML > Fluid' , // text in footer of editor
+			array(
+					'target' => intval($pObj->target)
+			)
 		);
 		$editor .= $t3editor->getJavascriptCode($doc);
 		return $editor;
 	}
 }
-?>

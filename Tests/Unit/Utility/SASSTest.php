@@ -47,4 +47,3 @@ class Tx_Fed_Tests_Unit_Utility_SASSTest extends Tx_Extbase_Tests_Unit_BaseTestC
 	}
 
 }
-?>

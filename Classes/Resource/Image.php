@@ -36,5 +36,3 @@ class Tx_Fed_Resource_Image extends Tx_Fed_Resource_File {
 	
 
 }
-
-?>

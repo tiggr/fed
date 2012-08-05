@@ -66,7 +66,7 @@
 	/**
 	 * Displays all DataSources
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function listAction() {
 		$parser = $this->objectManager->get('Tx_Fed_Utility_DataSourceParser');
@@ -175,4 +175,3 @@
 	}
 
 }
-?>

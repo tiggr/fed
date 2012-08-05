@@ -50,6 +50,8 @@ class Tx_Fed_ViewHelpers_Form_Group_ExcludeViewHelper extends Tx_Fluid_Core_View
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		$iteration = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'iteration');
@@ -57,9 +59,9 @@ class Tx_Fed_ViewHelpers_Form_Group_ExcludeViewHelper extends Tx_Fluid_Core_View
 			$this->tag->addAttribute('class', $this->arguments['class'] . ' field form-field-group-exclude');
 			$this->tag->setContent($this->renderChildren());
 			return $this->tag->render();
+		} else {
+			return NULL;
 		}
 	}
 
 }
-
-?>

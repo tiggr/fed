@@ -39,12 +39,10 @@ class Tx_Fed_ViewHelpers_Page_Head_FooterViewHelper extends Tx_Fluid_Core_ViewHe
 	*/
 	public function render() {
 		if (TYPO3_MODE == 'BE') {
-			return '';
+			return;
 		}
 
 		$GLOBALS['TSFE']->getPageRenderer()->addFooterData($this->renderChildren());
 	}
 
 }
-
-?>

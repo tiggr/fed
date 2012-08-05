@@ -94,5 +94,3 @@ class Tx_Fed_ViewHelpers_Social_TwitterViewHelper extends Tx_Fed_Core_ViewHelper
 		return $this->tag->render();
 	}
 }
-
-?>

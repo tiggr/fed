@@ -74,5 +74,3 @@ class Tx_Fed_ViewHelpers_LoopViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHe
 	}
 
 }
-
-?>

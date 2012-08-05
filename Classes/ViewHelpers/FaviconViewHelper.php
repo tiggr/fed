@@ -56,7 +56,3 @@ class Tx_Fed_ViewHelpers_FaviconViewHelper extends Tx_Fed_Core_ViewHelper_Abstra
 		return NULL;
 	}
 }
-
-
-
-?>

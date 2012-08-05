@@ -45,5 +45,3 @@ abstract class Tx_Fed_ViewHelpers_PageRenderer_AbstractPageRendererViewHelper ex
 	}
 
 }
-
-?>

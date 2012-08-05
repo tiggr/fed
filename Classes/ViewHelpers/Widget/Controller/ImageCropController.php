@@ -104,6 +104,9 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 				$cropData['w'],
 				$cropData['h']
 			);
+			if ($copied === FALSE) {
+				throw new Exception('ImageCropController was unable to resize the image', 1344186130);
+			}
 			switch (strtolower($pathinfo['extension'])) {
 				case 'gif':
 					imagegif($cropped, $filenameCropped);
@@ -121,5 +124,3 @@ class Tx_Fed_ViewHelpers_Widget_Controller_ImageCropController extends Tx_Fluid_
 	}
 
 }
-
-?>

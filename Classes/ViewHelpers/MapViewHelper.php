@@ -251,8 +251,8 @@ CSS;
 	public function renderMarkers() {
 		$layers = $this->get('layers');
 		$allMarkers = array();
-		foreach ($layers as $name=>$markers) {
-			foreach ($markers as $index=>$marker) {
+		foreach ($layers as $markers) {
+			foreach ($markers as $marker) {
 				$markerId = $marker['id'];
 				$infoWindow = $marker['infoWindow'];
 				unset($marker['infoWindow'], $marker['properties'], $marker['data']);
@@ -359,4 +359,3 @@ CSS;
 
 
 }
-?>

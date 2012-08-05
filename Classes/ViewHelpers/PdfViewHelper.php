@@ -114,9 +114,4 @@ SCRIPT;
 		return $html;
 	}
 
-
-
 }
-
-
-?>

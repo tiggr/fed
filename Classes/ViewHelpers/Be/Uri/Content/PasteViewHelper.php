@@ -44,5 +44,3 @@ class Tx_Fed_ViewHelpers_Be_Uri_Content_PasteViewHelper extends Tx_Fed_Core_View
 		return '';
 	}
 }
-
-?>

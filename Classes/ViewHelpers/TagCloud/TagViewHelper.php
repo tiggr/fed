@@ -60,5 +60,3 @@ class Tx_Fed_ViewHelpers_TagCloud_TagViewHelper extends Tx_Fed_ViewHelpers_TagCl
 	
 	
 }
-
-?>

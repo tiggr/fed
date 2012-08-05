@@ -32,5 +32,3 @@
 class Tx_Fed_Utility_RecursionHandler extends Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 }
-
-?>

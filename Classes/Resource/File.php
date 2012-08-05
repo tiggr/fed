@@ -260,6 +260,3 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	}
 
 }
-
-
-?>

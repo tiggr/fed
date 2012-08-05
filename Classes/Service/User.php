@@ -74,5 +74,3 @@ class Tx_Fed_Service_User implements t3lib_Singleton {
 	}
 
 }
-
-?>

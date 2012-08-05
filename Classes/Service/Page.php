@@ -142,6 +142,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 				return $row;
 			}
 		}
+		return NULL;
 	}
 
 	/**
@@ -182,5 +183,3 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	}
 
 }
-
-?>

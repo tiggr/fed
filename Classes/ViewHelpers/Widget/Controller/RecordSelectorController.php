@@ -182,7 +182,6 @@ class Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController extends Tx_F
 		$relationType = $this->relationType;
 		$repository = $this->infoService->getRepositoryInstance($relationType);
 		$query = $repository->createQuery();
-		$results = $query->execute();
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 		$query->matching($query->like($this->searchProperty, '%' . $term . '%', FALSE));
 		$results = $query->execute();
@@ -199,5 +198,3 @@ class Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController extends Tx_F
 	}
 
 }
-
-?>

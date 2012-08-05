@@ -96,5 +96,3 @@ class Tx_Fed_ViewHelpers_Social_Facebook_LikeViewHelper extends Tx_Fed_Core_View
 	}
 
 }
-
-?>

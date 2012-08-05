@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_SetSvgPathViewHelper extends Tx_Fed_ViewHe
 	}
 
 }
-
-?>

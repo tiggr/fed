@@ -44,5 +44,3 @@ class Tx_Fed_ViewHelpers_CommentViewHelper extends Tx_Fed_Core_ViewHelper_Abstra
 		return '';
 	}
 }
-
-?>

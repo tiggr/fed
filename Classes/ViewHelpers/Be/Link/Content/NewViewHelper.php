@@ -40,7 +40,7 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_NewViewHelper extends Tx_Fed_Core_ViewH
 		$pid = $this->arguments['row']['pid'];
 		$uid = $this->arguments['row']['uid'];
 		$area = $this->arguments['area'];
-		$sysLang = $this->arguments['row']['sys_language_uid'];
+		#$sysLang = $this->arguments['row']['sys_language_uid'];
 		$colPos = $this->arguments['row']['colPos'];
 		$returnUri = $this->getReturnUri($pid);
 		if ($area) {
@@ -57,5 +57,3 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_NewViewHelper extends Tx_Fed_Core_ViewH
 		return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

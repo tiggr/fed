@@ -68,5 +68,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_ResultsPerPageViewHelper extends Tx_Fluid_C
 	}
 
 }
-
-?>

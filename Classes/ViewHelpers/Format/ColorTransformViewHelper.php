@@ -126,5 +126,3 @@ class Tx_Fed_ViewHelpers_Format_ColorTransformViewHelper extends Tx_Fed_Core_Vie
 	}
 
 }
-
-?>

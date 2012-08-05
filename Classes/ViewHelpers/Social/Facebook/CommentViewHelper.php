@@ -73,5 +73,3 @@ class Tx_Fed_ViewHelpers_Social_Facebook_CommentViewHelper extends Tx_Fed_Core_V
 	}
 
 }
-
-?>

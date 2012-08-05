@@ -95,5 +95,3 @@ class Tx_Fed_ViewHelpers_ExplodeViewHelper extends Tx_Fed_Core_ViewHelper_Abstra
 	}
 
 }
-
-?>

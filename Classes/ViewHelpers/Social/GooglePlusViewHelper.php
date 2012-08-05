@@ -66,7 +66,6 @@ class Tx_Fed_ViewHelpers_Social_GooglePlusViewHelper extends Tx_Fed_Core_ViewHel
 	 */
 	public function render() {
 		$jsCode = $this->arguments['jsCode'];
-		$code = '';
 		if (empty($jsCode)) {
 			$jsCode = 'https://apis.google.com/js/plusone.js';
 		} elseif($jsCode != '-1') {
@@ -79,5 +78,3 @@ class Tx_Fed_ViewHelpers_Social_GooglePlusViewHelper extends Tx_Fed_Core_ViewHel
 		return $this->tag->render();
 	}
 }
-
-?>

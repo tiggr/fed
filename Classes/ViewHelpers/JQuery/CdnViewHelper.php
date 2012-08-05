@@ -42,5 +42,3 @@ class Tx_Fed_ViewHelpers_JQuery_CdnViewHelper extends Tx_Fed_ViewHelpers_JQueryV
 
 
 }
-
-?>

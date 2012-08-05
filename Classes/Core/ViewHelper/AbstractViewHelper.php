@@ -217,7 +217,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @return void
 	 */
 	public function includeFile($filename, $cache=FALSE, $concat=FALSE, $compress=FALSE) {
-		return $this->documentHead->includeFile($filename, $cache, $concat, $compress);
+		$this->documentHead->includeFile($filename, $cache, $concat, $compress);
 	}
 
 	/**
@@ -243,5 +243,3 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 
 
 }
-
-?>

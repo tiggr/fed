@@ -70,10 +70,10 @@ class Tx_Fed_Backend_PageLayoutSelector {
 		}
 		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate'] && empty($value) === TRUE) {
 			$fallbackTemplatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
-			#die($fallbackTemplatePathAndFilename);
 			if (strpos($fallbackTemplatePathAndFilename, '->')) {
 				list ($extensionName, $templateFileBase) = explode('->', $fallbackTemplatePathAndFilename);
 				$fallbackTemplateIdentifier = trim($fallbackTemplatePathAndFilename, '.html');
+				unset($templateFileBase);
 			} else {
 				$extensionName = NULL;
 				$fallbackTemplateIdentifier = $fallbackTemplatePathAndFilename;
@@ -106,5 +106,3 @@ class Tx_Fed_Backend_PageLayoutSelector {
 	}
 
 }
-
-?>

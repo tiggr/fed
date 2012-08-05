@@ -58,5 +58,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Paginate_TotalViewHelper extends Tx_Fluid_C
 
 
 }
-
-?>

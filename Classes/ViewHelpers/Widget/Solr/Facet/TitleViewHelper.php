@@ -57,5 +57,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Facet_TitleViewHelper extends Tx_Fluid_Core
 	}
 
 }
-
-?>

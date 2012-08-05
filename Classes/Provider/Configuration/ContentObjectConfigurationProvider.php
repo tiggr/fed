@@ -86,8 +86,8 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	public function getTemplateVariables(array $row) {
 		$flexFormUtility = $this->objectManager->get('Tx_Fed_Utility_FlexForm');
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
-		list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-		$paths = $this->configurationManager->getContentConfiguration($extensionName);
+		$filename = array_pop(explode(':', $templatePathAndFilename));
+		$paths = $this->getTemplatePaths($row);
 		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
 		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
@@ -123,12 +123,9 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	 */
 	public function getTemplatePaths(array $row) {
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
-		list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
-		$paths = array();
-		$paths = $this->configurationManager->getContentConfiguration($extensionName);
+		$extensionName = array_shift(explode(':', $templatePathAndFilename));
+		$paths = (array) $this->configurationManager->getContentConfiguration($extensionName);
 		return $paths;
 	}
 
 }
-
-?>

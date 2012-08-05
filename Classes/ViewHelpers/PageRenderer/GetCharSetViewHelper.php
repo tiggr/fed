@@ -38,5 +38,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetCharSetViewHelper extends Tx_Fed_ViewHe
 	}
 
 }
-
-?>

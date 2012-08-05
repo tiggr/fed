@@ -48,4 +48,3 @@ abstract class Tx_Fed_Tests_Unit_BaseTestCase extends Tx_Extbase_Tests_Unit_Base
 		}
 	}
 }
-?>

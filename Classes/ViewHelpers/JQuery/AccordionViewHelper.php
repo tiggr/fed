@@ -82,6 +82,8 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		$this->uniqId = uniqid('fedjqueryaccordion');
@@ -97,7 +99,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 			}
 			$this->addTab($this->arguments['title'], $this->renderChildren());
 			$this->setCurrentIndex($index + 1);
-			return;
+			return NULL;
 		}
 
 		// render tab group
@@ -201,11 +203,6 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		if ($selectedIndex === 0 && $this->arguments['collapsed'] === TRUE && $this->arguments['collapsible'] === TRUE) {
 			$this->setSelectedIndex(FALSE);
 		}
-		if ($this->arguments['animated'] === 'FALSE') {
-			$animation = '"animated" : false,';
-		} else {
-			$animation = '"animated" : "'. $this->arguments['animated'] . '",';
-		}
 		$cookie = $this->getBooleanForJavascript('cookie');
 		$collapsible = $this->getBooleanForJavascript('collapsible');
 		$disabled = $this->getBooleanForJavascript('disabled');
@@ -232,5 +229,3 @@ INITSCRIPT;
 
 
 }
-
-?>

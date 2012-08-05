@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_SetTitleViewHelper extends Tx_Fed_ViewHelp
 	}
 
 }
-
-?>

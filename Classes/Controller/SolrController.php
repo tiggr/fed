@@ -85,5 +85,3 @@ class Tx_Fed_Controller_SolrController extends Tx_Fed_Core_AbstractController {
 	}
 
 }
-
-?>

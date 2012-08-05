@@ -71,7 +71,6 @@ class Tx_Fed_Backend_FCESelector {
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
 			if (count($files) > 0) {
-				$groupLabel = '';
 				if ($templatePathSet['label']) {
 					$groupLabel = $templatePathSet['label'];
 				} elseif (!t3lib_extMgm::isLoaded($key)) {
@@ -113,7 +112,4 @@ class Tx_Fed_Backend_FCESelector {
 		return $select;
 	}
 
-
 }
-
-?>

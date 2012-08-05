@@ -42,7 +42,7 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_DeleteViewHelper extends Tx_Fed_Core_Vi
 
 		$charCode = '65,114,101,32,121,111,117,32,115,117,114,101,32,121,111,117,32,119,97,110,116,32,116,111,32,100,101,108,101,116,101,32,116,104,105,115,32,114,101,99,111,114,100,63';
 		$icon = $this->getIcon('actions-edit-delete', 'Delete content element: tt_content:' . $this->arguments['row']['uid']);
-		$action = 'return confirm(String.fromCharCode(' . $charCode . '));';
+		#$action = 'return confirm(String.fromCharCode(' . $charCode . '));';
 		$token = $this->getFormToken();
 		$vC = $this->getLinkChecksum();
 		$returnUri = $this->getReturnUri($pid);
@@ -51,5 +51,3 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_DeleteViewHelper extends Tx_Fed_Core_Vi
 		return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

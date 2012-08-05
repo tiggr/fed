@@ -56,5 +56,3 @@ class Tx_Fed_Controller_HashController extends Tx_Fed_Core_AbstractController {
 	}
 
 }
-
-?>

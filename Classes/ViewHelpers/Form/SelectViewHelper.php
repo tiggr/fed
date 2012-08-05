@@ -295,5 +295,3 @@ class Tx_Fed_ViewHelpers_Form_SelectViewHelper extends Tx_Fluid_ViewHelpers_Form
 		return $output;
 	}
 }
-
-?>

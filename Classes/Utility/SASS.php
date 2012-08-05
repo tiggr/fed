@@ -85,5 +85,3 @@ class Tx_Fed_Utility_SASS implements t3lib_Singleton {
 	}
 
 }
-
-?>

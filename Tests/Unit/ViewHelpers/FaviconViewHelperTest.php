@@ -34,4 +34,3 @@ class Tx_Fed_Tests_Unit_ViewHelpers_FaviconViewHelperTest extends Tx_Fluid_ViewH
 
 
 }
-?>

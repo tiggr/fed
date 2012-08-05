@@ -78,7 +78,7 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 				// important force-return here to avoid error messages caused by processing of $result
 				return NULL;
 			} else {
-				return "<div>Invalid SQL query! Error was: " . $GLOBALS['TYPO3_DB']->sql_error(). "</div>";
+				return '<div>Invalid SQL query! Error was: ' . $GLOBALS['TYPO3_DB']->sql_error(). '</div>';
 			}
 		}
 		$rows = array();
@@ -106,8 +106,7 @@ class Tx_Fed_ViewHelpers_Data_SqlViewHelper extends Tx_Fluid_Core_ViewHelper_Abs
 			}
 			$this->templateVariableContainer->add($name, $value);
 		}
+		return NULL;
 	}
 
 }
-
-?>

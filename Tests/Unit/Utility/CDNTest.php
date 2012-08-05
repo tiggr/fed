@@ -108,7 +108,4 @@ class Tx_Fed_Tests_Unit_Utility_CDNTest extends Tx_Extbase_Tests_Unit_BaseTestCa
 		$this->assertContains('jquery-ui.min.js', implode('', $GLOBALS['TSFE']->additionalHeaderData));
 	}
 
-
-
 }
-?>

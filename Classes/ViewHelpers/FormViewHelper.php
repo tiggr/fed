@@ -97,7 +97,6 @@ class Tx_Fed_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHel
 				$id = $this->arguments['id'];
 			} else {
 				$id = uniqid('form');
-				$this->tag->addAttribute('id', $id);
 			}
 			$link = $this->controllerContext->getUriBuilder()->uriFor('validate');
 			if ($this->arguments['validateTypeNum']) {
@@ -114,6 +113,7 @@ class Tx_Fed_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHel
 					'action' => $this->arguments['action']
 				)
 			);
+			$this->tag->addAttribute('id', $id);
 			$this->tag->addAttribute('class', 'fed-validator fed-validate-' . $this->arguments['validateMethod'] . ' '
 				. $this->arguments['class'] . ' ' . ($this->arguments['autoSubmit'] === TRUE ? 'fed-autosubmit' : ''));
 			$this->tag->addAttribute('rel', $relData);
@@ -134,5 +134,3 @@ class Tx_Fed_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHel
 
 
 }
-
-?>

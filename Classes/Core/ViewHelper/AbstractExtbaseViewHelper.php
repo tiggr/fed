@@ -222,5 +222,3 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	}
 
 }
-
-?>

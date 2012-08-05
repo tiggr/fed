@@ -56,5 +56,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Facet_CountViewHelper extends Tx_Fluid_Core
 	}
 
 }
-
-?>

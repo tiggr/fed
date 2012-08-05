@@ -142,7 +142,6 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 	 * @return string
 	 */
 	protected function renderImages(array $images, $returnConverted=FALSE) {
-		global $TYPO3_CONF_VARS;
 		$converted = array();
 		$lines = array();
 		$setup = array(
@@ -183,6 +182,7 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			$this->tag->addAttribute('src', $convertedImageFilename[0]);
 			$lines[] = $this->tag->render();
 			$this->tag->removeAttribute('id');
+			array_push($converted, $convertedImageFilename[0]);
 		}
 		foreach ($images as $k=>$image) {
 			$convertedImageFilename = $this->renderImage($image, $setup);
@@ -201,8 +201,12 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			}
 			$lines[] = $this->tag->render();
 		}
-		$html = implode($this->arguments['divider'], $lines);
-		return $html;
+		if ($returnConverted === TRUE) {
+			return $converted;
+		} else {
+			$html = implode($this->arguments['divider'], $lines);
+			return $html;
+		}
 	}
 
 	/**
@@ -341,7 +345,7 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 				$this->resetFrontendEnvironment();
 			}
 		}
-		return array($imageSource,$imageSourceOver);
+		return array($imageSource, $imageSourceOver);
 	}
 
 	/**
@@ -355,5 +359,3 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 	}
 
 }
-
-?>

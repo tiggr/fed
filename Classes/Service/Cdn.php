@@ -171,5 +171,3 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	}
 
 }
-
-?>

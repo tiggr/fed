@@ -72,7 +72,3 @@ class Tx_Fed_ViewHelpers_ExtJS_ExposeViewHelper extends Tx_Fed_Core_ViewHelper_A
 		return '';
 	}
 }
-
-
-
-?>

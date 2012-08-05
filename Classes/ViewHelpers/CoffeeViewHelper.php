@@ -61,5 +61,3 @@ class Tx_Fed_ViewHelpers_CoffeeViewHelper extends Tx_Fed_ViewHelpers_ScriptViewH
 	}
 
 }
-
-?>

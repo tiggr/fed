@@ -51,5 +51,3 @@ abstract class Tx_Fed_Persistence_Repository extends Tx_Extbase_Persistence_Repo
 	
 	
 }
-
-?>

@@ -60,5 +60,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsLibraryViewHelper extends Tx_Fed_View
 	}
 
 }
-
-?>

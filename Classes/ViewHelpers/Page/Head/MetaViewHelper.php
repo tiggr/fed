@@ -60,7 +60,7 @@ class Tx_Fed_ViewHelpers_Page_Head_MetaViewHelper extends Tx_Fluid_Core_ViewHelp
 	*/
 	public function render() {
 		if (TYPO3_MODE == 'BE') {
-			return '';
+			return;
 		}
 
 		if (isset($this->arguments['content']) && !empty($this->arguments['content'])) {
@@ -69,5 +69,3 @@ class Tx_Fed_ViewHelpers_Page_Head_MetaViewHelper extends Tx_Fluid_Core_ViewHelp
 	}
 
 }
-
-?>

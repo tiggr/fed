@@ -70,6 +70,3 @@ class Tx_Fed_ViewHelpers_StyleViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		}
 	}
 }
-
-
-?>

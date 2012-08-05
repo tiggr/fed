@@ -65,4 +65,3 @@ class Tx_Fed_Tests_Unit_Utility_ExtJSTest extends Tx_Fed_Tests_Unit_BaseTestCase
 	}
 
 }
-?>

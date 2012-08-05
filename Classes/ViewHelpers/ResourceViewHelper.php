@@ -137,8 +137,7 @@ class Tx_Fed_ViewHelpers_ResourceViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	 * @return mixed
 	 */
 	protected function getSortValue($src, $index) {
-		$field = $this->arguments['sortBy'];
-		list ($field, $subfield) = explode(':', $field);
+		$field = array_shift(explode(':', $this->arguments['sortBy']));
 		if ($src instanceof Tx_Fed_Resource_File) {
 			switch ($field) {
 				case 'filesize': return $src->getSize();
@@ -159,5 +158,3 @@ class Tx_Fed_ViewHelpers_ResourceViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	}
 
 }
-
-?>

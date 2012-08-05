@@ -72,5 +72,3 @@ class Tx_Fed_ViewHelpers_Widget_SolrViewHelper extends Tx_Fluid_Core_Widget_Abst
 	}
 
 }
-
-?>

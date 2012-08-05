@@ -142,4 +142,3 @@ class Tx_Fed_Tests_Unit_Utility_DocumentHeadTest extends Tx_Extbase_Tests_Unit_B
 	}
 
 }
-?>

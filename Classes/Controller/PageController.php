@@ -63,7 +63,9 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 	}
 
 	/**
-	 * @param Tx_Fed_MVC_View_ExposedTemplateView $view
+	 * @param Tx_Flux_MVC_View_ExposedTemplateView $view
+	 *
+	 * @return void
 	 */
 	public function initializeView(Tx_Flux_MVC_View_ExposedTemplateView $view) {
 		$configuration = $this->pageService->getPageTemplateConfiguration($GLOBALS['TSFE']->id);
@@ -85,6 +87,7 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 			$view->assign('user', $GLOBALS['TSFE']->fe_user->user);
 			$view->assign('cookies', $_COOKIE);
 			$view->assign('session', $_SESSION);
+			return;
 		} else {
 			$message = 'Template file "' . $templatePathAndFilename . '" does not exist.';
 			if (pathinfo($templatePathAndFilename, PATHINFO_BASENAME) === '') {
@@ -97,7 +100,7 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 					$message .= ' from the parent page template.';
 				}
 			}
-			return $message;
+			$this->flashMessageContainer->add($message, 'Template file not found');
 		}
 	}
 
@@ -110,5 +113,3 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
 	}
 
 }
-
-?>

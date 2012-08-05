@@ -81,4 +81,3 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractBackendViewHelper extends Tx_Fed_C
 	}
 
 }
-?>

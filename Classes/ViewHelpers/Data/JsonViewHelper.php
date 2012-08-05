@@ -51,5 +51,3 @@ class Tx_Fed_ViewHelpers_Data_JsonViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		return (string) $string;
 	}
 }
-
-?>

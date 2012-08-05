@@ -59,5 +59,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_ScorebarViewHelper extends Tx_Fluid_Core_Vi
 
 
 }
-
-?>

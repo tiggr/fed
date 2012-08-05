@@ -56,5 +56,3 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_PasteViewHelper extends Tx_Fed_Core_Vie
 		return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

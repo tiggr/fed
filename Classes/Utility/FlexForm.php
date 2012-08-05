@@ -79,5 +79,3 @@ class Tx_Fed_Utility_FlexForm extends Tx_Flux_Service_FlexForm implements t3lib_
 	}
 
 }
-
-?>

@@ -101,7 +101,3 @@ class Tx_Fed_ViewHelpers_ExtJS_AppViewHelper extends Tx_Fed_ViewHelpers_RenderVi
 		return $element;
 	}
 }
-
-
-
-?>

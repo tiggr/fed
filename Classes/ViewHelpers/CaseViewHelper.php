@@ -62,5 +62,3 @@ class Tx_Fed_ViewHelpers_CaseViewHelper extends Tx_Fed_Core_ViewHelper_AbstractV
 	}
 
 }
-
-?>

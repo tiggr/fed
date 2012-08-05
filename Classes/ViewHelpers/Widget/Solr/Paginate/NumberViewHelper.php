@@ -60,5 +60,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Paginate_NumberViewHelper extends Tx_Fluid_
 
 
 }
-
-?>

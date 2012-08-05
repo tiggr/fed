@@ -75,6 +75,3 @@ class Tx_Fed_ViewHelpers_ExistsViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 
 
 }
-
-
-?>

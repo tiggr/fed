@@ -43,4 +43,3 @@ class Tx_Fed_ViewHelpers_Be_ContentElementViewHelper extends Tx_Fed_Core_ViewHel
 	}
 
 }
-?>

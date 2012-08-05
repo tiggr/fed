@@ -66,5 +66,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddCssInlineBlockViewHelper extends Tx_Fed
 	}
 
 }
-
-?>

@@ -61,7 +61,6 @@ class Tx_Fed_ViewHelpers_Be_ContentAreaViewHelper extends Tx_Fed_Core_ViewHelper
 		$dblist->tt_contentConfig['showInfo'] = 1;
 		$dblist->tt_contentConfig['single'] = 0;
 
-		$records = array();
 		$condition = "tx_fed_fcecontentarea = '{$area}:{$row['uid']}' AND deleted = 0";
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tt_content', $condition, 'uid', 'sorting ASC');
 		$records = $dblist->getResult($res);
@@ -77,5 +76,3 @@ class Tx_Fed_ViewHelpers_Be_ContentAreaViewHelper extends Tx_Fed_Core_ViewHelper
 		return $content;
 	}
 }
-
-?>

@@ -93,6 +93,4 @@ class Tx_Fed_Domain_Model_BackendLayout extends Tx_Extbase_DomainObject_Abstract
 		$this->config = $config;
 	}
 
-
 }
-?>

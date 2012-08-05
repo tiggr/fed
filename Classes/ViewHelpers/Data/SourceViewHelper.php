@@ -43,6 +43,8 @@ class Tx_Fed_ViewHelpers_Data_SourceViewHelper extends Tx_Fluid_Core_ViewHelper_
 	 * @return string
 	 */
 	public function render() {
+		$source = $this->arguments['source'];
+		$name = $this->arguments['as'];
 		$repository = $this->objectManager->get('Tx_Fed_Domain_Repository_DataSourceRepository');
 		$parser = $this->objectManager->get('Tx_Fed_Utility_DataSourceParser');
 		if (is_array($source)) {
@@ -80,9 +82,8 @@ class Tx_Fed_ViewHelpers_Data_SourceViewHelper extends Tx_Fluid_Core_ViewHelper_
 				$this->templateVariableContainer->remove($name);
 			}
 			$this->templateVariableContainer->add($name, $value);
+			return NULL;
 		}
 	}
 
 }
-
-?>

@@ -183,7 +183,3 @@ class Tx_Fed_ViewHelpers_SassViewHelper extends Tx_Fed_Core_ViewHelper_AbstractV
 		return $this->sass->compile($this->getPath(), $GLOBALS['fedSASS']['target']);
 	}
 }
-
-
-
-?>

@@ -52,4 +52,3 @@ abstract class Tx_Fed_Resource_AbstractResource {
 	}
 
 }
-?>

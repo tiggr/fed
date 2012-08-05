@@ -56,5 +56,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Facet_Group_ListViewHelper extends Tx_Fluid
 	}
 
 }
-
-?>

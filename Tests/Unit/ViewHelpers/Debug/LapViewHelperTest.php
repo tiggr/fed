@@ -31,7 +31,4 @@ require_once t3lib_extMgm::extPath('fluid', '/Tests/Unit/ViewHelpers/ViewHelperB
  */
 class Tx_Fed_Tests_Unit_ViewHelpers_Debug_LapViewHelperTest extends Tx_Fluid_ViewHelpers_ViewHelperBaseTestcase {
 
-
-
 }
-?>

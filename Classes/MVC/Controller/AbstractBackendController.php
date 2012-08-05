@@ -32,5 +32,3 @@
 abstract class Tx_Fed_MVC_Controller_AbstractBackendController extends Tx_Extbase_MVC_Controller_ActionController {
 
 }
-
-?>

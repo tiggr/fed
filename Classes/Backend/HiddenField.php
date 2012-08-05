@@ -30,6 +30,11 @@
  */
 class Tx_Fed_Backend_HiddenField {
 
+	/**
+	 * @param array $parameters
+	 * @param mixed $pObj
+	 * @return string
+	 */
 	public function renderField(&$parameters, &$pObj) {
 		$name = $parameters['itemFormElName'];
 		$value = $parameters['itemFormElValue'];
@@ -37,4 +42,3 @@ class Tx_Fed_Backend_HiddenField {
 	}
 
 }
-?>

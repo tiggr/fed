@@ -43,5 +43,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_SetTemplateFileViewHelper extends Tx_Fed_V
 	}
 
 }
-
-?>

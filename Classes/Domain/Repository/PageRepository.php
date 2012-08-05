@@ -36,4 +36,3 @@ class Tx_Fed_Domain_Repository_PageRepository extends Tx_Fed_Persistence_Reposit
 
 
 }
-?>

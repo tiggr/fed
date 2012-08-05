@@ -45,4 +45,3 @@ class Tx_Fed_ViewHelpers_Page_AbsoluteUrlViewHelper extends Tx_Fed_Core_ViewHelp
 	}
 
 }
-?>

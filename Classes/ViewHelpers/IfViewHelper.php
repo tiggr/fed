@@ -169,7 +169,6 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 		$functions = array_merge($languageConstructs, $functions['internal'], $functions['user']);
 		$functions = array_diff($functions, $allowedFunctions);
 		$conditionLength = strlen($condition);
-		$conditionHasUnderscore = strpos($condition, '_');
 		foreach ($functions as $evilFunction) {
 			if (strlen($evilFunction) > $conditionLength) {
 					// no need to check for presence of this function - quick skip

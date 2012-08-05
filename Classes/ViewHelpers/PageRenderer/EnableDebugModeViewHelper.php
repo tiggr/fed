@@ -38,5 +38,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_EnableDebugModeViewHelper extends Tx_Fed_V
 	}
 
 }
-
-?>

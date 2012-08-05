@@ -49,4 +49,3 @@ class Tx_Fed_Domain_Repository_DataSourceRepository extends Tx_Fed_Persistence_R
 	}
 	
 }
-?>

@@ -63,5 +63,3 @@ class Tx_Fed_Tests_Unit_Utility_JSONTest extends Tx_Extbase_Tests_Unit_BaseTestC
 
 
 }
-
-?>

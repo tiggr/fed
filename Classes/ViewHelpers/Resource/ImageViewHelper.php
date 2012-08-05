@@ -58,7 +58,7 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 			$file = array_pop($files);
 			if ($this->arguments['as']) {
 				$this->templateVariableContainer->add($this->arguments['as'], $file);
-				return;
+				return NULL;
 			} else if ($this->arguments['return'] === TRUE) {
 				return $file;
 			} else {
@@ -111,11 +111,10 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 			$this->templateVariableContainer->remove('images');
 			// possible return: HTML file list
 			if (strlen(trim($content)) === 0) {
-				return $this->renderFileList($files);
-			} else {
-				return $content;
+				$content = $this->renderFileList($files);
 			}
 		}
+		return $content;
 	}
 
 	/**
@@ -135,8 +134,8 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 
 	/**
 	 * Adds support for sorting on new extended sort properties "size" and "exif"
-	 * @param type $src
-	 * @return type
+	 * @param string $src
+	 * @return mixed
 	 */
 	protected function getSortValue($src) {
 		$field = $this->arguments['sortBy'];
@@ -153,7 +152,7 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 					default: return ($w*$h);
 				}
 			case 'exif': return $this->readExifInfoField(PATH_site . $src, $subfield);
-			default: return parent::getSortValue($src);
+			default: return parent::getSortValue($src, 0);
 		}
 	}
 
@@ -189,5 +188,3 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 	}
 
 }
-
-?>

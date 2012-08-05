@@ -49,9 +49,9 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 
 	/**
 	 * ObjectManager instance
-	 * @var Tx_Extbase_Object_ObjectManager
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
-	protected $objectManger;
+	protected $objectManager;
 
 	/**
 	 * Inject a RecursionHandler instance
@@ -63,7 +63,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 
 	/**
 	 * Inject a Reflection Service instance
-	 * @param Tx_Extbase_Reflection_Server $service
+	 * @param Tx_Extbase_Reflection_Service $service
 	 */
 	public function injectReflectionService(Tx_Extbase_Reflection_Service $service) {
 		$this->reflectionService = $service;
@@ -71,9 +71,9 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 
 	/**
 	 * Inject a Reflection Service instance
-	 * @param Tx_Extbase_Object_ObjectManager $manager
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $manager
 	 */
-	public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $manager) {
 		$this->objectManager = $manager;
 	}
 
@@ -114,11 +114,10 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 	/**
 	 * Copies Domain Object as reference
 	 *
-	 * @param Tx_Extbase_DomainObject_AbstractDomainOject $value
-	 * @return Tx_Locus_Domain_Model_AbstractDomainModelObject
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $value
+	 * @return Tx_Extbase_DomainObject_DomainObjectInterface
 	 */
 	protected function copyAsReference($value) {
-		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		if ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
 			// objectstorage; copy storage and attach items to this new storage
 			// if 1:n mapping is used, items are detached from their old storage - this is
@@ -128,7 +127,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 				$newStorage->attach($item);
 			}
 			return $newStorage;
-		} else if ($value instanceof Tx_Locus_Domain_Model_AbstractDomainModelObject) {
+		} else if ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 			// 1:1 mapping as reference; return object itself
 			return $value;
 		} else if (is_object($value)) {
@@ -143,8 +142,8 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 	/**
 	 * Copies Domain Object as clone
 	 *
-	 * @param Tx_Extbase_DomainObject_AbstractDomainOject $value
-	 * @return Tx_Locus_Domain_Model_AbstractDomainModelObject
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $value
+	 * @return Tx_Extbase_DomainObject_DomainObjectInterface
 	 * @api
 	 */
 	protected function copyAsClone($value) {
@@ -156,7 +155,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 				$newStorage->attach($newItem);
 			}
 			return $newStorage;
-		} else if ($value instanceof Tx_Locus_Domain_Model_AbstractDomainModelObject) {
+		} else if ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 			// DomainObject; copy and return
 			return $this->copy($value);
 		} else if (is_object($value)) {
@@ -169,5 +168,3 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 	}
 
 }
-
-?>

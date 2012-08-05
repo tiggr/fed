@@ -38,5 +38,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetConcatenateCssViewHelper extends Tx_Fed
 	}
 
 }
-
-?>

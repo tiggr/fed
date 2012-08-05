@@ -72,5 +72,3 @@ class Tx_Fed_ViewHelpers_Be_Buttons_IconViewHelper extends Tx_Fluid_ViewHelpers_
 		}
 	}
 }
-
-?>

@@ -111,6 +111,7 @@ class Tx_Fed_ViewHelpers_Resource_FileViewHelper extends Tx_Fed_ViewHelpers_Reso
 		$files = $this->arrayToFileObjects($files);
 		$files = $this->sortFiles($files);
 		// rendering
+		$content = '';
 		if ($this->arguments['as']) {
 			if ($this->templateVariableContainer->exists($this->arguments['as'])) {
 				$this->templateVariableContainer->remove($this->arguments['as']);
@@ -124,13 +125,10 @@ class Tx_Fed_ViewHelpers_Resource_FileViewHelper extends Tx_Fed_ViewHelpers_Reso
 			$this->templateVariableContainer->remove('files');
 			// possible return: HTML file list
 			if (strlen(trim($content)) === 0) {
-				return $this->renderFileList($files);
-			} else {
-				return $content;
+				$content = $this->renderFileList($files);
 			}
 		}
+		return $content;
 	}
 
 }
-
-?>

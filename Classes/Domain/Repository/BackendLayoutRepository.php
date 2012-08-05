@@ -33,7 +33,4 @@
  */
 class Tx_Fed_Domain_Repository_BackendLayoutRepository extends Tx_Fed_Persistence_Repository {
 
-
-
 }
-?>

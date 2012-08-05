@@ -48,5 +48,3 @@ implements Tx_Fluid_Core_ViewHelper_Facets_ChildNodeAccessInterface {
 	}
 
 }
-
-?>

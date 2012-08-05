@@ -57,5 +57,3 @@ class Tx_Fed_ViewHelpers_CsspressoViewHelper extends Tx_Fed_ViewHelpers_StyleVie
 	}
 
 }
-
-?>

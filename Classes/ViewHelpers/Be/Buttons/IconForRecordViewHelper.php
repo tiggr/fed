@@ -54,5 +54,3 @@ class Tx_Fed_ViewHelpers_Be_Buttons_IconForRecordViewHelper extends Tx_Fluid_Vie
 		return $icon;
 	}
 }
-
-?>

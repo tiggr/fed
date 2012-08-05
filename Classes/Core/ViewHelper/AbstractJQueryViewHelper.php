@@ -47,5 +47,3 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractJQueryViewHelper extends Tx_Fed_Co
 	}
 
 }
-
-?>

@@ -54,5 +54,3 @@ class Tx_Fed_Utility_Geocoder implements t3lib_Singleton {
 	}
 
 }
-
-?>

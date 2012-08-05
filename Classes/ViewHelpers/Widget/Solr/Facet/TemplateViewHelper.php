@@ -64,5 +64,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_Facet_TemplateViewHelper extends Tx_Fluid_C
 	}
 
 }
-
-?>

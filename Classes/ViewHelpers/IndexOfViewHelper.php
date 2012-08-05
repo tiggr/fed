@@ -46,5 +46,3 @@ class Tx_Fed_ViewHelpers_IndexOfViewHelper extends Tx_Fed_ViewHelpers_ContainsVi
 	}
 
 }
-
-?>

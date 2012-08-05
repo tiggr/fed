@@ -71,5 +71,3 @@ class Tx_Fed_ViewHelpers_Data_ObjectViewHelper extends Tx_Fed_Core_ViewHelper_Ab
 	}
 
 }
-
-?>

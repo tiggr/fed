@@ -34,4 +34,3 @@ class Tx_Fed_Tests_Unit_ViewHelpers_JQuery_CdnViewHelperTest extends Tx_Fluid_Vi
 
 
 }
-?>

@@ -74,5 +74,3 @@ class Tx_Fed_Controller_TemplateController extends Tx_Fed_MVC_Controller_Abstrac
 	}
 
 }
-
-?>

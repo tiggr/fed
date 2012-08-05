@@ -42,5 +42,3 @@ class Tx_Fed_ViewHelpers_Be_Link_Content_EditViewHelper extends Tx_Fed_Core_View
 		return $this->wrapLink($icon, $uri);
 	}
 }
-
-?>

@@ -45,6 +45,7 @@ class Tx_Fed_ViewHelpers_MathViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHe
 		} else {
 			$expression = $this->renderChildren();
 		}
+		$number = NAN;
 		$evalString = "\$number = floatval($expression);";
 		@eval($evalString);
 		if ($this->arguments['as']) {
@@ -52,11 +53,10 @@ class Tx_Fed_ViewHelpers_MathViewHelper extends Tx_Fluid_ViewHelpers_ImageViewHe
 				$this->templateVariableContainer->remove($this->arguments['as']);
 			}
 			$this->templateVariableContainer->add($this->arguments['as'], $number);
+			return NULL;
 		} else {
 			return $number;
 		}
 	}
 
 }
-
-?>

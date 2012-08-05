@@ -36,4 +36,3 @@ class Tx_Fed_Domain_Repository_ContentElementRepository extends Tx_Fed_Persisten
 
 
 }
-?>

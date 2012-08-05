@@ -68,11 +68,10 @@ class Tx_Fed_ViewHelpers_Data_FuncViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 				$this->templateVariableContainer->remove($this->arguments['as']);
 			}
 			$this->templateVariableContainer->add($this->arguments['as'], $output);
+			return NULL;
 		} else {
 			return $output;
 		}
 	}
 
 }
-
-?>

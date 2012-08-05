@@ -34,5 +34,3 @@
 class Tx_Fed_Utility_CDN extends Tx_Fed_Service_Cdn implements t3lib_Singleton {
 
 }
-
-?>

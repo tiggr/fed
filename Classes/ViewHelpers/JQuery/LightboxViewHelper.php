@@ -66,10 +66,6 @@ class Tx_Fed_ViewHelpers_JQuery_LightboxViewHelper extends Tx_Fed_ViewHelpers_Re
 			$view->assign('arguments', $this->arguments);
 			return $view->render();
 		}
-		return $html;
 	}
-	
-	
-	
+
 }
-?>

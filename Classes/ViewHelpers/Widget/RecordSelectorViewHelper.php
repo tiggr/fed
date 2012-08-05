@@ -76,4 +76,3 @@ class Tx_Fed_ViewHelpers_Widget_RecordSelectorViewHelper extends Tx_Fluid_Core_W
 	}
 
 }
-?>

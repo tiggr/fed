@@ -38,5 +38,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_LoadExtCoreViewHelper extends Tx_Fed_ViewH
 	}
 
 }
-
-?>

@@ -33,5 +33,3 @@
 class Tx_Fed_Utility_JSON extends Tx_Fed_Service_Json implements t3lib_Singleton {
 
 }
-
-?>

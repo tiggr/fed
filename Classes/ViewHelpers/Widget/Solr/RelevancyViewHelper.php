@@ -58,5 +58,3 @@ class Tx_Fed_ViewHelpers_Widget_Solr_RelevancyViewHelper extends Tx_Fluid_Core_V
 
 
 }
-
-?>

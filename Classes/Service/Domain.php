@@ -150,7 +150,6 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @api
 	 */
 	public function getBackendControllerClassName($object) {
-		$className = is_object($object) ? get_class($object) : $object;
 		$controllerName = $this->getControllerName($object);
 		$extensionName = $this->getExtensionName($object);
 		$className = 'Tx_' . $extensionName . '_Controller_Backend_' . $controllerName . 'Controller';
@@ -350,6 +349,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 			if ($this->hasAnnotation($className, $propertyName, $annotation)) {
 				$tags = $this->reflectionService->getPropertyTagsValues($className, $propertyName);
 				$set = $tags[$annotation];
+				$tagArray[$propertyName] = $set;
 			}
 		}
 		return $tagArray;
@@ -363,10 +363,13 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @api
 	 */
 	public function getExtensionTyposcriptConfiguration($object) {
+		$setup = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$extensionName = $this->getExtensionName($object);
 		$extensionName = strtolower($extensionName);
 		if (is_array($setup['plugin.']['tx_' . $extensionName . '.'])) {
 			$extensionConfiguration = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_' . $extensionName . '.']);
+		} else {
+			$extensionConfiguration = NULL;
 		}
 		return $extensionConfiguration;
 	}
@@ -539,9 +542,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @api
 	 */
 	public function getUploadFolder($object, $propertyName=NULL) {
-		if (is_object($object)) {
-			$className = get_class($object);
-		} else {
+		if (is_object($object) === FALSE) {
 			$className = $object;
 			$object = $this->objectManager->get($className);
 		}

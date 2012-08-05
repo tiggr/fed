@@ -57,6 +57,3 @@ class Tx_Fed_ViewHelpers_Map_LayerViewHelper extends Tx_Fed_ViewHelpers_MapViewH
 	}
 
 }
-
-
-?>

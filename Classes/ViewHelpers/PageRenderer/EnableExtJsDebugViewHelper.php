@@ -38,5 +38,3 @@ class Tx_Fed_ViewHelpers_PageRenderer_EnableExtJsDebugViewHelper extends Tx_Fed_
 	}
 
 }
-
-?>

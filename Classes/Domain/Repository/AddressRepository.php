@@ -36,4 +36,3 @@ class Tx_Fed_Domain_Repository_AddressRepository extends Tx_Fed_Persistence_Repo
 	
 	
 }
-?>

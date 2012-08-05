@@ -36,5 +36,3 @@ class Tx_Fed_Utility_DomainObjectInfo extends Tx_Fed_Service_Domain implements t
 
 
 }
-
-?>

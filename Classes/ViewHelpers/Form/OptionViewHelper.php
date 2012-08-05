@@ -85,6 +85,4 @@ class Tx_Fed_ViewHelpers_Form_OptionViewHelper extends Tx_Fluid_ViewHelpers_Form
 		return $this->tag->render();
 	}
 
-
 }
-?>

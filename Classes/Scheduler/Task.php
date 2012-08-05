@@ -157,5 +157,3 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 	}
 
 }
-
-?>
