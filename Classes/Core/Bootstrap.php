@@ -52,7 +52,6 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 		$this->initialize($configuration);
 		$this->infoService = $this->objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
 		$this->jsonService = $this->objectManager->get('Tx_Fed_Utility_JSON');
-		$messager = $this->objectManager->get('Tx_Extbase_MVC_Controller_FlashMessages');
 		$requestHandlerResolver = $this->objectManager->get('Tx_Extbase_MVC_RequestHandlerResolver');
 		$requestHandler = $requestHandlerResolver->resolveRequestHandler();
 		$response = $requestHandler->handleRequest();
@@ -79,7 +78,6 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 		} else {
 			$data = $content;
 		}
-		$messager->getAllMessagesAndFlush();
 
 		if (is_array($data) || is_object($data)) {
 			$output = $this->jsonService->encode($data);
