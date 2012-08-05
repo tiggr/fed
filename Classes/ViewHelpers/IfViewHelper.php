@@ -176,7 +176,7 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 				continue;
 			}
 			if (preg_match('/' . $evilFunction . '([\s]){0,}\(/', $condition) === 1) {
-				throw new Exception('Disallowed PHP function "' . $evilFunction . '" used in IfViewHelper condition. Allowed functions: ' . $goodFunctions, 1309613359);
+				throw new Exception('Disallowed PHP function "' . $evilFunction . '" used in IfViewHelper condition. Allowed functions: ' . implode(', ', $allowedFunctions), 1309613359);
 			}
 		}
 
