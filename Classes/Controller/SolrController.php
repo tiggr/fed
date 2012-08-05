@@ -37,6 +37,11 @@ class Tx_Fed_Controller_SolrController extends Tx_Fed_Core_AbstractController {
 	protected $solrService;
 
 	/**
+	 * @var array
+	 */
+	protected $solrConfiguration;
+
+	/**
 	 * @param Tx_Fed_Service_Solr $solrService
 	 */
 	public function injectSolrService(Tx_Fed_Service_Solr $solrService) {
@@ -49,7 +54,7 @@ class Tx_Fed_Controller_SolrController extends Tx_Fed_Core_AbstractController {
 	public function initializeAction() {
 		$configType = Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT;
 		$settings = $this->configurationManager->getConfiguration($configType);
-		$settings = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
+		$settings = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
 		$this->solrConfiguration = $settings;
 	}
 

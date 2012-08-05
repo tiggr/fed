@@ -57,7 +57,7 @@ class Tx_Fed_ViewHelpers_TyposcriptViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 			}
 		}
 		if (is_array($value)) {
-			$value = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($value);
+			$value = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($value);
 		}
 		return $value;
 	}

@@ -57,7 +57,7 @@ class Tx_Fed_ViewHelpers_Widget_Controller_SolrController extends Tx_Fluid_Core_
 	public function initializeAction() {
 		$configType = Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT;
 		$settings = $this->configurationManager->getConfiguration($configType);
-		$settings = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
+		$settings = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
 		$this->solrConfiguration = $settings;
 	}
 
@@ -95,5 +95,3 @@ class Tx_Fed_ViewHelpers_Widget_Controller_SolrController extends Tx_Fluid_Core_
 		return $this->view->render();
 	}
 }
-
-?>

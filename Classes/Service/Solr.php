@@ -56,7 +56,7 @@ class Tx_Fed_Service_Solr implements t3lib_Singleton {
 	public function initializeObject() {
 		$configType = Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT;
 		$settings = $this->configurationManager->getConfiguration($configType);
-		$settings = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
+		$settings = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($settings['plugin.']['tx_solr.']);
 		$this->solrConfiguration = $settings;
 	}
 

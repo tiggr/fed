@@ -162,7 +162,7 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 		$configurationManager = $objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 		$typoscript = $configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$settings = $typoscript['plugin.']['tx_fed.'];
-		$settings = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($settings);
+		$settings = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($settings);
 		$allowedFunctions = explode(',', $settings['fluid']['allowedFunctions']);
 		$languageConstructs = explode(',', $settings['fluid']['disallowedConstructs']);
 		$functions = get_defined_functions();
@@ -182,12 +182,11 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 
 		$evaluation = NULL;
 		$evaluationCondition = $condition;
-		$evaluationCondition = trim($condition, ';');
+		$evaluationCondition = trim($evaluationCondition, ';');
 		$evaluationExpression = '$evaluation = (bool) (' . $evaluationCondition . ');';
 		@eval($evaluationExpression);
 		if ($evaluation === NULL) {
 			throw new Exception('Syntax error while analyzing computed IfViewHelper expression: ' . $evaluationExpression, 1309537403);
-			return $this->renderElseChild();
 		} else if ($evaluation === TRUE) {
 			return $this->renderThenChild();
 		} else {
@@ -195,4 +194,3 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 		}
 	}
 }
-?>

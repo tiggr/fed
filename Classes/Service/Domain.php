@@ -239,8 +239,8 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * Returns the View configuration for $object as defined in Typoscript
-	 * @param type $object
-	 * @return type
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
+	 * @return array
 	 * @api
 	 */
 	public function getViewConfiguration($object) {
@@ -251,7 +251,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	/**
 	 * Returns the absolute path to the Resources folder for $object
 	 *
-	 * @param type $object
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
 	 * @return string
 	 * @api
 	 */
@@ -264,7 +264,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	/**
 	 * Returns the site-relative path to the Resources folder for $object
 	 *
-	 * @param type $object
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
 	 * @return string
 	 * @api
 	 */
@@ -296,7 +296,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * Turns a Tx_Extbase_Persistence_ObjectStorage<ModelObject> into "ModelObject"
-	 * @param type $annotation
+	 * @param string $annotation
 	 * @api
 	 */
 	public function parseObjectStorageAnnotation($annotation) {
@@ -366,7 +366,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 		$extensionName = $this->getExtensionName($object);
 		$extensionName = strtolower($extensionName);
 		if (is_array($setup['plugin.']['tx_' . $extensionName . '.'])) {
-			$extensionConfiguration = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_' . $extensionName . '.']);
+			$extensionConfiguration = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_' . $extensionName . '.']);
 		}
 		return $extensionConfiguration;
 	}
@@ -486,7 +486,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 		$typoscript = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$configuration = $typoscript['config.']['tx_extbase.']['persistence.']['classes.'];
 		if (is_array($configuration)) {
-			$configuration = Tx_Extbase_Utility_TypoScript::convertTypoScriptArrayToPlainArray($configuration);
+			$configuration = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($configuration);
 			foreach ($configuration as $objectType=>$definition) {
 				if ($definition['tableName'] === $table) {
 					return $objectType;
@@ -565,5 +565,3 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	}
 
 }
-
-?>
