@@ -35,6 +35,9 @@ class Tx_Fed_Utility_PartialRender extends Tx_Fed_Service_Render implements t3li
 	/**
 	 * @see Tx_Fed_Service_Render
 	 * @deprecated
+	 * @param string $templateFile
+	 * @param array $arguments
+	 * @return string
 	 */
 	public function render($templateFile, $arguments=NULL) {
 		return $this->renderTemplateFile($templateFile, $arguments);

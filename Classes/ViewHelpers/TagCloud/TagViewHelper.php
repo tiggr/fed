@@ -32,10 +32,10 @@
 class Tx_Fed_ViewHelpers_TagCloud_TagViewHelper extends Tx_Fed_ViewHelpers_TagCloudViewHelper {
 	
 	public function initializeArguments() {
-		$this->registerArgument('tag', 'string'); // universal
-		$this->registerArgument('href', 'string');
-		$this->registerArgument('title', 'string'); // universal
-		$this->registerArgument('style', 'string'); // universal
+		$this->registerArgument('tag', 'string', 'Tag'); // universal
+		$this->registerArgument('href', 'string', 'Href');
+		$this->registerArgument('title', 'string', 'Title'); // universal
+		$this->registerArgument('style', 'string', 'Style'); // universal
 		$this->registerArgument('occurrences', 'int', 'Number of times this tag occurs - default is zero', FALSE, 0);
 	}
 	

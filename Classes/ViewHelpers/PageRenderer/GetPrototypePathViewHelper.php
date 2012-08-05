@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetPrototypePathViewHelper extends Tx_Fed_
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getPrototypePath();

@@ -54,6 +54,8 @@ class Tx_Fed_ViewHelpers_SolrViewHelper extends Tx_Fed_Core_ViewHelper_AbstractJ
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		$jsFile = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/SolrService.js';

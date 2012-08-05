@@ -143,7 +143,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 			'title' => $title,
 			'content' => $content
 		);
-		$tabs = $this->templateVariableContainer->get('tabs');
+		$tabs = (array) $this->templateVariableContainer->get('tabs');
 		array_push($tabs, $tab);
 		$this->templateVariableContainer->remove('tabs');
 		$this->templateVariableContainer->add('tabs', $tabs);
@@ -155,7 +155,7 @@ class Tx_Fed_ViewHelpers_JQuery_TabViewHelper extends Tx_Fed_Core_ViewHelper_Abs
 	}
 
 	protected function addDisabledIndex($index) {
-		$disabled = $this->templateVariableContainer->get('disabledIndices');
+		$disabled = (array) $this->templateVariableContainer->get('disabledIndices');
 		array_push($disabled, $index);
 		$this->templateVariableContainer->remove('disabledIndices');
 		$this->templateVariableContainer->add('disabledIndices', $disabled);

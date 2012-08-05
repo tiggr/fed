@@ -185,6 +185,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param string $contents Contents of the file
 	 * @param string $uniqid Unique id of the temporary file
 	 * @param string $extension Extensin of the filename
+	 * @return string
 	 * @deprecated
 	 */
 	public function saveContentToTempFile($contents, $uniqid=NULL, $extension=NULL) {
@@ -291,6 +292,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 *
 	 * @param string $dir
 	 * @param string $type
+	 * @return array
 	 * @deprecated
 	 */
 	public function getFilenamesOfType($dir, $extension=NULL) {
@@ -314,10 +316,11 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	}
 
 	/**
-	* Check client browser
-	* @param array $browser
-	* return boolean
-	*/
+	 * Check client browser
+	 *
+	 * @param array $browser
+	 * @return boolean
+	 */
 	public function checkClientBrowser(array $browser) {
 		foreach($browser as $value) {
 			$find = stripos(t3lib_div::getIndpEnv('HTTP_USER_AGENT'), $value);

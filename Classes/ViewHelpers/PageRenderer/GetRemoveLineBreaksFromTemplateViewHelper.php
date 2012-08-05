@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetRemoveLineBreaksFromTemplateViewHelper 
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getRemoveLineBreaksFromTemplate();

@@ -160,6 +160,7 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 	 * Applies resolution information to metadata for all $images
 	 *
 	 * @param array $images
+	 * @return array
 	 */
 	protected function applyResolutionData(array $images) {
 		foreach ($images as $k=>$image) {
@@ -177,6 +178,7 @@ class Tx_Fed_ViewHelpers_Resource_ImageViewHelper extends Tx_Fed_ViewHelpers_Res
 	 * Applies EXIF information to metadata for all $images
 	 *
 	 * @param array $images
+	 * @return array
 	 */
 	protected function applyExifData(array $images) {
 		foreach ($images as $k=>$image) {

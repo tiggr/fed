@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetMetaCharsetTagViewHelper extends Tx_Fed
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getMetaCharsetTag();

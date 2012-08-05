@@ -37,6 +37,11 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 	protected $wkhtmltopdf;
 
 	/**
+	 * @var string
+	 */
+	protected $stylesheet;
+
+	/**
 	 * Designed for Bootstrap usage. Overrides headers and outputs PDF source
 	 * @return void
 	 */

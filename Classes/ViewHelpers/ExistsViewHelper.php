@@ -37,9 +37,14 @@ class Tx_Fed_ViewHelpers_ExistsViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	protected $evaluation = FALSE;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $service
+	 * @var Tx_Fed_Service_Domain
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $service) {
+	protected $infoService;
+
+	/**
+	 * @param Tx_Fed_Service_Domain $service
+	 */
+	public function injectInfoService(Tx_Fed_Service_Domain $service) {
 		$this->infoService = $service;
 	}
 
@@ -54,6 +59,8 @@ class Tx_Fed_ViewHelpers_ExistsViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		
@@ -72,6 +79,5 @@ class Tx_Fed_ViewHelpers_ExistsViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 			return $this->renderElseChild();
 		}
 	}
-
 
 }

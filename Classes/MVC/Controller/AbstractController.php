@@ -32,12 +32,12 @@
 abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_Controller_ActionController {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
 	/**
-	 * @var Tx_Fed_Utility_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	protected $jsonService;
 
@@ -47,7 +47,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $extJSService;
 
 	/**
-	 * @var Tx_Fed_Utility_FlexForm
+	 * @var Tx_Flux_Service_FlexForm
 	 */
 	protected $flexform;
 
@@ -67,16 +67,16 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $emailService;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_JSON $jsonService
+	 * @param Tx_Fed_Service_Json $jsonService
 	 */
-	public function injectJSONService(Tx_Fed_Utility_JSON $jsonService) {
+	public function injectJSONService(Tx_Fed_Service_Json $jsonService) {
 		$this->jsonService = $jsonService;
 	}
 
@@ -88,9 +88,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_FlexForm $flexform
+	 * @param Tx_Flux_Service_FlexForm $flexform
 	 */
-	public function injectFlexFormService(Tx_Fed_Utility_FlexForm $flexform) {
+	public function injectFlexFormService(Tx_Flux_Service_FlexForm $flexform) {
 		$this->flexform = $flexform;
 	}
 
@@ -253,6 +253,8 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 				$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
 			} else if (isset($_SERVER["CONTENT_TYPE"])) {
 				$contentType = $_SERVER["CONTENT_TYPE"];
+			} else {
+				$contentType = NULL;
 			}
 			$targetDir = PATH_site . $this->infoService->getUploadFolder($objectType, $propertyName);
 			$sourceFilename = $_FILES['file']['tmp_name'];

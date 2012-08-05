@@ -41,13 +41,17 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper extends Tx_Flu
 			return NULL;
 		}
 		$haystack = $this->arguments['haystack'];
+		$asArray = array();
 		if (is_array($haystack)) {
 			$asArray = $haystack;
 		} elseif ($haystack instanceof Tx_Extbase_Persistence_ObjectStorage) {
+			/** @var Tx_Extbase_Persistence_ObjectStorage $haystack */
 			$asArray = $haystack->toArray();
 		} elseif ($haystack instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
+			/** @var Tx_Extbase_Persistence_LazyObjectStorage $haystack */
 			$asArray = $haystack->toArray();
 		} elseif ($haystack instanceof Tx_Extbase_Persistence_QueryResult) {
+			/** @var Tx_Extbase_Persistence_QueryResult $haystack */
 			$asArray = $haystack->toArray();
 		}
 		return $asArray[$index];
@@ -60,9 +64,11 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper extends Tx_Flu
 	 */
 	protected function assertHaystackIsQueryResultAndHasNeedle($haystack, $needle) {
 		if ($needle instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
+			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $needle */
 			$needle = $needle->getUid();
 		}
 		foreach ($haystack as $index=>$candidate) {
+			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $candidate */
 			if ($candidate->getUid() == $needle) {
 				return $index;
 			}
@@ -78,6 +84,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper extends Tx_Flu
 	protected function assertHaystackIsObjectStorageAndHasNeedle($haystack, $needle) {
 		$index = 0;
 		foreach ($haystack as $candidate) {
+			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $candidate */
 			if ($needle instanceof Tx_Extbase_DomainObject_AbstractDomainObject) {
 				$needle = $needle->getUid();
 			}
@@ -98,7 +105,9 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper extends Tx_Flu
 		if ($needle instanceof Tx_Extbase_DomainObject_DomainObjectInterface === FALSE) {
 			return array_search($needle, $haystack);
 		} else {
+			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $needle */
 			foreach ($haystack as $index=>$straw) {
+				/** @var Tx_Extbase_DomainObject_DomainObjectInterface $straw */
 				if ($straw->getUid() == $needle->getUid()) {
 					return $index;
 				}

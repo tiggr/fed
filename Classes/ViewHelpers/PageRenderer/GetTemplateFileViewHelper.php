@@ -34,6 +34,7 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetTemplateFileViewHelper extends Tx_Fed_V
 	 * Render
 	 *
 	 * @param string $file
+	 * @return string
 	 */
 	public function render($file=NULL) {
 		if (!$file) {

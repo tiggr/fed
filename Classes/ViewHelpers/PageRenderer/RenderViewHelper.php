@@ -34,6 +34,7 @@ class Tx_Fed_ViewHelpers_PageRenderer_RenderViewHelper extends Tx_Fed_ViewHelper
 	 * Render
 	 *
 	 * @param integer $part
+	 * @return string
 	 */
 	public function render($part=t3lib_PageRenderer::PART_COMPLETE) {
 		return $this->pageRenderer->render($part);

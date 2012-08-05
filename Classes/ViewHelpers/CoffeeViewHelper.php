@@ -47,7 +47,7 @@ class Tx_Fed_ViewHelpers_CoffeeViewHelper extends Tx_Fed_ViewHelpers_ScriptViewH
 	public function render() {
 		if ($this->arguments['src']) {
 			$filename = PATH_site . $this->arguments['src'];
-			$template = $this->getTemplate($filename);
+			$template = $this->documentHead->getTemplate($filename);
 			$variables = $this->templateVariableContainer->getAll();
 			$template->assignMultiple($variables);
 			$rendered = $template->render();

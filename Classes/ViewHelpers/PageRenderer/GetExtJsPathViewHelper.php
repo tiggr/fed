@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetExtJsPathViewHelper extends Tx_Fed_View
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getExtJsPath();

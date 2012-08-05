@@ -43,7 +43,7 @@ class Tx_Fed_ViewHelpers_CsspressoViewHelper extends Tx_Fed_ViewHelpers_StyleVie
 	public function render() {
 		if ($this->arguments['href']) {
 			$filename = PATH_site . $this->arguments['href'];
-			$template = $this->getTemplate($filename);
+			$template = $this->documentHead->getTemplate($filename);
 			$variables = $this->templateVariableContainer->getAll();
 			$template->assignMultiple($variables);
 			$rendered = $template->render();

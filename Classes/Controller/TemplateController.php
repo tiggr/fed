@@ -41,7 +41,7 @@ class Tx_Fed_Controller_TemplateController extends Tx_Fed_MVC_Controller_Abstrac
 	 * @param Tx_Flux_MVC_View_ExposedTemplateView $view
 	 */
 	public function initializeView(Tx_Flux_MVC_View_ExposedTemplateView $view) {
-		$json = $this->objectManager->get('Tx_Fed_Utility_JSON');
+		$json = $this->objectManager->get('Tx_Fed_Service_Json');
 		$flexform = $this->getFlexForm();
 		if ($flexform['templateFile']) {
 			$view->setTemplatePathAndFilename(PATH_site . $flexform['templateFile']);

@@ -43,7 +43,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	protected $backups = array();
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -58,7 +58,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	protected $documentHead;
 
 	/**
-	 * @var Tx_Fed_Utility_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	protected $jsonService;
 
@@ -80,9 +80,9 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -101,9 +101,9 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_JSON $jsonService
+	 * @param Tx_Fed_Service_Json $jsonService
 	 */
-	public function injectJsonService(Tx_Fed_Utility_JSON $jsonService) {
+	public function injectJsonService(Tx_Fed_Service_Json $jsonService) {
 		$this->jsonService = $jsonService;
 	}
 

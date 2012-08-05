@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetHtmlTagViewHelper extends Tx_Fed_ViewHe
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getHtmlTag();

@@ -88,6 +88,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 *
 	 * @param Tx_Fed_Domain_Model_Page $page
 	 * @param string $columnName
+	 * @return Tx_Extbase_Persistence_QueryResultInterface
 	 * @api
 	 */
 	public function getContentElementsByColumnName(Tx_Fed_Domain_Model_Page $page, $columnName) {
@@ -105,6 +106,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 * Gets an array of the column definition in a BackendLayout object
 	 *
 	 * @param Tx_Fed_Domain_Model_Page $page
+	 * @return array
 	 * @api
 	 */
 	public function getColumnConfiguration(Tx_Fed_Domain_Model_Page $page) {

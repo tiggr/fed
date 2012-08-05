@@ -32,7 +32,7 @@
 class Tx_Fed_ViewHelpers_ContainsViewHelper extends Tx_Fed_Core_ViewHelper_AbstractConditionViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -42,9 +42,9 @@ class Tx_Fed_ViewHelpers_ContainsViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	protected $evaluation = FALSE;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $service
+	 * @param Tx_Fed_Service_Domain $service
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $service) {
+	public function injectInfoService(Tx_Fed_Service_Domain $service) {
 		$this->infoService = $service;
 	}
 
@@ -59,6 +59,8 @@ class Tx_Fed_ViewHelpers_ContainsViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		$haystack = $this->arguments['haystack'];

@@ -46,7 +46,6 @@ class Tx_Fed_ViewHelpers_Be_ContentAreaViewHelper extends Tx_Fed_Core_ViewHelper
 		$GLOBALS['TYPO3_DB']->sql_free_result($pageRes);
 		$dblist = t3lib_div::makeInstance('tx_cms_layout');
 		$dblist->backPath = $GLOBALS['BACK_PATH'];
-		$dblist->thumbs = $this->imagemode;
 		$dblist->script = 'db_layout.php';
 		$dblist->showIcon = 1;
 		$dblist->setLMargin = 0;

@@ -171,8 +171,8 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 				'maxH' => $this->arguments['largeHeight'],
 			);
 			$large = array();
-			foreach ($images as $image) {
-				$large[] = $this->renderImage($image, $largeSetup);
+			foreach ($images as $k => $image) {
+				$large[$k] = $this->renderImage($image, $largeSetup);
 			}
 			$convertedImageFilename = $this->renderImage($images[0], $largeSetup);
 			$this->tag->addAttribute('width', $this->arguments['largeWidth']);
@@ -183,6 +183,8 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			$lines[] = $this->tag->render();
 			$this->tag->removeAttribute('id');
 			array_push($converted, $convertedImageFilename[0]);
+		} else {
+			$large = NULL;
 		}
 		foreach ($images as $k=>$image) {
 			$convertedImageFilename = $this->renderImage($image, $setup);
@@ -190,7 +192,7 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			$this->tag->addAttribute('width', $imagesize[0]);
 			$this->tag->addAttribute('height', $imagesize[1]);
 			$this->tag->addAttribute('src', $convertedImageFilename[0]);
-			if ($large && $this->arguments['clickenlarge'] === TRUE) {
+			if (is_array($large) === TRUE && $large[$k] && $this->arguments['clickenlarge'] === TRUE) {
 				$this->tag->addAttribute('onclick', 'fedImgXL(\'' . $uniqid . '\', \'' . $large[$k][0] . '\');');
 				$this->tag->addAttribute('class', 'small');
 				$this->tag->removeAttribute('id'); // avoid DOM ID collisions

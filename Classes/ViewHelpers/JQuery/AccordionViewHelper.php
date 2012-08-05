@@ -148,7 +148,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 			'title' => $title,
 			'content' => $content
 		);
-		$tabs = $this->templateVariableContainer->get('tabs');
+		$tabs = (array) $this->templateVariableContainer->get('tabs');
 		array_push($tabs, $tab);
 		$this->templateVariableContainer->remove('tabs');
 		$this->templateVariableContainer->add('tabs', $tabs);
@@ -170,7 +170,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * @param integer $index
 	 */
 	protected function addDisabledIndex($index) {
-		$disabled = $this->templateVariableContainer->get('disabledIndices');
+		$disabled = (array) $this->templateVariableContainer->get('disabledIndices');
 		array_push($disabled, $index);
 		$this->templateVariableContainer->remove('disabledIndices');
 		$this->templateVariableContainer->add('disabledIndices', $disabled);
@@ -209,7 +209,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$autoHeight = $this->getBooleanForJavascript('autoHeight');
 		$clearStyle = $this->getBooleanForJavascript('clearStyle');
 		$fillSpace = $this->getBooleanForJavascript('fillSpace');
-		$csvOfDisabledTabIndices = implode(',' ,$this->templateVariableContainer->get('disabledIndices'));
+		$csvOfDisabledTabIndices = implode(',', (array) $this->templateVariableContainer->get('disabledIndices'));
 		$active = $this->templateVariableContainer->get('active');
 		$init = <<< INITSCRIPT
 jQuery(document).ready(function() {

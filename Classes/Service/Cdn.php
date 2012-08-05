@@ -156,6 +156,7 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * @param string $package URI-name of the package
 	 * @param string $version The version number to load
 	 * @param string $file Filename to load from that package
+	 * @return string
 	 * @api
 	 */
 	public function buildPackageUri($package='jquery', $version=NULL, $file='jquery.min.js') {

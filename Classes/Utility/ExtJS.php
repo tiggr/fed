@@ -34,7 +34,7 @@
 class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo;
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -49,9 +49,9 @@ class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 	protected $propertyMapper;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -106,7 +106,7 @@ class Tx_Fed_Utility_ExtJS implements t3lib_Singleton {
 	 * Maps data onto an stdClass object - recursively - based on the ExtJS source
 	 * annotations.
 	 *
-	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface|array $object
 	 * @return stdClass
 	 */
 	public function exportDataToExtJS($object) {

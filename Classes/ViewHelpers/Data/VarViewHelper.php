@@ -101,8 +101,10 @@ class Tx_Fed_ViewHelpers_Data_VarViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 
 	/**
 	 * Type-cast a value with type $type
+	 *
 	 * @param mixed $value
 	 * @param string $type
+	 * @return mixed
 	 */
 	private function typeCast($value, $type) {
 		switch ($type) {

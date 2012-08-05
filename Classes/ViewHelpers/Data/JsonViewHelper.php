@@ -46,7 +46,7 @@ class Tx_Fed_ViewHelpers_Data_JsonViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 * @return string
 	 */
 	public function render() {
-		$jsonHandler = $this->objectManager->get('Tx_Fed_Utility_JSON');
+		$jsonHandler = $this->objectManager->get('Tx_Fed_Service_Json');
 		$string = $jsonHandler->encode($this->arguments['data']);
 		return (string) $string;
 	}

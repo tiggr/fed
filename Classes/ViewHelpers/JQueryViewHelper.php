@@ -69,6 +69,8 @@ class Tx_Fed_ViewHelpers_JQueryViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 
 	/**
 	 * Loads necessary resources from Google CDN
+	 *
+	 * @return string
 	 */
 	public function render() {
 		$jQueryVersion = $this->arguments['jQueryVersion'];
@@ -76,7 +78,8 @@ class Tx_Fed_ViewHelpers_JQueryViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 		$jQueryUITheme = $this->arguments['jQueryUITheme'];
 		$return = $this->arguments['report'];
 		$compatibility = $this->arguments['compatibility'];
-		return $this->cdn->includeJQuery($jQueryVersion, $jQueryUIVersion, $jQueryUITheme, $compatibility, $return);
+		$this->cdn->includeJQuery($jQueryVersion, $jQueryUIVersion, $jQueryUITheme, $compatibility, $return);
+		return '';
 	}
 
 }

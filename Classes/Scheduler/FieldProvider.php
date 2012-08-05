@@ -213,6 +213,7 @@ class Tx_Fed_Scheduler_FieldProvider implements Tx_Scheduler_AdditionalFieldProv
 	 * Gets the data type required for the argument value
 	 *
 	 * @param Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument
+	 * @return string
 	 */
 	protected function getArgumentType(Tx_Extbase_MVC_CLI_CommandArgumentDefinition $argument) {
 		$command = $this->commandManager->getCommandByIdentifier($this->task->getCommandIdentifier());

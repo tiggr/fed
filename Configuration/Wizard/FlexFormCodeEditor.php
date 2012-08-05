@@ -41,6 +41,7 @@ class Tx_Fed_Configuration_Wizard_FlexFormCodeEditor {
 			return $fallback;
 		}
 		require_once $t3editorWizard;
+		/** @var tx_t3editor $t3editor */
 		$t3editor = t3lib_div::makeInstance('tx_t3editor');
 		if (!$t3editor->isEnabled()) {
 			return '';

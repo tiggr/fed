@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetIconMimeTypeViewHelper extends Tx_Fed_V
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getIconMimeType();

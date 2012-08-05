@@ -157,14 +157,6 @@ $TCA['tx_fed_domain_model_datasource'] = array(
 			'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:tx_fed_domain_model_datasource.template_file',
 			'config' => array(
 				'type' => 'passthrough',
-				#'type' => 'group',
-				#'internal_type' => 'file',
-				#'uploadfolder' => 'uploads/tx_fed',
-				#'allowed' => 'html',
-				#'disallowed' => 'php',
-				#'size' => 1,
-				#'maxitems' => 1,
-				#'multiple' => 0
 			),
 		),
 		'template_source' => array(
@@ -172,13 +164,7 @@ $TCA['tx_fed_domain_model_datasource'] = array(
 			'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:tx_fed_domain_model_datasource.template_source',
 			'config' => array(
 				'type' => 'passthrough',
-				#'type' => 'text',
-				#'cols' => 40,
-				#'rows' => 15,
-				#'eval' => 'trim'
 			),
 		),
 	),
 );
-## KICKSTARTER DEFAULTS END TOKEN - Everything BEFORE this line is overwritten with the defaults of the kickstarter
-?>

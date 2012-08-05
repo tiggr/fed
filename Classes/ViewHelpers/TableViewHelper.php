@@ -27,7 +27,7 @@
 class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -40,9 +40,9 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 	public $uniqId;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -120,7 +120,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		}
 
 		$headers = $this->arguments['headers'];
-		$properties = $this->arguments['properties'];
+		$properties = (array) $this->arguments['properties'];
 		$objects = $this->arguments['objects'];
 		$source = $this->arguments['dataSource'];
 		$data = $this->arguments['data'];
@@ -142,11 +142,11 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 			}
 			$source = $parser->parseDataSource($source);
 			$data = $source->getData();
-			if (!$properties) {
+			if (count($properties) === 0) {
 				$properties = array_keys($data[0]);
 			}
 			if (!$headers) {
-				$headers = $this->translatePropertyNames($properties, $properties);
+				$headers = $this->translatePropertyNames($source, $properties);
 			}
 			$tbody = $this->renderData($data, $properties);
 		} else if ($data) {
@@ -242,7 +242,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 				$id = $item['id'];
 			} else if (is_object($item) && method_exists($item, 'getUid')) {
 				$id = $item->getUid();
-			} else if (is_object) {
+			} else if (is_object($item)) {
 				$id = $item->uid;
 			}
 			$html .= "<tr class='{$this->rowClassPrefix}{$id}'>";
@@ -274,7 +274,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 		} else if (is_object($item)) {
 			$value = $item->$property;
 		} else {
-			$value = (string) $value;
+			$value = NULL;
 		}
 
 		// rendering value
@@ -304,6 +304,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 	 * Extensionname etc. is detected from DomainObject's class name
 	 * @param mixed $object Either a single DomainObject or an ObjectStorage of DomainObjects
 	 * @param string $section
+	 * @return string
 	 */
 	private function renderDomainObjectTemplateSection($object, $section) {
 		$string = "";
@@ -312,6 +313,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 				$string .= $this->renderDomainObjectTemplateSection($child, $section);
 			}
 		} else if ($object instanceof Tx_Extbase_DomainObject_AbstractDomainObject) {
+			/** @var Tx_Fluid_View_TemplateView $template */
 			$template = $this->objectManager->get('Tx_Fluid_View_TemplateView');
 			$template->assign('object', $object);
 			$template->assign('arguments', $this->arguments);
@@ -340,8 +342,10 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 
 	/**
 	 * If possible, render human-readable column names based on i18n etc.
+	 *
 	 * @param Tx_Extbase_DomainObject_AbstractDomainObject $object
 	 * @param array $properties
+	 * @return array
 	 */
 	private function translatePropertyNames($object, $properties) {
 		return array_combine($properties, $properties);
@@ -350,6 +354,7 @@ class Tx_Fed_ViewHelpers_TableViewHelper extends Tx_Fed_Core_ViewHelper_Abstract
 	/**
 	 * return a JSON-valid representation of a PHP-"boolean" which can be TRUE/FALSE or 1/0
 	 * @param mixed $bool
+	 * @return string
 	 */
 	private function jsBoolean($bool) {
 		return ($bool ? 'true' : 'false');

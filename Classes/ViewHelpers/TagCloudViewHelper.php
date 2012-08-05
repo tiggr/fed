@@ -122,6 +122,7 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	 * Render the tag cloud HTML to be inserted in DOM. Output depends on settings
 	 * @param string $mode
 	 * @param array $tags
+	 * @return mixed
 	 */
 	protected function renderTagCloud($mode, $tags) {
 		$totalTagOccurrences = 0;
@@ -193,6 +194,7 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	/**
 	 * Convert a simple (stdClass or class with public properties) object to an array
 	 * @param array $obj
+	 * @return array
 	 */
 	protected function objToArray($obj) {
 		if (is_array($obj)) {
@@ -243,6 +245,7 @@ class Tx_Fed_ViewHelpers_TagCloudViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	 * @author Roy Tanck
 	 * @author Claus Due
 	 * @param array $tags
+	 * @return string
 	 */
 	protected function renderFlashTagCloud($tags) {
 		$elementId = uniqid('wpcumulus_');

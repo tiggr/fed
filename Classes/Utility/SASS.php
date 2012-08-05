@@ -48,7 +48,7 @@ class Tx_Fed_Utility_SASS implements t3lib_Singleton {
 
 	/**
 	 * Set the command name (or full path of command) of the "compass" command
-	 * @param type $command
+	 * @param string $command
 	 * @api
 	 */
 	public function setCompassCommand($command) {
@@ -57,7 +57,7 @@ class Tx_Fed_Utility_SASS implements t3lib_Singleton {
 
 	/**
 	 * Get the name/binary path of the "compass" command
-	 * @return type
+	 * @return string
 	 * @api
 	 */
 	public function getCompassCommand() {

@@ -30,7 +30,7 @@
  * @package Fed
  * @subpackage Controller
  */
- class Tx_Fed_Controller_DataSourceController extends Tx_Fed_Core_AbstractController {
+ class Tx_Fed_Controller_DataSourceController extends Tx_Fed_MVC_Controller_AbstractController {
 
 	/**
 	 * dataSourceRepository
@@ -171,7 +171,7 @@
 	 * @return void
 	 */
 	public function initializeAction() {
-		$this->dataSourceRepository = t3lib_div::makeInstance(Tx_Fed_Domain_Repository_DataSourceRepository);
+		$this->dataSourceRepository = $this->objectManager->get('Tx_Fed_Domain_Repository_DataSourceRepository');
 	}
 
 }

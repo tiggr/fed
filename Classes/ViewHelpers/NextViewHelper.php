@@ -35,6 +35,8 @@ class Tx_Fed_ViewHelpers_NextViewHelper extends Tx_Fed_ViewHelpers_ContainsViewH
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		parent::render();

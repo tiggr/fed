@@ -80,8 +80,8 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 	/**
 	 * Copy a singe object based on field annotations about how to copy the object
 	 *
-	 * @param Tx_Extbase_DomainObject_AbstractDomainOject $object The object to be copied
-	 * @return Tx_Extbase_DomainObject_AbstractDomainOject $copy
+	 * @param Tx_Extbase_DomainObject_DomainObjectInterface $object The object to be copied
+	 * @return Tx_Extbase_DomainObject_DomainObjectInterface $copy
 	 * @api
 	 */
 	public function copy($object) {
@@ -95,6 +95,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 			$getter = 'get' . ucfirst($propertyName);
 			$setter = 'set' . ucfirst($propertyName);
 			$copyMethod = $tags['copy'][0];
+			$copiedValue = NULL;
 			if ($copyMethod !== NULL && $copyMethod !== 'ignore') {
 				$originalValue = $object->$getter();
 				if ($copyMethod == 'reference') {
@@ -157,6 +158,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 			return $newStorage;
 		} else if ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 			// DomainObject; copy and return
+			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $value */
 			return $this->copy($value);
 		} else if (is_object($value)) {
 			// fallback case for class copying - value objects and such

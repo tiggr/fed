@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetCompressJavascriptViewHelper extends Tx
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getCompressJavascript();

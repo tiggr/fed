@@ -79,6 +79,7 @@ class Tx_Fed_Service_Solr implements t3lib_Singleton {
 	 *
 	 * @param string $q
 	 * @param array $parameters
+	 * @return object|boolean
 	 */
 	public function query($q, $parameters=NULL) {
 		if ($q != $parameters['q']) {

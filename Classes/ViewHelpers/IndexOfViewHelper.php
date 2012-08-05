@@ -35,6 +35,8 @@ class Tx_Fed_ViewHelpers_IndexOfViewHelper extends Tx_Fed_ViewHelpers_ContainsVi
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		parent::render();

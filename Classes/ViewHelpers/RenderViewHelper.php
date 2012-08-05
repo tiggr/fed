@@ -34,6 +34,18 @@
 class Tx_Fed_ViewHelpers_RenderViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
+	 * @var Tx_Fed_Service_Render
+	 */
+	protected $renderService;
+
+	/**
+	 * @param Tx_Fed_Service_Render $partialRender
+	 */
+	public function injectPartialRender(Tx_Fed_Service_Render $renderService) {
+		$this->renderService = $renderService;
+	}
+
+	/**
 	 * Initialize
 	 */
 	public function initializeArguments() {
@@ -42,10 +54,10 @@ class Tx_Fed_ViewHelpers_RenderViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	}
 
 	/**
-	 * return string
+	 * @return string
 	 */
 	public function render() {
-		return $this->partialRender->render($this->arguments['template'], $this->arguments['arguments']);
+		return $this->renderService->renderTemplateFile($this->arguments['template'], $this->arguments['arguments']);
 	}
 
 }

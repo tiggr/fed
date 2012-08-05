@@ -84,7 +84,7 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	 * @return array
 	 */
 	public function getTemplateVariables(array $row) {
-		$flexFormUtility = $this->objectManager->get('Tx_Fed_Utility_FlexForm');
+		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FlexForm');
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
 		$filename = array_pop(explode(':', $templatePathAndFilename));
 		$paths = $this->getTemplatePaths($row);

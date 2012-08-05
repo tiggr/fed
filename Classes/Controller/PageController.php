@@ -29,7 +29,7 @@
  * @package Fed
  * @subpackage Controller
  */
-class Tx_Fed_Controller_PageController extends Tx_Fed_Core_AbstractController {
+class Tx_Fed_Controller_PageController extends Tx_Fed_MVC_Controller_AbstractController {
 
 	/**
 	 * @var string

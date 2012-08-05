@@ -32,6 +32,21 @@
  */
 class Tx_Fed_ViewHelpers_Data_SourceViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 
+	/**
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
+	 */
+	protected $objectManager;
+
+	/**
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {
+		$this->objectManager = $objectManager;
+	}
+
+	/**
+	 * Initialize arguments
+	 */
 	public function initializeArguments() {
 		$this->registerArgument('as', 'string', 'Which template variable name to use');
 		$this->registerArgument('source', 'mixed', 'Integer UID or string identifier of DataSource record');

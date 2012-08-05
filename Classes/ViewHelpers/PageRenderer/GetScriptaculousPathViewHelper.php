@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetScriptaculousPathViewHelper extends Tx_
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getScriptaculousPath();

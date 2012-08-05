@@ -239,7 +239,7 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	}
 
 	/**
-	 * @return type
+	 * @return string
 	 */
 	public function getRelativePath() {
 		return $this->relativePath;

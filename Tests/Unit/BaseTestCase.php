@@ -37,10 +37,11 @@ abstract class Tx_Fed_Tests_Unit_BaseTestCase extends Tx_Extbase_Tests_Unit_Base
 	 */
 	public function __construct($name = NULL, array $data = array(), $dataName = '') {
 		parent::__construct($name, $data, $dataName);
+		/** @var Tx_Extbase_Object_ObjectManager $objectManager */
 		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
-		$domainObjectInfo = $objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
+		/** @var Tx_Fed_Service_Domain $domainObjectInfo */
+		$domainObjectInfo = $objectManager->get('Tx_Fed_Service_Domain');
 		$injectableProperties = $domainObjectInfo->getPropertiesByAnnotation($this, 'inject', TRUE, FALSE);
-		#var_dump($injectableProperties);
 		foreach ($injectableProperties as $injectableProperty) {
 			$propertyType = $domainObjectInfo->getPropertyType($this, $injectableProperty);
 			$instance = $objectManager->get($propertyType);

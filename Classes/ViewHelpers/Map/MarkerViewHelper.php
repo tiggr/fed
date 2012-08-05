@@ -37,9 +37,9 @@ class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapView
 	protected $infoService;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -103,14 +103,14 @@ class Tx_Fed_ViewHelpers_Map_MarkerViewHelper extends Tx_Fed_ViewHelpers_MapView
 	}
 
 	public function addMarker($marker) {
-		$layers = $this->get('layers');
+		$layers = (array) $this->get('layers');
 		$last = array_pop(array_keys($layers));
 		array_push($layers[$last], $marker);
 		$this->reassign('layers', $layers);
 	}
 
 	public function addInfoWindow($infoWindow) {
-		$infoWindows = $this->get('infoWindows');
+		$infoWindows = (array) $this->get('infoWindows');
 		array_push($infoWindows, $infoWindow);
 		$this->reassign('infoWindows', $infoWindows);
 	}

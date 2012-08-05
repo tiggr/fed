@@ -74,7 +74,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * Inject a Reflection Service instance
-	 * @param Tx_Extbase_Reflection_Server $service
+	 * @param Tx_Extbase_Reflection_Service $service
 	 */
 	public function injectReflectionService(Tx_Extbase_Reflection_Service $service) {
 		$this->reflectionService = $service;
@@ -183,7 +183,11 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	public function getPluginName($object) {
 		$extensionName = $this->getExtensionName($object);
 		$controllerName = $this->getControllerName($object);
-		$pluginName = Tx_Extbase_Utility_Extension::getPluginNameByAction($extensionName, $controllerName, 'list');
+		if (class_exists('Tx_Extbase_Service_Extension') === TRUE) {
+			$pluginName = $this->objectManager->get('Tx_Extbase_Service_Extension')->getPluginNameByAction($extensionName, $controllerName, 'list');
+		} else {
+			$pluginName = Tx_Extbase_Utility_Extension::getPluginNameByAction($extensionName, $controllerName, 'list');
+		}
 		return $pluginName;
 	}
 
@@ -197,11 +201,16 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	public function getPluginNamespace($object) {
 		$extensionName = $this->getExtensionName($object);
 		$pluginName = $this->getPluginName($object);
-		return Tx_Extbase_Utility_Extension::getPluginNamespace($extensionName, $pluginName);
+		if (class_exists('Tx_Extbase_Service_Extension') === TRUE) {
+			return $this->objectManager->get('Tx_Extbase_Service_Extension')->getPluginNamespace($extensionName, $pluginName);
+		} else {
+			return Tx_Extbase_Utility_Extension::getPluginNamespace($extensionName, $pluginName);
+		}
 	}
 
 	/**
 	 * @param mixed $object  Instance or classname
+	 * @return string
 	 * @api
 	 */
 	public function getRepositoryClassname($object) {
@@ -223,6 +232,8 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 
 	/**
 	 * Gets the absolute path to partial templates for $object
+	 *
+	 * @return string
 	 * @api
 	 */
 	public function getPartialTemplatePath($object) {
@@ -296,6 +307,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	/**
 	 * Turns a Tx_Extbase_Persistence_ObjectStorage<ModelObject> into "ModelObject"
 	 * @param string $annotation
+	 * @return string
 	 * @api
 	 */
 	public function parseObjectStorageAnnotation($annotation) {
@@ -308,6 +320,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param mixed $object The object or classname containing the properties
 	 * @param array $propertyNames Optional list of properties to get - if empty, gets all properties' types
+	 * @return array
 	 * @api
 	 */
 	public function getPropertyTypes($object, array $propertyNames=NULL) {
@@ -325,6 +338,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 *
 	 * @param mixed $object DomainObject or classname of DomainObject
 	 * @param string $propertyName
+	 * @return string
 	 * @api
 	 */
 	public function getPropertyType($object, $propertyName) {
@@ -510,7 +524,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 				$subject[$k] = $this->convertLowerCaseUnderscoredToLowerCamelCase($value);
 			}
 		} else {
-			$subject = Tx_Extbase_Utility_Extension::convertLowerUnderscoreToUpperCamelCase($subject);
+			$subject = t3lib_div::underscoredToLowerCamelCase($subject);
 			$subject{0} = strtolower($subject{0});
 		}
 		return $subject;
@@ -527,7 +541,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 				$subject[$k] = $this->convertCamelCaseToLowerCaseUnderscored($value);
 			}
 		} else {
-			$subject = Tx_Extbase_Utility_Extension::convertCamelCaseToLowerCaseUnderscored($subject);
+			$subject = t3lib_div::camelCaseToLowerCaseUnderscored($subject);
 		}
 		return $subject;
 	}

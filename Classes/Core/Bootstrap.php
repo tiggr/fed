@@ -38,7 +38,7 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 	protected $infoService;
 
 	/**
-	 * @var Tx_Fed_Utillity_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	private $jsonService;
 
@@ -47,12 +47,17 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 	 *
 	 * @param string $content
 	 * @param array $configuration
+	 * @return mixed
 	 */
 	public function run($content, $configuration) {
 		$this->initialize($configuration);
-		$this->infoService = $this->objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
-		$this->jsonService = $this->objectManager->get('Tx_Fed_Utility_JSON');
+		/** @var Tx_Fed_Service_Domain $infoService */
+		$this->infoService = $this->objectManager->get('Tx_Fed_Service_Domain');
+		/** @var Tx_Fed_Service_Json $jsonService */
+		$this->jsonService = $this->objectManager->get('Tx_Fed_Service_Json');
+		/** @var Tx_Extbase_MVC_RequestHandlerResolver $requestHandlerResolver */
 		$requestHandlerResolver = $this->objectManager->get('Tx_Extbase_MVC_RequestHandlerResolver');
+		/** @var Tx_Extbase_MVC_RequestHandlerInterface $requestHandler  */
 		$requestHandler = $requestHandlerResolver->resolveRequestHandler();
 		$response = $requestHandler->handleRequest();
 		if ($response === NULL) {

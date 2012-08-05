@@ -33,7 +33,7 @@ abstract class Tx_Fed_Core {
 	const CACHED_CONTENT_ELEMENTS_FILE = 'typo3conf/.FED_CONTENT';
 
 	/**
-	 * @static
+	 * @return void
 	 */
 	static function loadRegisteredFluidContentElementTypoScript() {
 		$pageTsConfig = self::retrieveCachedConfiguration();
@@ -47,15 +47,17 @@ abstract class Tx_Fed_Core {
 	}
 
 	/**
-	 * @static
+	 * @return string|boolean
 	 */
 	protected static function writeCachedConfiguration() {
 		self::performWarmup();
 		$fedWizardElements = array();
 		$pageTsConfig = '';
+		/** @var t3lib_tsparser_ext $template */
 		$template = t3lib_div::makeInstance("t3lib_tsparser_ext");
 		$template->tt_track = 0;
 		$template->init();
+		/** @var t3lib_pageSelect $sys_page */
 		$sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
 		$rootLine = $sys_page->getRootLine(intval(t3lib_div::_GP('id')));
 		$template->runThroughTemplates($rootLine);
@@ -113,7 +115,7 @@ abstract class Tx_Fed_Core {
 	}
 
 	/**
-	 * @static
+	 * @return string|boolean
 	 */
 	protected static function retrieveCachedConfiguration() {
 		$pageTsConfig = FALSE;
@@ -124,7 +126,7 @@ abstract class Tx_Fed_Core {
 	}
 
 	/**
-	 * @static
+	 * @return void
 	 */
 	protected static function performWarmup() {
 		// Setting some global vars:
@@ -138,7 +140,7 @@ abstract class Tx_Fed_Core {
 	}
 
 	/**
-	 * @static
+	 * @return void
 	 */
 	protected static function performShutdown() {
 		unset(

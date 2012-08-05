@@ -55,14 +55,14 @@
 class Tx_Fed_ViewHelpers_ExtJS_AppViewHelper extends Tx_Fed_ViewHelpers_RenderViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_PartialRender
+	 * @var Tx_Fed_Service_Render
 	 */
 	protected $partialRender;
 
 	/**
-	 * @param Tx_Fed_Utility_PartialRender $partialRender
+	 * @param Tx_Fed_Service_Render $partialRender
 	 */
-	public function injectPartialRender(Tx_Fed_Utility_PartialRender $partialRender) {
+	public function injectPartialRender(Tx_Fed_Service_Render $partialRender) {
 		$this->partialRender = $partialRender;
 	}
 
@@ -88,7 +88,7 @@ class Tx_Fed_ViewHelpers_ExtJS_AppViewHelper extends Tx_Fed_ViewHelpers_RenderVi
 		$arguments['id'] = $this->arguments['id'];
 
 		if ($this->arguments['fluid'] === TRUE) {
-			$applicationScriptContent = $this->partialRender->render($this->arguments['template'], $arguments);
+			$applicationScriptContent = $this->partialRender->renderTemplateFile($this->arguments['template'], $arguments);
 			$initScript = $this->renderChildren();
 			$uniqid = md5($applicationScriptContent);
 			$tempFile = $this->documentHead->saveContentToTempFile($applicationScriptContent, $uniqid, 'js');

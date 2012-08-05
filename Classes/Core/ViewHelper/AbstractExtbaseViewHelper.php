@@ -38,7 +38,7 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	protected $transferArguments = array('object', 'controllerName', 'extensionName', 'pluginName', 'action', 'pageUid');
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -87,9 +87,9 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -214,9 +214,9 @@ class Tx_Fed_Core_ViewHelper_AbstractExtbaseViewHelper extends Tx_Fed_Core_ViewH
 	 */
 	public function getRequestPrefix() {
 		$ext = $this->getExtensionName();
-		$ext = Tx_Extbase_Utility_Extension::convertCamelCaseToLowerCaseUnderscored($ext);
+		$ext = t3lib_div::camelCaseToLowerCaseUnderscored($ext);
 		$pi = $this->getPluginName();
-		$pi = Tx_Extbase_Utility_Extension::convertCamelCaseToLowerCaseUnderscored($pi);
+		$pi = t3lib_div::camelCaseToLowerCaseUnderscored($pi);
 		$prefix = "tx_{$ext}_{$pi}";
 		return $prefix;
 	}

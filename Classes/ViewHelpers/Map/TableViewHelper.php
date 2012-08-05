@@ -40,13 +40,15 @@ class Tx_Fed_ViewHelpers_Map_TableViewHelper extends Tx_Fed_ViewHelpers_TableVie
 	public function render($auto=TRUE) {
 		$this->rowClassPrefix = 'marker';
 		parent::render();
+		$objects = $this->arguments['objects'];
+		$data = $this->arguments['data'];
 		if ($objects || $data) {
 			return $this->tag->render();
 		} else if ($auto === FALSE) {
 			$this->tag->setContent($this->renderChildren());
 			return $this->tag->render();
 		}
-		$layers = $this->templateVariableContainer->get('layers');
+		$layers = (array) $this->templateVariableContainer->get('layers');
 		$rows = "";
 		
 		foreach ($layers as $layer) {

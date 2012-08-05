@@ -95,7 +95,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 	/**
 	 * Set the maximum allowed number of times a particular identifier may be encountered before an Exception is thrown
-	 * @param unknown_type $max
+	 * @param integer $max
 	 * @api
 	 */
 	public function setMaxEncounters($max) {
@@ -176,6 +176,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 	/**
 	 * Check the current recursion level and encounter status. Call in each iteration of your function
 	 * @param string $exitMsg
+	 * @return boolean
 	 * @api
 	 */
 	public function check($exitMsg='<no message>') {

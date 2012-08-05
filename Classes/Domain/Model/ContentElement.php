@@ -264,6 +264,11 @@ class Tx_Fed_Domain_Model_ContentElement extends Tx_Extbase_DomainObject_Abstrac
 	protected $piFlexform;
 
 	/**
+	 * @var boolean
+	 */
+	protected $transformBodytext;
+
+	/**
 	 *
 	 */
 	public function __construct() {

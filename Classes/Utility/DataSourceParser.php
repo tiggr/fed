@@ -36,16 +36,29 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 	const URLMETHOD_URI = 2;
 
 	/**
-	 * @var Tx_Fed_Utility_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	protected $jsonHandler;
 
 	/**
-	 * @param Tx_Fed_Utility_JSON $jsonHandler
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
-	protected function injectJSONHandler(Tx_Fed_Utility_JSON $jsonHandler) {
+	protected $objectManager;
+
+	/**
+	 * @param Tx_Fed_Service_Json $jsonHandler
+	 */
+	public function injectJSONHandler(Tx_Fed_Service_Json $jsonHandler) {
 		$this->jsonHandler = $jsonHandler;
 	}
+
+	/**
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $objectManager
+	 */
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $objectManager) {
+		$this->objectManager = $objectManager;
+	}
+
 
 	/**
 	 * @param array $sources
@@ -121,7 +134,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 	 */
 	private function fetchDataByUrl($url, $method) {
 		$contents = file_get_contents($url);
-		switch ($methpd) {
+		switch ($method) {
 			case self::URLMETHOD_JSON:
 				return (array) $this->jsonHandler->decode($contents);
 				break;
@@ -129,7 +142,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 				return (array) simplexml_load_string($contents, 'stdClass');
 				break;
 			case self::URLMETHOD_URI:
-				return (array) parse_url($content, PHP_URL_SCHEME);
+				return (array) parse_url($contents, PHP_URL_SCHEME);
 				break;
 			default:
 				return (array) array();

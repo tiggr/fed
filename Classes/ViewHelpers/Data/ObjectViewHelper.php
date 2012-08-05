@@ -32,14 +32,14 @@
 class Tx_Fed_ViewHelpers_Data_ObjectViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -56,12 +56,13 @@ class Tx_Fed_ViewHelpers_Data_ObjectViewHelper extends Tx_Fed_Core_ViewHelper_Ab
 		$type = $this->arguments['type'];
 		$uid = $this->arguments['uid'];
 		$repository = $this->infoService->getRepositoryInstance($type);
-		if ($repository) {
-			$query = $repository->createQuery();
-			$query->getQuerySettings()->setRespectStoragePage(FALSE);
-			$query->matching($query->equals('uid', $uid));
-			$object = $query->execute()->getFirst();
+		if (!$repository) {
+			throw new Exception('Object of class ' . $type . ' does not have a matching Repository', 1344188619);
 		}
+		$query = $repository->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$query->matching($query->equals('uid', $uid));
+		$object = $query->execute()->getFirst();
 		if ($this->arguments['as']) {
 			$this->templateVariableContainer->add($this->arguments['as'], $object);
 			return $this->renderChildren();

@@ -63,7 +63,7 @@ class Tx_Fed_ViewHelpers_FormViewHelper extends Tx_Fluid_ViewHelpers_FormViewHel
 		parent::initializeArguments();
 		$this->registerArgument('validate', 'boolean', 'If TRUE, uses AJAX to validate the form before submission. Requires jQuery', FALSE, FALSE);
 		$this->registerArgument('validateMethod', 'string', 'Method of validation - changes the way the form behaves on AJAX validation. Depends on validate=TRUE', FALSE, 'all');
-		$this->registerArgument('validateTypeNum', integer, 'If specified, makes validation AJAX requests to this page typeNum (you must register this typeNum in TypoScript for it to work)');
+		$this->registerArgument('validateTypeNum', 'integer', 'If specified, makes validation AJAX requests to this page typeNum (you must register this typeNum in TypoScript for it to work)');
 		$this->registerArgument('autosubmit', 'boolean', 'If TRUE and validate TRUE, automatically submits the form when valid', FALSE, FALSE);
 	}
 

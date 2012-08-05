@@ -42,7 +42,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	protected $objectManager;
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -54,9 +54,9 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
@@ -274,6 +274,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	 * @param string $targetDir
 	 * @param string $filename
 	 * @param integer $chunk
+	 * @return string
 	 */
 	public function copyChunk($sourceFileName, $targetDir, $filename, $chunk) {
 		list ($in, $out) = $this->getFileCopyPointers($sourceFileName, $targetDir, $filename, $chunk);
@@ -282,6 +283,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 		}
 		fclose($in);
 		fclose($out);
+		return $filename;
 	}
 
 }

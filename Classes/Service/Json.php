@@ -51,7 +51,7 @@ class Tx_Fed_Service_Json implements t3lib_Singleton {
 	/**
 	 * Get encoding options depending on PHP version
 	 *
-	 * @return int
+	 * @return integer
 	 */
 	private function getEncodeOptions() {
 		if ($this->getPHPVersion() >= 5.3) {
@@ -65,7 +65,8 @@ class Tx_Fed_Service_Json implements t3lib_Singleton {
 	 * Encode to working JSON depending on PHP version
 	 *
 	 * @param mixed $source
-	 * @param int $options
+	 * @param integer $options
+	 * @return string
 	 * @api
 	 */
 	public function encode($source) {
@@ -82,6 +83,7 @@ class Tx_Fed_Service_Json implements t3lib_Singleton {
 	 * Decode to working JSON depending on PHP version
 	 *
 	 * @param string $str
+	 * @return mixed
 	 * @api
 	 */
 	public function decode($str) {

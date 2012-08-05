@@ -29,7 +29,7 @@
  * @package Fed
  * @subpackage Controller
  */
-class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_AbstractController {
+class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_MVC_Controller_AbstractController {
 
 	/**
 	 * Show template as defined in flexform
@@ -40,6 +40,7 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_Core_Abs
 		$view = $this->objectManager->create('Tx_Flux_MVC_View_ExposedTemplateView');
 		$cObj = $this->configurationManager->getContentObject();
 		$this->flexform->setContentObjectData($cObj->data);
+		/** @var Tx_Fed_Configuration_ConfigurationManager $configurationManager */
 		$configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 		list ($extensionName, $filename) = explode(':', $cObj->data['tx_fed_fcefile']);
 		$paths = $configurationManager->getContentConfiguration($extensionName);

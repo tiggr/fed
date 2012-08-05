@@ -32,7 +32,7 @@
 class Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController extends Tx_Fluid_Core_Widget_AbstractWidgetController {
 
 	/**
-	 * @var Tx_Fed_Utility_DomainObjectInfo
+	 * @var Tx_Fed_Service_Domain
 	 */
 	protected $infoService;
 
@@ -107,9 +107,14 @@ class Tx_Fed_ViewHelpers_Widget_Controller_RecordSelectorController extends Tx_F
 	protected $allUrl;
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @var array
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	protected $sections;
+
+	/**
+	 * @param Tx_Fed_Service_Domain $infoService
+	 */
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 

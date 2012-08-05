@@ -56,6 +56,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 		$this->registerArgument('classCurrent', 'string', 'Optional class name to add to current link', FALSE, 'current');
 		$this->registerArgument('classHasSubpages', 'string', 'Optional class name to add to links which have subpages', FALSE, 'sub');
 		$this->registerArgument('useShortcutTarget', 'boolean', 'Optional param for using shortcut target instead of shortcut itself for current link', FALSE, FALSE);
+		$this->registerArgument('useNavigationTitle', 'boolean', 'If TRUE, uses nav_title on pages where this is set. If FALSE, never considers nav_title', FALSE, TRUE);
 		$this->registerArgument('classFirst', 'string', 'Optional class name for the first menu elment', FALSE, '');
 		$this->registerArgument('classLast', 'string', 'Optional class name for the last menu elment', FALSE, '');
 		$this->registerArgument('substElementUid', 'boolean', 'Optional parameter for wrapping the link with the uid of the page', FALSE, '');
@@ -116,6 +117,7 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 *
 	 * @param array $menu
 	 * @param array $rootLine
+	 * @return string
 	 */
 	protected function autoRender($menu, $rootLine) {
 		$tagName = $this->arguments['tagNameChildren'];
@@ -137,13 +139,18 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	 * return string
 	 */
 	protected function getNavigationTitle($pageUid) {
+		if ((boolean) $this->arguments['useNavigationTitle'] === FALSE) {
+			$alternativeField = 'nav_title';
+		} else {
+			$alternativeField = FALSE;
+		}
 		$getLL = t3lib_div::_GP('L');
-		if($getLL){
+		if ($getLL){
 			$pageOverlay = $this->pageSelect->getPageOverlay($pageUid,$getLL);
-			$title = ($pageOverlay['nav_title']) ? $pageOverlay['nav_title'] : $pageOverlay['title'];
-		}else {
+			$title = ($pageOverlay['nav_title'] && $alternativeField) ? $pageOverlay['nav_title'] : $pageOverlay['title'];
+		} else {
 			$page = $this->pageSelect->getPage($pageUid);
-			$title = ($page['nav_title']) ? $page['nav_title'] : $page['title'];
+			$title = ($page['nav_title'] && $alternativeField) ? $page['nav_title'] : $page['title'];
 		}
 		return $title;
 	}
@@ -151,14 +158,16 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_Core_ViewHelper_Abst
 	/**
 	 * @param integer $pageUid
 	 * @param array $rootLine
+	 * @return boolean
 	 */
 	protected function isCurrent($pageUid, $rootLine) {
 		return $pageUid == $GLOBALS['TSFE']->id;
 	}
 
 	/**
-	 * @param pageUid $pageUid
+	 * @param integer $pageUid
 	 * @param array $rootLine
+	 * @return boolean
 	 */
 	protected function isActive($pageUid, $rootLine) {
 		foreach ($rootLine as $page) {

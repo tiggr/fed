@@ -55,12 +55,12 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 
 	/**
 	 * ObjectManager instance
-	 * @var Tx_Extbase_Object_ObjectManager
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
-	protected $objectManger;
+	protected $objectManager;
 
 	/**
-	 * @var Tx_Fed_Utility_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	protected $jsonService;
 
@@ -83,24 +83,24 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_DomainObjectInfo $infoService
+	 * @param Tx_Fed_Service_Domain $infoService
 	 */
-	public function injectInfoService(Tx_Fed_Utility_DomainObjectInfo $infoService) {
+	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
 	}
 
 	/**
 	 * Inject a Reflection Service instance
-	 * @param Tx_Extbase_Object_ObjectManager $manager
+	 * @param Tx_Extbase_Object_ObjectManagerInterface $manager
 	 */
-	public function injectObjectManager(Tx_Extbase_Object_ObjectManager $manager) {
+	public function injectObjectManager(Tx_Extbase_Object_ObjectManagerInterface $manager) {
 		$this->objectManager = $manager;
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_JSON $jsonService
+	 * @param Tx_Fed_Service_Json $jsonService
 	 */
-	public function injectJSONService(Tx_Fed_Utility_JSON $jsonService) {
+	public function injectJSONService(Tx_Fed_Service_Json $jsonService) {
 		$this->jsonService = $jsonService;
 	}
 

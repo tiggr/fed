@@ -35,11 +35,11 @@ class Tx_Fed_ViewHelpers_PreviousViewHelper extends Tx_Fed_ViewHelpers_ContainsV
 
 	/**
 	 * Render method
+	 *
+	 * @return string
 	 */
 	public function render() {
 		parent::render();
-		#var_dump($this->evaluation);
-		#exit();
 		return $this->getNeedleAtIndex($this->evaluation !== FALSE ? $this->evaluation - 1 : -1);
 	}
 

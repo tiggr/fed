@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetBodyContentViewHelper extends Tx_Fed_Vi
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getBodyContent();

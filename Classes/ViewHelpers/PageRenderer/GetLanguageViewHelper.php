@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetLanguageViewHelper extends Tx_Fed_ViewH
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getLanguage();

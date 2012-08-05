@@ -66,8 +66,11 @@ class Tx_Fed_Scheduler_Task extends Tx_Scheduler_Task {
 		list ($extensionName, $controllerName, $commandName) = explode(':', $this->commandIdentifier);
 		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->injectObjectManager($objectManager);
+		/** @var Tx_Extbase_MVC_CLI_Request $request */
 		$request = $this->objectManager->create('Tx_Extbase_MVC_CLI_Request');
+		/** @var Tx_Extbase_MVC_Dispatcher $dispatcher */
 		$dispatcher = $this->objectManager->get('Tx_Extbase_MVC_Dispatcher');
+		/** @var Tx_Extbase_MVC_CLI_Response $response */
 		$response = $this->objectManager->create('Tx_Extbase_MVC_CLI_Response');
 		try {
 			$upperCamelCaseExtensionName = t3lib_div::underscoredToUpperCamelCase($extensionName);

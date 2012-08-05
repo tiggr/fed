@@ -72,7 +72,7 @@ class Tx_Fed_Backend_TCEMain {
 					$translatedKeys = $this->infoService->convertLowerCaseUnderscoredToLowerCamelCase($keys);
 					$translatedRecordValues = array_combine($translatedKeys, $record);
 					foreach ($translatedRecordValues as $underScoredName=>$value) {
-						$upperCamelCaseName = Tx_Extbase_Utility_Extension::convertLowerUnderscoreToUpperCamelCase($underScoredName);
+						$upperCamelCaseName = t3lib_div::underscoredToUpperCamelCase($underScoredName);
 						$setter = 'set' . $upperCamelCaseName;
 						$methodArray = array($object, $setter);
 						if (method_exists($object, $setter)) {

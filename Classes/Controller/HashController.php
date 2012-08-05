@@ -29,7 +29,7 @@
  * @package Fed
  * @subpackage Controller
  */
-class Tx_Fed_Controller_HashController extends Tx_Fed_Core_AbstractController {
+class Tx_Fed_Controller_HashController extends Tx_Fed_MVC_Controller_AbstractController {
 
 	/**
 	 * @var Tx_Extbase_Security_Cryptography_HashService

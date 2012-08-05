@@ -40,6 +40,11 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 	protected $languageMenu = array();
 
 	/**
+	 * @var integer
+	 */
+	protected $defaultLangUid = 0;
+
+	/**
 	 * @var string
 	 */
 	protected $tagName = 'ul';
@@ -76,7 +81,7 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 	public function render() {
 		$this->cObj = t3lib_div::makeInstance('tslib_cObj');
 		$this->tagName = $this->arguments['tagName'];
-		$this->languageMenu = $this->parseLanguageMenu($order, $labelOverwrite);
+		$this->languageMenu = $this->parseLanguageMenu($this->arguments['order'], $this->arguments['labelOverwrite']);
 		$this->templateVariableContainer->add('languageMenu', $this->languageMenu);
 		$content = $this->renderChildren();
 		if (strlen(trim($content)) === 0) {
@@ -132,7 +137,7 @@ class Tx_Fed_ViewHelpers_Page_LanguageMenuViewHelper extends Tx_Fed_Core_ViewHel
 	protected function getLanguageFlagSrc($iso) {
 		$path = trim($this->arguments['flagPath']);
 		$imgType = trim($this->arguments['flagImageType']);
-		$iso = ($isoMatch[$iso]) ? $isoMatch[$iso] : $iso;
+		#$iso = ($isoMatch[$iso]) ? $isoMatch[$iso] : $iso;
 		$img = $path . $iso . '.' . $imgType;
 		return $img;
 	}

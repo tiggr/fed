@@ -32,6 +32,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_GetInlineLanguageLabelsViewHelper extends 
 
 	/**
 	 * Render
+	 *
+	 * @return string
 	 */
 	public function render() {
 		return $this->pageRenderer->getInlineLanguageLabels();

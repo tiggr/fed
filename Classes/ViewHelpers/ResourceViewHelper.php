@@ -48,14 +48,88 @@ class Tx_Fed_ViewHelpers_ResourceViewHelper extends Tx_Fed_Core_ViewHelper_Abstr
 	}
 
 	/**
+	 * Render / process
 	 *
-	 * @return type Render
+	 * @return string
 	 */
 	public function render() {
-		// Tx_Fed_ViewHelpers_Resource_FilesViewHelper is an alias of this class
-		// which provides the render method. Since this ViewHelper assumes
-		// default intention is to render files, we call:
-		return Tx_Fed_ViewHelpers_Resource_FileViewHelper::render();
+		// if no "as" argument and no child content, return linked list of files
+		// else, assign variable "as"
+		$pathinfo = pathinfo($this->arguments['path']);
+		if (is_dir($pathinfo['dirname']) === FALSE) {
+			$pathinfo = pathinfo(PATH_site . $this->arguments['path']);
+		}
+		if ($pathinfo['filename'] === '*') {
+			$files = $this->documentHead->getFilenamesOfType($pathinfo['dirname'], $pathinfo['extension']);
+		} else if ($this->arguments['file']) {
+			$files = array($this->arguments['path'] . $this->arguments['file']);
+			$files = $this->arrayToFileObjects($files);
+			$file = array_pop($files);
+			if ($this->arguments['as']) {
+				if ($this->templateVariableContainer->exists($this->arguments['as'])) {
+					$this->templateVariableContainer->remove($this->arguments['as']);
+				}
+				$this->templateVariableContainer->add($this->arguments['as'], $file);
+			} else if ($this->arguments['return'] === TRUE) {
+				return $file;
+			} else {
+				$this->templateVariableContainer->add('file', $file);
+				$content = $this->renderChildren();
+				$this->templateVariableContainer->remove('file');
+				if (strlen(trim($content)) === 0) {
+					return $this->renderFileList($files);
+				} else {
+					return $content;
+				}
+			}
+		} else if (is_array($this->arguments['files']) && count($this->arguments['files']) > 0) {
+			$files = $this->arguments['files'];
+			if ($this->arguments['path']) {
+				foreach ($files as $k=>$file) {
+					$files[$k] = $this->arguments['path'] . $file;
+				}
+			}
+		} else if (is_dir($pathinfo['dirname'] . '/' . $pathinfo['basename'])) {
+			$files = scandir($pathinfo['dirname'] . '/' . $pathinfo['basename']);
+			foreach ($files as $k=>$file) {
+				$file = $pathinfo['dirname'] . '/' . $pathinfo['basename'] . '/' . $file;
+				if (is_dir($file)) {
+					unset($files[$k]);
+				} else if (substr($file, 0, 1) === '.') {
+					unset($files[$k]);
+				} else {
+					$files[$k] = $file;
+				}
+			}
+		} else {
+			if ($this->arguments['return'] === TRUE) {
+				return array();
+			} else {
+				return '';
+			}
+			//throw new Exception('Invalid path given to Resource ViewHelper', $code, $previous);
+		}
+		$files = $this->arrayToFileObjects($files);
+		$files = $this->sortFiles($files);
+		// rendering
+		$content = '';
+		if ($this->arguments['as']) {
+			if ($this->templateVariableContainer->exists($this->arguments['as'])) {
+				$this->templateVariableContainer->remove($this->arguments['as']);
+			}
+			$this->templateVariableContainer->add($this->arguments['as'], $files);
+		} else if ($this->arguments['return'] === TRUE) {
+			return $files;
+		} else {
+			$this->templateVariableContainer->add('files', $files);
+			$content = $this->renderChildren();
+			$this->templateVariableContainer->remove('files');
+			// possible return: HTML file list
+			if (strlen(trim($content)) === 0) {
+				$content = $this->renderFileList($files);
+			}
+		}
+		return $content;
 	}
 
 	/**

@@ -38,7 +38,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	protected $tag;
 
 	/**
-	 * @var Tx_Fed_Utility_JSON
+	 * @var Tx_Fed_Service_Json
 	 */
 	protected $jsonService;
 
@@ -53,7 +53,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	protected $extJSService;
 
 	/**
-	 * @var Tx_Fed_Utility_FlexForm
+	 * @var Tx_Flux_Service_FlexForm
 	 */
 	protected $flexform;
 
@@ -68,7 +68,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	protected $configurationManager;
 
 	/**
-	 * @var type
+	 * @var array
 	 */
 	private $registeredArguments = array();
 
@@ -86,9 +86,9 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 
 	/**
 	 * Inject JSON Service
-	 * @param Tx_Fed_Utility_JSON $service
+	 * @param Tx_Fed_Service_Json $service
 	 */
-	public function injectJSONService(Tx_Fed_Utility_JSON $service) {
+	public function injectJSONService(Tx_Fed_Service_Json $service) {
 		$this->jsonService = $service;
 	}
 
@@ -107,9 +107,9 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	}
 
 	/**
-	 * @param Tx_Fed_Utility_FlexForm $flexform
+	 * @param Tx_Flux_Service_FlexForm $flexform
 	 */
-	public function injectFlexFormService(Tx_Fed_Utility_FlexForm $flexform) {
+	public function injectFlexFormService(Tx_Flux_Service_FlexForm $flexform) {
 		$this->flexform = $flexform;
 	}
 
@@ -187,7 +187,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @deprecated
 	 */
 	public function includeHeader($code, $type=NULL, $key=NULL) {
-		return $this->documentHead->includeHeader($code, $type, $key);
+		$this->documentHead->includeHeader($code, $type, $key);
 	}
 
 	/**
@@ -228,6 +228,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 *
 	 * @param string $dir
 	 * @param string $type
+	 * @return array
 	 * @api
 	 */
 	public function getFilenamesOfType($dir, $extension=NULL) {
