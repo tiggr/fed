@@ -94,6 +94,9 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 	 * @return string
 	 */
 	public function render() {
+		if (TYPO3_MODE === 'BE') {
+			$this->simulateFrontendEnvironment();
+		}
 		$pathinfo = pathinfo($this->arguments['src']);
 		if ($pathinfo['filename'] === '*') {
 			$images = $this->documentHead->getFilenamesOfType($pathinfo['dirname'], $pathinfo['extension']);
@@ -110,7 +113,7 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 		} else if (is_array($this->arguments['src'])) {
 			$images = $this->arguments['src'];
 		} else {
-			$images = array($this->arguments['src']);
+			$images = array(trim($this->arguments['src'], ', '));
 		}
 		if ($this->arguments['sortBy'] !== NULL) {
 			$images = $this->sortImages($images);
@@ -127,11 +130,15 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 
 		// use altsrc for any image not present
 		foreach ($images as $k=>$v) {
-			if (is_file(PATH_site . $images[$k]) === FALSE) {
+			if (is_file(t3lib_div::getFileAbsFileName($v)) === FALSE) {
 				$images[$k] = $this->arguments['altsrc'];
 			}
 		}
-		return $this->renderImages($images);
+		$rendered = $this->renderImages($images);
+		if (TYPO3_MODE === 'BE') {
+			$this->resetFrontendEnvironment();
+		}
+		return $rendered;
 	}
 
 	/**
@@ -188,7 +195,8 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 		}
 		foreach ($images as $k=>$image) {
 			$convertedImageFilename = $this->renderImage($image, $setup);
-			$imagesize = getimagesize(PATH_site . $convertedImageFilename[0]);
+			$originalFilePathAndFilename = t3lib_div::getFileAbsFileName((TYPO3_MODE === 'BE' && strpos($convertedImageFilename[0], '/') === 0 ? substr($convertedImageFilename[0], 1) : $convertedImageFilename[0]));
+			$imagesize = getimagesize($originalFilePathAndFilename);
 			$this->tag->addAttribute('width', $imagesize[0]);
 			$this->tag->addAttribute('height', $imagesize[1]);
 			$this->tag->addAttribute('src', $convertedImageFilename[0]);
@@ -314,6 +322,9 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 		if (TYPO3_MODE === 'BE' && substr($src, 0, 3) === '../') {
 			$src = substr($src, 3);
 		}
+		if (strpos($src, PATH_site) === 0) {
+			$src = str_replace(PATH_site, '', $src);
+		}
 
 		$imageInfo = $this->contentObject->getImgResource($src, $setup);
 
@@ -322,28 +333,27 @@ class Tx_Fed_ViewHelpers_ImageViewHelper extends Tx_Fluid_ViewHelpers_ImageViewH
 			throw new Tx_Fluid_Core_ViewHelper_Exception('Could not get image resource for "' . htmlspecialchars($src) . '".' , 1253191060);
 		}
 
-		$imageInfo[3] = t3lib_div::png_to_gif_by_imagemagick($imageInfo[3]);
-
 		$GLOBALS['TSFE']->imagesOnPage[] = $imageInfo[3];
 
 		$imageSource = $GLOBALS['TSFE']->absRefPrefix . t3lib_div::rawUrlEncodeFP($imageInfo[3]);
-		if (TYPO3_MODE === 'BE') {
-			$imageSource = '../' . $imageSource;
-			$this->resetFrontendEnvironment();
+		if (TYPO3_MODE === 'BE' && strpos($imageSource, '/') !== 0) {
+			$imageSource = '/' . $imageSource;
 		}
 
-		if($this->arguments['mouseoverSuffix'] != '') {
+		$imageSourceOver = NULL;
+		if ($this->arguments['mouseoverSuffix'] != '') {
 			$srcImg = explode('.',$src);
 			$srcMouseoverImg = $srcImg[0].$this->arguments['mouseoverSuffix'].'.'.$srcImg[1];
 			$imageInfoMouseover = $this->contentObject->getImgResource($srcMouseoverImg, $setup);
 			if (!is_array($imageInfoMouseover)) {
 				throw new Tx_Fluid_Core_ViewHelper_Exception('Could not get image resource for "' . htmlspecialchars($srcMouseoverImg) . '".' , 1253191060);
 			}
-			$imageInfoMouseover[3] = t3lib_div::png_to_gif_by_imagemagick($imageInfoMouseover[3]);
 			$GLOBALS['TSFE']->imagesOnPage[] = $imageInfoMouseover[3];
 			$imageSourceOver = $GLOBALS['TSFE']->absRefPrefix . t3lib_div::rawUrlEncodeFP($imageInfoMouseover[3]);
 			if (TYPO3_MODE === 'BE') {
-				$imageSourceOver = '../' . $imageSourceOver;
+				if (strpos($imageSource, '/') !== 0) {
+					$imageSourceOver = '/' . $imageSourceOver;
+				}
 				$this->resetFrontendEnvironment();
 			}
 		}
