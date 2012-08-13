@@ -53,21 +53,22 @@ class Tx_Fed_Backend_TCEMain {
 	 * @param string $table
 	 * @param string $action
 	 * @param array $record
+	 * @param integer $uid
 	 * @param array $arguments
 	 * @return array
 	 */
-	protected function executeBackendControllerCommand($table, $action, $record, $arguments=array()) {
+	protected function executeBackendControllerCommand($table, $action, $record, $uid=NULL, $arguments=array()) {
 		$objectType = $this->infoService->getObjectType($table);
 		try {
 			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableBackendRecordController'] && $objectType) {
 				$keys = array_keys($record);
 				$controllerClassName = $this->infoService->getBackendControllerClassName($objectType);
 				if ($controllerClassName) {
-					if ($record['uid'] < 1) {
-						$object = $this->objectManager->get($objectType);
+					if ($uid < 1) {
+						$object = $this->objectManager->create($objectType);
 					} else {
 						$repository = $this->infoService->getRepositoryInstance($objectType);
-						$object = $repository->findByUid($record['uid']);
+						$object = $repository->findByUid($uid);
 					}
 					$translatedKeys = $this->infoService->convertLowerCaseUnderscoredToLowerCamelCase($keys);
 					$translatedRecordValues = array_combine($translatedKeys, $record);
@@ -130,12 +131,15 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_preProcessFieldArray(array &$incomingFieldArray, $table, $id, t3lib_TCEmain &$reference) {
-		if ($incomingFieldArray['uid'] > 0) {
+		if ($id > 0) {
 			$action = 'read';
 		} else {
 			$action = 'create';
 		}
-		$incomingFieldArray = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray);
+		$record = $this->executeBackendControllerCommand($table, $action, $incomingFieldArray, $id);
+		if ($record) {
+			$incomingFieldArray = $record;
+		}
 	}
 
 	/**
@@ -147,7 +151,7 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_postProcessFieldArray ($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
-		$record = $this->executeBackendControllerCommand($table, $status, $fieldArray);
+		$record = $this->executeBackendControllerCommand($table, $status, $fieldArray, $id);
 		if ($record) {
 			$fieldArray = $record;
 		}
@@ -162,6 +166,10 @@ class Tx_Fed_Backend_TCEMain {
 	 * @return	void
 	 */
 	public function processDatamap_afterDatabaseOperations($status, $table, $id, &$fieldArray, t3lib_TCEmain &$reference) {
+		$record = $this->executeBackendControllerCommand($table, $status, $fieldArray, $id);
+		if ($record) {
+			$fieldArray = $record;
+		}
 	}
 
 	/**
