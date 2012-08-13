@@ -44,7 +44,7 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_MVC_Cont
 		$configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 		list ($extensionName, $filename) = explode(':', $cObj->data['tx_fed_fcefile']);
 		$paths = $configurationManager->getContentConfiguration($extensionName);
-		$absolutePath = $paths['templateRootPath'] . DIRECTORY_SEPARATOR . $filename;
+		$absolutePath = $paths['templateRootPath'] . '/' . $filename;
 		$view->setLayoutRootPath($paths['layoutRootPath']);
 		$view->setPartialRootPath($paths['partialRootPath']);
 		$view->setTemplatePathAndFilename($absolutePath);

@@ -265,18 +265,18 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			$chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
 			$filename = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
 			$filename = preg_replace('/[^\w\._]+/', '', $filename);
-			if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $filename)) {
+			if ($chunks < 2 && file_exists($targetDir . '/' . $filename)) {
 				$ext = strrpos($filename, '.');
 				$filenameA = substr($filename, 0, $ext);
 				$filenameB = substr($filename, $ext);
 				$count = 1;
-				while (file_exists($targetDir . DIRECTORY_SEPARATOR . $filenameA . '_' . $count . $filenameB)) {
+				while (file_exists($targetDir . '/' . $filenameA . '_' . $count . $filenameB)) {
 					$count++;
 				}
 				$filename = $filenameA . '_' . $count . $filenameB;
 			}
 			if (strpos($contentType, "multipart") !== FALSE) {
-				$newFilename = $this->fileService->move($sourceFilename, $targetDir . DIRECTORY_SEPARATOR . $filename);
+				$newFilename = $this->fileService->move($sourceFilename, $targetDir . '/' . $filename);
 			} else {
 				$newFilename = $this->fileService->copyChunk($sourceFilename, $targetDir, $filename, $chunk);
 			}

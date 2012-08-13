@@ -64,7 +64,7 @@ class Tx_Fed_Utility_Path implements t3lib_Singleton {
 			if (substr($file, 0, 1) === '.') {
 				continue;
 			} else if (is_dir($basePath . $appendBasePath . $file) && $recursive) {
-				foreach (self::getFiles($basePath, $recursive, $appendBasePath . $file . DIRECTORY_SEPARATOR) as $addFile) {
+				foreach (self::getFiles($basePath, $recursive, $appendBasePath . $file . '/') as $addFile) {
 					$addFiles[] = $appendBasePath . $addFile;
 				}
 			} else if (is_file($basePath . $appendBasePath . $file)) {

@@ -133,7 +133,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 			if (isset($group['enable']) === TRUE && $group['enable'] < 1) {
 				continue;
 			}
-			$path = $group['templateRootPath'] . 'Page' . DIRECTORY_SEPARATOR;
+			$path = $group['templateRootPath'] . 'Page' . '/';
 			$files = scandir($path);
 			$output[$extensionName] = array();
 			foreach ($files as $k=>$file) {

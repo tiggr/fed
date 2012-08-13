@@ -82,7 +82,7 @@ class Tx_Fed_Backend_FCESelector {
 				}
 				$select .= '<optgroup label="' . htmlspecialchars($groupLabel) . '">' . LF;
 				foreach ($files as $fileRelPath) {
-					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
+					$templateFilename = $templatePathSet['templateRootPath'] . '/' . $fileRelPath;
 					$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 					$view->setTemplatePathAndFilename($templateFilename);
 					try {

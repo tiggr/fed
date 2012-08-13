@@ -74,7 +74,7 @@ abstract class Tx_Fed_Core {
 			if (count($files) > 0) {
 				foreach ($files as $fileRelPath) {
 					$contentConfiguration = array();
-					$templateFilename = $templatePathSet['templateRootPath'] . DIRECTORY_SEPARATOR . $fileRelPath;
+					$templateFilename = $templatePathSet['templateRootPath'] . '/' . $fileRelPath;
 					$templateContents = file_get_contents($templateFilename);
 					$matches = array();
 					$pattern = '/<flux\:flexform[^\.]([^>]+)/';

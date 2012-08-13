@@ -86,11 +86,11 @@ class Tx_Fed_Persistence_FileObjectStorage extends SplObjectStorage {
 	 * @param string $basePath
 	 */
 	public function setBasePath($basePath) {
-		if (substr($basePath, 0, 1) === DIRECTORY_SEPARATOR) {
+		if (substr($basePath, 0, 1) === '/') {
 			throw new Exception('FileObjectStorage does not support absolute paths!', 1311692821);
 		}
-		if (substr($basePath, -1) !== DIRECTORY_SEPARATOR) {
-			$basePath .= DIRECTORY_SEPARATOR;
+		if (substr($basePath, -1) !== '/') {
+			$basePath .= '/';
 		}
 		$this->basePath = $basePath;
 	}

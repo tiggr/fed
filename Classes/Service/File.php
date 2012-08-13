@@ -100,7 +100,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 
 		foreach ($fileObjectStorage as $fileObject) {
 			$source = $fileObject->getAbsolutePath();
-			$destination = $uploadFolder . DIRECTORY_SEPARATOR . $fileObject->getTargetFilename();
+			$destination = $uploadFolder . '/' . $fileObject->getTargetFilename();
 			$newFilename = $this->move($source, $destination);
 			$fileObject->setAbsolutePath(PATH_site . $newFilename);
 			$uploadedFileObjectStorage->attach($fileObject);
@@ -260,7 +260,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	 */
 	public function getFileCopyPointers($sourceFileName, $targetDir, $filename, $chunk=0) {
 		$in = fopen($sourceFileName, "rb");
-		$out = fopen($targetDir . DIRECTORY_SEPARATOR . $filename, $chunk == 0 ? "wb" : "ab");
+		$out = fopen($targetDir . '/' . $filename, $chunk == 0 ? "wb" : "ab");
 		if ($out === FALSE) {
 			throw new Exception('Failed to open output stream', 102);
 		} else if ($in === FALSE) {

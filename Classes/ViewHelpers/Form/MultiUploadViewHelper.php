@@ -183,7 +183,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 			// create JSON objects for each existing file
 		foreach ($existingFiles as $k=>$file) {
-			$size = (string) intval(filesize(PATH_site . $uploadFolder . DIRECTORY_SEPARATOR . $file));
+			$size = (string) intval(filesize(PATH_site . $uploadFolder . '/' . $file));
 			$existingFiles[$k] = array(
 				'id' => "f$k",
 				'name' => $file,
