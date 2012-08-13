@@ -58,7 +58,6 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$this->registerArgument('classCurrent', 'string', 'Optional class name to add to current link', FALSE, 'current');
 		$this->registerArgument('classHasSubpages', 'string', 'Optional class name to add to links which have subpages', FALSE, 'sub');
 		$this->registerArgument('useShortcutTarget', 'boolean', 'Optional param for using shortcut target instead of shortcut itself for current link', FALSE, FALSE);
-		$this->registerArgument('useNavigationTitle', 'boolean', 'If TRUE, uses nav_title on pages where this is set. If FALSE, never considers nav_title', FALSE, TRUE);
 		$this->registerArgument('classFirst', 'string', 'Optional class name for the first menu elment', FALSE, '');
 		$this->registerArgument('classLast', 'string', 'Optional class name for the last menu elment', FALSE, '');
 		$this->registerArgument('substElementUid', 'boolean', 'Optional parameter for wrapping the link with the uid of the page', FALSE, '');
@@ -70,6 +69,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$this->registerArgument('linkCurrent', 'boolean', 'If FALSE, does not wrap the current page in a link', FALSE, TRUE);
 		$this->registerArgument('linkActive', 'boolean', 'If FALSE, does not wrap with links the titles of pages that are active in the rootline', FALSE, TRUE);
 		$this->registerArgument('backupVariables', 'array', 'Backup these template variables while rendering the menu and restore them afterwards. Default: [rootLine, page, menu]', FALSE, array('rootLine', 'page', 'menu'));
+		$this->registerArgument('titleFields', 'string', 'CSV list of fields to use as link label - default is "nav_title,title", change to for example "tx_myext_somefield,subtitle,nav_title,title". The first field that contains text will be used. Field value resolved AFTER page field overlays.', FALSE, 'nav_title,title');
 	}
 
 	/**
@@ -178,17 +178,23 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$getLL = t3lib_div::_GP('L');
 		$pageUid = $page['uid'];
 		$doktype = $page['doktype'];
-		if ((boolean) $this->arguments['useNavigationTitle'] === TRUE) {
-			$alternativeField = 'nav_title';
-		} else {
-			$alternativeField = FALSE;
-		}
 		if ($getLL){
 			$pageOverlay = $this->pageSelect->getPageOverlay($pageUid, $getLL);
-			$title = ($alternativeField && $pageOverlay[$alternativeField]) ? $pageOverlay[$alternativeField] : ($pageOverlay['title'] ? $pageOverlay['title'] : $page['title']);
+			foreach ($pageOverlay as $name => $value) {
+				if (empty($value) === FALSE) {
+					$page[$name] = $value;
+				}
+			}
 		} else {
 			$page = $this->pageSelect->getPage($pageUid);
-			$title = ($alternativeField && $page[$alternativeField]) ? $page[$alternativeField] : $page['title'];
+		}
+		$title = $page['title'];
+		$titleFieldList = t3lib_div::trimExplode(',', $this->arguments['titleFields']);
+		foreach ($titleFieldList as $titleFieldName) {
+			if (empty($page[$titleFieldName]) === FALSE) {
+				$title = $page[$titleFieldName];
+				break;
+			}
 		}
 		$shortcut = ($doktype == constant('t3lib_pageSelect::DOKTYPE_SHORTCUT')) ? $page['shortcut'] : $page['url'];
 		$page['active'] = $this->isActive($pageUid, $rootLine);
