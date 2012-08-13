@@ -66,6 +66,9 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$this->registerArgument('bullet', 'string', 'Piece of text/html to insert before each item', FALSE);
 		$this->registerArgument('resolveExclude', 'boolean', 'Exclude link if realurl/cooluri flag tx_realurl_exclude is set', FALSE, FALSE);
 		$this->registerArgument('showHidden', 'boolean', 'Include "hidden in menu" pages', FALSE, FALSE);
+		$this->registerArgument('showCurrent', 'boolean', 'If FALSE, does not display the current page', FALSE, TRUE);
+		$this->registerArgument('linkCurrent', 'boolean', 'If FALSE, does not wrap the current page in a link', FALSE, TRUE);
+		$this->registerArgument('linkActive', 'boolean', 'If FALSE, does not wrap with links the titles of pages that are active in the rootline', FALSE, TRUE);
 		$this->registerArgument('backupVariables', 'array', 'Backup these template variables while rendering the menu and restore them afterwards. Default: [rootLine, page, menu]', FALSE, array('rootLine', 'page', 'menu'));
 	}
 
@@ -233,13 +236,26 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	protected function autoRender($menu, $level=1) {
 		$tagName = $this->arguments['tagNameChildren'];
 		$substElementUid = $this->arguments['substElementUid'];
+		$linkCurrent = (boolean) $this->arguments['linkCurrent'];
+		$linkActive = (boolean) $this->arguments['linkActive'];
+		$showCurrent = (boolean) $this->arguments['showCurrent'];
 		$html = array();
 		foreach ($menu as $page) {
+			if ($page['current'] && !$showCurrent) {
+				continue;
+			}
 			$class = trim($page['class']) != '' ? ' class="' . $page['class'] . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
 			$target = $page['target']!='' ? ' target="'.$page['target'].'"' : '';
 			$html[] = '<' . $tagName . $elementID . $class .'>';
-			$html[] = '<a href="' . $page['link'] . '"' . $class . $target . '>' . $page['title'] . '</a>';
+			if ($page['current'] && $linkCurrent === FALSE) {
+				$html[] = $page['title'];
+			} elseif ($page['active'] && $linkActive === FALSE) {
+				$html[] = $page['title'];
+			} else {
+				$html[] = '<a href="' . $page['link'] . '"' . $class . $target . '>' . $page['title'] . '</a>';
+			}
+
 			if (($page['active'] || $this->arguments['expandAll']) && $page['hasSubPages'] && $level < $this->arguments['levels']) {
 				$rootLine = $this->pageSelect->getRootLine($page['uid']);
 				$rootLine = $this->parseMenu($rootLine, $rootLine);
