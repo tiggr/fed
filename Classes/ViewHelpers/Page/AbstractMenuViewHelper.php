@@ -51,6 +51,8 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$this->registerArgument('tagName', 'string', 'Tag name to use for enclsing container', FALSE, 'ul');
 		$this->registerArgument('tagNameChildren', 'string', 'Tag name to use for child nodes surrounding links', FALSE, 'li');
 		$this->registerArgument('entryLevel', 'integer', 'Optional entryLevel TS equivalent of the menu', FALSE, 0);
+		$this->registerArgument('levels', 'integer', 'Number of levels to render - setting this to a number higher than 1 (one) will expand menu items that are active, to a depth of $levels starting from $entryLevel', FALSE, 1);
+		$this->registerArgument('expandAll', 'boolean', 'If TRUE and $levels > 1 then expands all (not just the active) menu items which have submenus', FALSE, FALSE);
 		$this->registerArgument('pageUid', 'integer', 'Optional parent page UID to use as top level of menu. If left out will be detected from rootLine using $entryLevel', FALSE, NULL);
 		$this->registerArgument('classActive', 'string', 'Optional class name to add to active links', FALSE, 'active');
 		$this->registerArgument('classCurrent', 'string', 'Optional class name to add to current link', FALSE, 'current');
@@ -71,9 +73,9 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * Initialize object
 	 */
 	public function initializeObject() {
-		$this->tagName = $this->arguments['tagName'];
+		$this->tag->setTagName($this->tagName);
 		$this->pageSelect = new t3lib_pageSelect();
-		$this->pageSelect->init($this->arguments['showHidden']);
+		$this->pageSelect->init((boolean) $this->arguments['showHidden']);
 	}
 
 	/**
@@ -225,18 +227,29 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * Automatically render a menu
 	 *
 	 * @param array $menu
-	 * @param array $rootLine
+	 * @param integer $level
 	 * @return string
 	 */
-	protected function autoRender($menu) {
+	protected function autoRender($menu, $level=1) {
 		$tagName = $this->arguments['tagNameChildren'];
 		$substElementUid = $this->arguments['substElementUid'];
 		$html = array();
 		foreach ($menu as $page) {
-			$class = trim($page['class'])!='' ? ' class="' . $page['class'] . '"' : '';
+			$class = trim($page['class']) != '' ? ' class="' . $page['class'] . '"' : '';
 			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
 			$target = $page['target']!='' ? ' target="'.$page['target'].'"' : '';
-			$html[] = '<' . $tagName . $elementID . $class .'><a href="' . $page['link'] . '"' . $class . $target . '>' . $page['title'] . '</a></' . $tagName . '>';
+			$html[] = '<' . $tagName . $elementID . $class .'>';
+			$html[] = '<a href="' . $page['link'] . '"' . $class . $target . '>' . $page['title'] . '</a>';
+			if (($page['active'] || $this->arguments['expandAll']) && $page['hasSubPages'] && $level < $this->arguments['levels']) {
+				$rootLine = $this->pageSelect->getRootLine($page['uid']);
+				$rootLine = $this->parseMenu($rootLine, $rootLine);
+				$subMenu = $this->pageSelect->getMenu($page['uid']);
+				$subMenu = $this->parseMenu($subMenu, $rootLine);
+				$renderedSubMenu = $this->autoRender($subMenu, $level + 1);
+				$this->tag->setContent($renderedSubMenu);
+				$html[] = $this->tag->render();
+			}
+			$html[] = '</' . $tagName . '>';
 		}
 		return implode(LF, $html);
 	}

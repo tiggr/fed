@@ -38,7 +38,6 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelpe
 	 */
 	public function render() {
 		$pageUid = $this->arguments['pageUid'] > 0 ? $this->arguments['pageUid'] : $GLOBALS['TSFE']->id;
-		$entryLevel = intval($this->arguments['entryLevel']);
 		$rootLine = $this->pageSelect->getRootLine($pageUid);
 		$rootLine = array_reverse($rootLine);
 		$rootLine = array_slice($rootLine, $this->arguments['entryLevel']);
