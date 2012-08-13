@@ -147,7 +147,7 @@ class Tx_Fed_Service_Auth implements t3lib_Singleton {
 			return FALSE;
 		}
 		$currentBackendUser = $this->userService->getCurrentBackendUser();
-		return ($currentBackendUser['is_admin'] == 1);
+		return (boolean) $currentBackendUser['admin'];
 	}
 
 }
