@@ -76,9 +76,15 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * Initialize object
 	 */
 	public function initializeObject() {
-		$this->tag->setTagName($this->tagName);
+		if (is_array($GLOBALS['TSFE']->fe_user->user) === TRUE) {
+			$groups = array(-2, 0);
+			$groups = array_merge($groups, (array) array_values($GLOBALS['TSFE']->fe_user->groupData['uid']));
+		} else {
+			$groups = array(-1, 0);
+		}
 		$this->pageSelect = new t3lib_pageSelect();
 		$this->pageSelect->init((boolean) $this->arguments['showHidden']);
+		$this->pageSelect->where_groupAccess = ' AND fe_group IN(\'\',' . implode(',', $groups) . ')';
 	}
 
 	/**
@@ -206,20 +212,21 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$classFirst = $this->arguments['classFirst'];
 		$classLast = $this->arguments['classLast'];
 		$filtered = array();
+		$allowedDocumentTypes = $this->allowedDoktypeList();
 		foreach ($menu as $page) {
 			if ($page['hidden'] == 1) {
 
 			} elseif ($page['nav_hide'] == 1 && $this->arguments['showHidden'] < 1) {
 
-			} elseif (in_array($page['doktype'], $this->allowedDoktypeList())) {
+			} elseif (in_array($page['doktype'], $allowedDocumentTypes)) {
 				$page = $this->getMenuItemEntry($page, $rootLine);
 				$filtered[] = $page;
 			}
 		}
-		if($classFirst) {
+		if ($classFirst) {
 			$filtered[0]['class'] = trim($filtered[0]['class'] . ' ' . $classFirst);
 		}
-		if($classLast) {
+		if ($classLast) {
 			$length = count($filtered);
 			$filtered[$length-1]['class'] = trim($filtered[$length-1]['class'] . ' ' . $classLast);
 		}
