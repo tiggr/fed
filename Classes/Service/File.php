@@ -125,13 +125,13 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 			$objectType = 'Tx_Fed_Resource_File';
 		}
 		$namespace = $this->infoService->getPluginNamespace($domainObject);
-		$fileObjectStorage = $this->objectManager->get('Tx_Fed_Persistence_FileObjectStorage');
-		$postFiles = $_FILES[$namespace]['tmp_name'][$propertyName];
+		$fileObjectStorage = $this->objectManager->create('Tx_Fed_Persistence_FileObjectStorage');
+		$postFiles = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['tmp_name'], $propertyName);
 		if (is_array($postFiles) === FALSE) {
 			$filename = $postFiles;
-			$targetFilename = $_FILES[$namespace]['name'][$propertyName];
-			if($targetFilename && $targetFilename != '') {
-				$object = $this->objectManager->get($objectType, $filename);
+			$targetFilename = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['name'], $propertyName);
+			if ($targetFilename && $targetFilename != '') {
+				$object = $this->objectManager->create($objectType, $filename);
 				$object->setTargetFilename($targetFilename);
 				$fileObjectStorage->attach($object);
 				return $fileObjectStorage;
@@ -139,8 +139,8 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 		}
 		$numFiles = count($postFiles);
 		for ($i=0; $i<$numFiles; $i++) {
-			$filename = $_FILES[$namespace]['tmp_name'][$propertyName][$i];
-			$targetFilename = $_FILES[$namespace]['name'][$propertyName][$i];
+			$filename = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['tmp_name'], $propertyName . '.' . $i);
+			$targetFilename = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['name'], $propertyName . '.' . $i);
 			if($targetFilename && $targetFilename != '') {
 				if (is_file($filename)) {
 					$object = $this->objectManager->get($objectType, $filename);
