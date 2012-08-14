@@ -49,9 +49,10 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterInlineCodeViewHelper extends Tx
 		if (!$block) {
 			$block = $this->renderChildren();
 		}
+		$name = $this->arguments['name'];
 		if ($this->isCached()) {
 			$this->pageRenderer->addJsFooterInlineCode(
-				$this->arguments['name'],
+				$name,
 				$block,
 				$this->arguments['compress'],
 				$this->arguments['forceOnTop']
