@@ -38,25 +38,47 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 		$this->registerArgument('as', 'string', 'Which variable to update in the TemplateVariableContainer. If left out, returns sorted data instead of updating the varialbe (i.e. reference or copy)');
 		$this->registerArgument('sortBy', 'string', 'Which property/field to sort by - leave out for numeric sorting based on indexes(keys)');
 		$this->registerArgument('order', 'string', 'ASC or DESC', FALSE, 'ASC');
+		$this->registerArgument('array', 'array', 'DEPRECATED: Optional; use to sort an array');
+		$this->registerArgument('objectStorage', 'Tx_Extbase_Persistence_ObjectStorage|Tx_Extbase_Persistence_LazyObjectStorage', 'DEPRECATED: Optional; use to sort an ObjectStorage');
+		$this->registerArgument('queryResult', 'Tx_Extbase_Persistence_QueryResult', 'DEPRECATED: Optional; use to sort a QueryResult');
 	}
 
 	/**
 	 * "Render" method - sorts a target list-type target. Either $array or $objectStorage must be specified. If both are,
 	 * ObjectStorage takes precedence.
 	 *
-	 * @param array $array Optional; use to sort an array
-	 * @param Tx_Extbase_Persistence_ObjectStorage $objectStorage Optional; use to sort an ObjectStorage
-	 * @param Tx_Extbase_Persistence_QueryResult $queryResult Optional; use to sort a QueryResult
+	 * @param array|object An array, Iterator, ObjectStorage, LazyObjectStorage or QueryResult to sort
 	 * @return mixed
 	 */
-	public function render($array=NULL, Tx_Extbase_Persistence_ObjectStorage $objectStorage=NULL, $queryResult=NULL) {
-		if ($objectStorage) {
-			$sorted = $this->sortObjectStorage($objectStorage);
-		} else if ($array) {
-			$sorted = $this->sortArray($array);
-		} elseif ($queryResult) {
-			$sorted = $this->sortArray($queryResult->toArray());
+	public function render($subject=NULL) {
+		if ($subject === NULL) {
+			$priorities = array('array', 'objectStorage', 'queryResult');
+			foreach ($priorities as $argumentName) {
+				if ($this->arguments[$argumentName]) {
+					$subject = $this->arguments[$argumentName];
+					break;
+				}
+			}
+		}
+		$sorted = NULL;
+		if (is_array($subject) === TRUE) {
+			$sorted = $this->sortArray($subject);
 		} else {
+			if ($subject instanceof Tx_Extbase_Persistence_ObjectStorage || $subject instanceof Tx_Extbase_Persistence_LazyObjectStorage) {
+				$sorted = $this->sortObjectStorage($subject);
+			} elseif ($subject instanceof Iterator) {
+				/** @var Iterator $subject */
+				$array = array();
+				foreach ($subject as $index => $item) {
+					$array[$index] = $item;
+				}
+				$sorted = $this->sortArray($array);
+			} elseif ($subject instanceof Tx_Extbase_Persistence_QueryResultInterface) {
+				/** @var Tx_Extbase_Persistence_QueryResultInterface $subject */
+				$sorted = $this->sortArray($subject->toArray());
+			}
+		}
+		if ($sorted === NULL) {
 			throw new Exception('Nothing to sort, SortViewHelper has no purpose in life, performing LATE term self-abortion');
 		}
 		if ($this->arguments['as']) {
@@ -78,8 +100,10 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	 */
 	protected function sortArray($array) {
 		$sorted = array();
-		while ($object = array_shift($array)) {
-			$index = $this->getSortValue($object);
+		foreach ($array as $index => $object) {
+			if ($this->arguments['sortBy']) {
+				$index = $this->getSortValue($object);
+			}
 			while (isset($sorted[$index])) {
 				$index .= '1';
 			}
@@ -101,7 +125,7 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	 */
 	protected function sortObjectStorage($storage) {
 		/** @var Tx_Extbase_Object_ObjectManager $objectManager */
-        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+		$objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		/** @var Tx_Extbase_Persistence_ObjectStorage $temp */
 		$temp = $objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
 		foreach ($storage as $item) {
