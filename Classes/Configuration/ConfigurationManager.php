@@ -74,6 +74,9 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 		if ($extensionName) {
 			$config = $config[$extensionName];
 		}
+		if (is_array($config) === FALSE) {
+			return array();
+		}
 		foreach ($config as $k=>$v) {
 			if ($extensionName) {
 				if (in_array($k, $dontTranslateMembers) === FALSE) {

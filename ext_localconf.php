@@ -17,19 +17,16 @@ Tx_Extbase_Utility_Extension::configurePlugin(
 	)
 );
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-	Tx_Extbase_Utility_Extension::configurePlugin(
-		$_EXTKEY,
-		'Fce',
-		array(
-			'FlexibleContentElement' => 'render',
-		),
-		array(
-		),
-		Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
-	);
-}
-
+Tx_Extbase_Utility_Extension::configurePlugin(
+	$_EXTKEY,
+	'Fce',
+	array(
+		'FlexibleContentElement' => 'render',
+	),
+	array(
+	),
+	Tx_Extbase_Utility_Extension::PLUGIN_TYPE_CONTENT_ELEMENT
+);
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
 
@@ -90,7 +87,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 $fedWizardElements = array();
 if (TYPO3_MODE == 'BE') {
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
-	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']
 	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']
 	) {
 		array_push($fedWizardElements, 'template');
@@ -98,9 +94,7 @@ if (TYPO3_MODE == 'BE') {
 		array_push($fedWizardElements, 'solr');
 	}
 
-	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-		Tx_Fed_Core::loadRegisteredFluidContentElementTypoScript();
-	}
+	Tx_Fed_Core::loadRegisteredFluidContentElementTypoScript();
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
 
@@ -145,7 +139,7 @@ if (TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['moveRecordClass']['fed'] = 'EXT:fed/Classes/Backend/TCEMain.php:Tx_Fed_Backend_TCEMain';
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableIntegratedBackendLayouts']) {
-		//$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/classes/class.tx_cms_backendlayout.php']['tx_cms_BackendLayout']['fed'] = 'EXT:fed/Classes/Backend/BackendLayout.php:Tx_Fed_Backend_BackendLayout';
+		$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/classes/class.tx_cms_backendlayout.php']['tx_cms_BackendLayout']['fed'] = 'EXT:fed/Classes/Backend/BackendLayout.php:Tx_Fed_Backend_BackendLayout';
 	}
 }
 

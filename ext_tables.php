@@ -71,30 +71,27 @@ if (TYPO3_MODE == 'BE') {
 	$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_sandbox'] = 'pi_flexform';
 
 	$GLOBALS['TCA']['tt_content']['ctrl']['typeicon_classes']['fed_fce'] = 'apps-pagetree-root';
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_fce']['pluginType'] = 'CType';
+	Tx_Extbase_Utility_Extension::registerPlugin(
+		$_EXTKEY,
+		'Fce',
+		'Fluid Content',
+		t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'
+	);
+	t3lib_extMgm::addPlugin(array('Fluid Content', 'fed_fce', t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'), 'CType');
+	Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider');
 
-	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidContentElements']) {
-		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions']['fed']['plugins']['fed_fce']['pluginType'] = 'CType';
-		Tx_Extbase_Utility_Extension::registerPlugin(
-			$_EXTKEY,
-			'Fce',
-			'Fluid Content Element',
-			t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'
-		);
-		t3lib_extMgm::addPlugin(array('Fluid Content Element', 'fed_fce', t3lib_extMgm::extRelPath('fed') . 'ext_icon.gif'), 'CType');
-		Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider');
-
-		$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_fce'] = 'pi_flexform';
-		$TCA['tt_content']['types']['fed_fce']['showitem'] = '
-		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
-		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.header;header,
-		--div--;Content settings, tx_fed_fcefile;Element type, pi_flexform;Configuration,
-		--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.appearance,
-		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.frames;frames,
-		--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
-		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.visibility;visibility,
-		--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access
-		 ';
-	}
+	$TCA['tt_content']['types']['list']['subtypes_addlist']['fed_fce'] = 'pi_flexform';
+	$TCA['tt_content']['types']['fed_fce']['showitem'] = '
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.header;header,
+	--div--;Content settings, tx_fed_fcefile;Element type, pi_flexform;Configuration,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.appearance,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.frames;frames,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.visibility;visibility,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access
+	 ';
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 		t3lib_div::loadTCA('pages');
