@@ -31,6 +31,16 @@ plugin.tx_fed {
 		layoutRootPath = {$plugin.tx_fed.view.layoutRootPath}
 	}
 	settings {
+		viewhelpers {
+			lipsum {
+				file = EXT:fed/Resources/Private/Text/LoremIpsum.txt
+				paragraphs = 5
+				wordsPerParagraph = 50
+				skew = 10
+				html = 1
+				parseFuncTSPath = lib.parseFunc_RTE
+			}
+		}
 		widget {
 			solr {
 				itemsPerPage = 10
