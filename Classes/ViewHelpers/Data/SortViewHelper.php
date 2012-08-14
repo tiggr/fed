@@ -100,14 +100,18 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	 * @return Tx_Extbase_Persistence_ObjectStorage
 	 */
 	protected function sortObjectStorage($storage) {
-        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Persistence_ObjectStorage');
+		/** @var Tx_Extbase_Object_ObjectManager $objectManager */
+        $objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
+		/** @var Tx_Extbase_Persistence_ObjectStorage $temp */
 		$temp = $objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
 		foreach ($storage as $item) {
 			$temp->attach($item);
 		}
 		$sorted = array();
-		foreach ($storage as $item) {
-			$index = $this->getSortValue($item);
+		foreach ($storage as $index => $item) {
+			if ($this->arguments['sortBy']) {
+				$index = $this->getSortValue($item);
+			}
 			while (isset($sorted[$index])) {
 				$index .= '1';
 			}
@@ -133,20 +137,7 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 	 */
 	protected function getSortValue($object) {
 		$field = $this->arguments['sortBy'];
-		if ($field) {
-			$parts = explode('.', $field);
-			while ($part = array_shift($parts)) {
-				$getter = 'get' . ucfirst($part);
-				if (method_exists($object, $getter)) {
-					$object = $object->$getter();
-				} else if (is_object ($object)) {
-					$object = $object->$field;
-				} else if (is_array($object)) {
-					$object = $object[$field];
-				}
-			}
-			$value = $object;
-		}
+		$value = Tx_Extbase_Reflection_ObjectAccess::getProperty($object, $field);
 		if ($value instanceof DateTime) {
 			$value = $value->format('U');
 		} elseif ($value instanceof Tx_Extbase_Persistence_ObjectStorage) {
