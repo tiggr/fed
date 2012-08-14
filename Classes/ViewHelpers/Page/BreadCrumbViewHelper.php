@@ -31,7 +31,7 @@
  * @package Fed
  * @subpackage ViewHelpers/Page
  */
-class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_Core_ViewHelper_AbstractViewHelper {
+class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper {
 
 	/**
 	 * @return string
