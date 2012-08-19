@@ -73,6 +73,9 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	 */
 	public function getTemplatePathAndFilename(array $row) {
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
+		if (strpos($templatePathAndFilename, ':') === FALSE) {
+			return NULL;
+		}
 		list ($extensionName, $filename) = explode(':', $templatePathAndFilename);
 		$paths = $this->configurationManager->getContentConfiguration($extensionName);
 		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
