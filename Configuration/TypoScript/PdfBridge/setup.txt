@@ -1,0 +1,13 @@
+FedPdfBridge = PAGE
+FedPdfBridge {
+    typeNum = 48151623420
+    config {
+        no_cache = 1
+        disableAllHeaderCode = 1
+    }
+    headerData >
+    10 = USER_INT
+    10 {
+        userFunc = tx_fed_utility_pdf->run
+    }
+}

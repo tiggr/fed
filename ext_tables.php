@@ -126,7 +126,8 @@ if (TYPO3_MODE == 'BE') {
 	}
 
 	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'FED Fluid Extbase Development Framework');
-	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/FrameworkBridge', 'FED Fluid Extbase Development Framework Bridge - Used by some ViewHelpers (AJAX)');
+	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/PdfBridge', 'FED PDF Bridge - Used by PDF ViewHelper');
+	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript/FrameworkBridge', 'FED Framework Bridge - Used by some ViewHelpers (AJAX)');
 
 	$TCA['tt_content']['types']['fed_template']['showitem'] = '
 	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.general;general,
