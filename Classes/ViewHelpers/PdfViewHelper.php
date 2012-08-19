@@ -42,6 +42,7 @@ class Tx_Fed_ViewHelpers_PdfViewHelper extends Tx_Fed_Core_ViewHelper_AbstractVi
 		$this->registerArgument('wkhtmltopdf', 'string', 'Path to executable wkhtmltopdf binary.
 			Defaults to "wkhtmltopdf" which expects the binary to be in the server process\' PATH environment variable', FALSE, 'wkhtmltopdf');
 		$this->registerArgument('cliArguments', 'string', 'Optional arguments to wkhtmltopdf command line.', FALSE, '');
+		$this->registerArgument('useHtml', 'boolean', 'If true, the current HTML source will be used instead of current URL. Use this for ajax powered pages.', FALSE, FALSE);
 	}
 
 	/**
@@ -75,14 +76,20 @@ class Tx_Fed_ViewHelpers_PdfViewHelper extends Tx_Fed_Core_ViewHelper_AbstractVi
 		$typeNum = 48151623420;
 		$html = <<< CODE
 <form action='?type={$typeNum}' method='post' id='{$uniqId}' style='display: none'>
-<input type='hidden' name='{$extension}[html]' value='' />
+<input type='hidden' name='{$extension}[data]' value='' />
 <input type='hidden' name='{$extension}[arguments]' value='{$arguments}' />
 </form>
 CODE;
+
+	if ($this->arguments['useHtml'])
+		$value = "'<html><head>'+document.head.innerHTML+'</head><body>'+document.body.innerHTML+'</body></html>'";
+	else
+		$value = "document.URL";
+		
 		$script = <<< SCRIPT
 function {$uniqId}() {
 	var f = jQuery('#{$uniqId}');
-	f.find('input[name="{$extension}[html]"]').val('<html><head>'+document.head.innerHTML+'</head><body>'+document.body.innerHTML+'</body></html>');
+	f.find('input[name="{$extension}[data]"]').val($value);
 	return f.submit();
 }
 SCRIPT;
