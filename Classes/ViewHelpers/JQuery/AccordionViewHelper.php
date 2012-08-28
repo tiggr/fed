@@ -87,10 +87,10 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 */
 	public function render() {
 		$this->uniqId = uniqid('fedjqueryaccordion');
-		if ($this->templateVariableContainer->exists('tabs') === TRUE) {
+		if ($this->templateVariableContainer->exists('tabsAccordion') === TRUE) {
 			// render one tab
 			$index = $this->getCurrentIndex();
-			$this->tag->addAttribute('class', 'fed-accordion');
+			$this->tag->addAttribute('class', 'fedAccordion');
 			if ($this->arguments['active'] === TRUE) {
 				$this->setSelectedIndex($index);
 			}
@@ -103,10 +103,10 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		}
 
 		// render tab group
-		$this->templateVariableContainer->add('tabs', array());
-		$this->templateVariableContainer->add('selectedIndex', 0);
-		$this->templateVariableContainer->add('disabledIndices', array());
-		$this->templateVariableContainer->add('currentIndex', 0);
+		$this->templateVariableContainer->add('tabsAccordion', array());
+		$this->templateVariableContainer->add('selectedIndexAccordion', 0);
+		$this->templateVariableContainer->add('disabledIndicesAccordion', array());
+		$this->templateVariableContainer->add('currentIndexAccordion', 0);
 		$content = $this->renderChildren();
 
 		// uniq DOM id for this accordion
@@ -114,12 +114,12 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 		$html = ($tabs . LF . $content . LF);
 		$this->addScript();
 		$this->tag->setContent($html);
-		$this->tag->addAttribute('class', 'fed-accordion-group');
+		$this->tag->addAttribute('class', 'fedAccordion-group');
 		$this->tag->addAttribute('id', $this->uniqId);
-		$this->templateVariableContainer->remove('tabs');
-		$this->templateVariableContainer->remove('selectedIndex');
-		$this->templateVariableContainer->remove('disabledIndices');
-		$this->templateVariableContainer->remove('currentIndex');
+		$this->templateVariableContainer->remove('tabsAccordion');
+		$this->templateVariableContainer->remove('selectedIndexAccordion');
+		$this->templateVariableContainer->remove('disabledIndicesAccordion');
+		$this->templateVariableContainer->remove('currentIndexAccordion');
 		return $this->tag->render();
 	}
 
@@ -130,7 +130,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 */
 	protected function renderTabs() {
 		$html = "";
-		foreach ($this->templateVariableContainer->get('tabs') as $tab) {
+		foreach ($this->templateVariableContainer->get('tabsAccordion') as $tab) {
 			$html .= '<h3><a href="#">' . $tab['title'] . '</a></h3>' . LF;
 			$html .= '<div>' . $tab['content'] . '</div>' . LF;
 		}
@@ -148,10 +148,10 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 			'title' => $title,
 			'content' => $content
 		);
-		$tabs = (array) $this->templateVariableContainer->get('tabs');
+		$tabs = (array) $this->templateVariableContainer->get('tabsAccordion');
 		array_push($tabs, $tab);
-		$this->templateVariableContainer->remove('tabs');
-		$this->templateVariableContainer->add('tabs', $tabs);
+		$this->templateVariableContainer->remove('tabsAccordion');
+		$this->templateVariableContainer->add('tabsAccordion', $tabs);
 	}
 
 	/**
@@ -160,8 +160,8 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * @param integer $index
 	 */
 	protected function setSelectedIndex($index) {
-		$this->templateVariableContainer->remove('selectedIndex');
-		$this->templateVariableContainer->add('selectedIndex', $index);
+		$this->templateVariableContainer->remove('selectedIndexAccordion');
+		$this->templateVariableContainer->add('selectedIndexAccordion', $index);
 	}
 
 	/**
@@ -170,10 +170,10 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * @param integer $index
 	 */
 	protected function addDisabledIndex($index) {
-		$disabled = (array) $this->templateVariableContainer->get('disabledIndices');
+		$disabled = (array) $this->templateVariableContainer->get('disabledIndicesAccordion');
 		array_push($disabled, $index);
-		$this->templateVariableContainer->remove('disabledIndices');
-		$this->templateVariableContainer->add('disabledIndices', $disabled);
+		$this->templateVariableContainer->remove('disabledIndicesAccordion');
+		$this->templateVariableContainer->add('disabledIndicesAccordion', $disabled);
 	}
 
 	/**
@@ -182,7 +182,7 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * @return integer
 	 */
 	protected function getCurrentIndex() {
-		return $this->templateVariableContainer->get('currentIndex');
+		return $this->templateVariableContainer->get('currentIndexAccordion');
 	}
 
 	/**
@@ -191,37 +191,37 @@ class Tx_Fed_ViewHelpers_JQuery_AccordionViewHelper extends Tx_Fed_Core_ViewHelp
 	 * @param integer $index
 	 */
 	protected function setCurrentIndex($index) {
-		$this->templateVariableContainer->remove('currentIndex');
-		$this->templateVariableContainer->add('currentIndex', $index);
+		$this->templateVariableContainer->remove('currentIndexAccordion');
+		$this->templateVariableContainer->add('currentIndexAccordion', $index);
 	}
 
 	/**
 	 * Attach necessary scripting
 	 */
 	protected function addScript() {
-		$selectedIndex = $this->templateVariableContainer->get('selectedIndex');
+		$selectedIndex = $this->templateVariableContainer->get('selectedIndexAccordion');
 		if ($selectedIndex === 0 && $this->arguments['collapsed'] === TRUE && $this->arguments['collapsible'] === TRUE) {
 			$this->setSelectedIndex(FALSE);
 		}
-		$cookie = $this->getBooleanForJavascript('cookie');
-		$collapsible = $this->getBooleanForJavascript('collapsible');
-		$disabled = $this->getBooleanForJavascript('disabled');
-		$autoHeight = $this->getBooleanForJavascript('autoHeight');
-		$clearStyle = $this->getBooleanForJavascript('clearStyle');
-		$fillSpace = $this->getBooleanForJavascript('fillSpace');
-		$csvOfDisabledTabIndices = implode(',', (array) $this->templateVariableContainer->get('disabledIndices'));
-		$active = $this->templateVariableContainer->get('active');
+		$csvOfDisabledTabIndices = implode(',', (array) $this->templateVariableContainer->get('disabledIndicesAccordion'));
+		
+		$options = array(
+			'cookie' => (bool)$this->arguments['cookie'],
+			'collapsible' => (bool)$this->arguments['collapsible'],
+			'disabled' => (bool)$this->arguments['disabled'],
+			'autoHeight' => (bool)$this->arguments['autoHeight'],
+			'clearStyle' => (bool)$this->arguments['clearStyle'],
+			'fillSpace' => (bool)$this->arguments['fillSpace'],
+			'animated' => $this->arguments['animated'],
+		);
+		
+		if ($this->templateVariableContainer->exists('active'))
+			$options['active'] = $this->templateVariableContainer->get('active');
+		
+		$javaScriptOptions = json_encode($options);
 		$init = <<< INITSCRIPT
 jQuery(document).ready(function() {
-	jQuery('#{$this->uniqId}').accordion({
-		disabled : {$disabled},
-		animated : '{$this->arguments['animated']}',
-		autoHeight : {$autoHeight},
-		clearStyle : {$clearStyle},
-		collapsible : {$collapsible},
-		fillSpace : {$fillSpace},
-		active : {$active}
-	});
+	jQuery('#{$this->uniqId}').accordion($javaScriptOptions);
 });
 INITSCRIPT;
 		$this->documentHead->includeHeader($init, 'js');
