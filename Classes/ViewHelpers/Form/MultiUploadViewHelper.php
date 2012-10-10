@@ -115,7 +115,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('resizeWidth', 'integer', 'If set, uses client side resizing of any added images width', FALSE);
 		$this->registerArgument('resizeHeight', 'integer', 'If set, uses client side resizing of any added images height', FALSE);
 		$this->registerArgument('resizeQuality', 'integer', 'Range 0-100, quality of resized image', FALSE, 90);
-		$this->registerArgument('filters', 'array', 'Array label=>csvAllowedExtensions of file types to browse for', FALSE, array('title' => 'All files', 'extensions' => '*'));
+		$this->registerArgument('filters', 'array', 'Array label=>csvAllowedExtensions of file types to browse for. For example: {0: {title: "Images", extensions: "jpg,jpeg,gif,png"}, 1: {title: "Text files", extensions: "txt,pdf,doc,docx"}}', FALSE, array('title' => 'All files', 'extensions' => '*'));
 		$this->registerArgument('uploadfolder', 'string', 'If specified, uses this site relative path as target upload folder. If a form object exists and this argument is not present, TCA uploadfolder is used as defined in the named field definition');
 		$this->registerArgument('preinit', 'array', 'Array of preinit event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
 		$this->registerArgument('init', 'array', 'Array of init event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
