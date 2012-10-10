@@ -122,6 +122,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('header', 'boolean', 'If FALSE, suppresses the header which is normally added to the upload widget', FALSE, TRUE);
 		$this->registerArgument('headerTitle', 'string', 'Text for header title, if different from default');
 		$this->registerArgument('headerSubtitle', 'string', 'Text for header subtitle, if different from default');
+		$this->registerArgument('insertJSInBody', 'boolean', 'If TRUE, the associated Javascript is added to the body output of the page instead of the headers. This can come in handy for asynchronous loading of the object, although you will then need to include all the libraries and styling manually.', FALSE, FALSE);
 	}
 
 	/**
@@ -139,9 +140,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			'<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" class="value-holder" />',
 			'<div id="' . $this->uniqueId . '" class="fed-plupload plupload_container"></div>',
 		);
+
+		# Add JS-block to HTML output if need be.
+		$html[] = $this->addScript();
 		$this->tag->addAttribute('id', '');
 		$this->tag->setContent(implode(LF, $html));
-		$this->addScript();
 		return $this->tag->render();
 	}
 
@@ -153,8 +156,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	}
 
 	/**
-	 * Adds necessary scripts to header
-	 * @return void
+	 * Adds necessary scripts to header. However, if includeJSInBody is set, it will return the initialization javascript as a string.
+	 * @return string
 	 */
 	protected function addScript() {
 		$scriptPath = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/';
@@ -245,11 +248,19 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			$optionsJson .= implode(',',$initHandler) . '}';
 		}
 		$optionsJson .= '}';
-		$this->documentHead->includeHeader("
+
+		$scriptBlock = "
 			var {$this->uniqueId} = null;
 			var {$this->uniqueId}options = {$optionsJson};
-			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$this->uniqueId}options); });", 'js'
-		);
+			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$this->uniqueId}options); });";
+
+		# Set headers OR return the script block if told to do so.
+		if ($this->arguments['insertJSInBody']) {
+			return "<script type='text/javascript'>" . $scriptBlock . "</script>";
+		} else {
+			$this->documentHead->includeHeader($scriptBlock, 'js');
+		}
+		return "";
 	}
 
 	/**
