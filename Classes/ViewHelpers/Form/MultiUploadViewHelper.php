@@ -123,7 +123,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('preinit', 'array', 'Array of preinit event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
 		$this->registerArgument('init', 'array', 'Array of init event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
 		$this->registerArgument('initFunctionName', 'string', "If you want to use your own JS-initializer entirely, insert it's name here. It MUST be a jQuery function, as it's called using jQuery(objectName). Defaults to 'fileListEditor' which is a small module delivered by this extension.", FALSE, "fileListEditor");
-		$this->registerArgument('storedValue', 'mixed', "If you set this, it will be used instead of the 'actual' form element value. Supports arrays, CSVs and similar. You can subclass the entire viewhelper and override getStoredValue() if you need more flexibility.", FALSE, FALSE);
+		$this->registerArgument('storedValue', 'mixed', "If you set this, it will be used instead of the 'actual' form element value. Supports arrays (associative; each entry MUST contain 'name'; 'uid' is an optional extra) and CSVs.", FALSE, FALSE);
 		$this->registerArgument('header', 'boolean', 'If FALSE, suppresses the header which is normally added to the upload widget', FALSE, TRUE);
 		$this->registerArgument('headerTitle', 'string', 'Text for header title, if different from default');
 		$this->registerArgument('headerSubtitle', 'string', 'Text for header subtitle, if different from default');
@@ -137,7 +137,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	 */
 	public function render() {
 		$name = $this->getName();
+
+		# Flatten stored values into a neat CSV-string
 		$value = $this->getStoredValue(FALSE);
+		if (is_array($value)) $fieldValue = $this->flattenFilelist($value);
+
 		$this->uniqueId = $this->arguments['id'] ? $this->arguments['id'] : uniqid('plupload');
 		$this->setErrorClassAttribute();
 		$this->registerFieldNameForFormTokenGeneration($name);
@@ -147,7 +151,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		# If we aren't told not to render the hidden value field, we'll do so now.
 		if ($this->arguments['noHiddenValueField'] === FALSE) {
-			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . implode(",", $value) . '" class="value-holder" />';
+			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $fieldValue . '" class="value-holder" />';
 		}
 
 		# Add JS-block to HTML output if need be.
@@ -165,6 +169,27 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	}
 
 
+
+
+	/**
+	 * Flatten file list array into single CSV-line containing only the filenames.
+	 * @param array $filelist The filelist array to parse.
+	 * @return string
+	 */
+	protected function flattenFilelist($filelist) {
+
+		$output = array();
+		if (is_array($filelist)) {
+			foreach($filelist as $file) {
+				$output[] = $file;
+			}
+		}
+
+		return implode(",", $output);
+
+	}
+
+
 	/**
 	 * Get list of previously stored files for this uploader.
 	 * @param boolean $getFromPropertyValue If FALSE, uses $this->getValue(), otherwise uses $this->getPropertyValue().
@@ -175,7 +200,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$return = array();
 
 		# Get the data, either from the passed arguments or the internal functions.
-		if ($this->arguments['storedValue'] === FALSE) {
+		if (!isset($this->arguments['storedValue'])) {
 			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
 		} else {
 			$data = $this->arguments['storedValue'];
@@ -184,17 +209,21 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		if (is_string($data)) {
 
 			# It's just a string, so let's try to explode it and return the results.
-			$return = t3lib_div::trimExplode(",", $data, TRUE);
+			$tempData = t3lib_div::trimExplode(",", $data, TRUE);
+			foreach($tempData as $tD) {
+				$return[] = array(
+					"name" => $tD,
+					"uid" => FALSE
+				);
+			}
 
 		} elseif (is_array($data)) {
 
-			# Huh. An array. We'll assume it to be a single-dimension array, since everything else
-			# would just fuck up our day anyway, so let's return it and be on our merry.
+			# This is an array. We'll assume it has the proper data format (each entry MUST contain 'name'; 'uid' is
+			# optional), and just pass it along to the parser directly.
 			return $data;
 
 		}
-
-		// TODO: handle object storages and repositories!
 
 		return array();
 
@@ -231,10 +260,12 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		));
 
 		# create JSON objects for each existing file
-		foreach ($existingFiles as $k=>$file) {
+		foreach ($existingFiles as $k=>$fileData) {
+			$file = $fileData['name'];
 			$size = (string) intval(filesize(PATH_site . $uploadFolder . '/' . $file));
 			$existingFiles[$k] = array(
 				'id' => "f$k",
+				'uid' => intval($fileData['uid']),
 				'name' => $file,
 				'size' => $size,
 				'percent' => 100,
@@ -324,7 +355,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			$formObjectClass = get_class($formObject);
 			$controllerName = $this->controllerContext->getRequest()->getControllerName();
 			// Set pluginName dynamically: if found in arguments, it'll use the custom name instead.
-			$pluginName = ($this->arguments['pluginName'] !== FALSE) ? $this->arguments['pluginName'] : $this->controllerContext->getRequest()->getPluginName();
+			$pluginName = (isset($this->arguments['pluginName'])) ? $this->arguments['pluginName'] : $this->controllerContext->getRequest()->getPluginName();
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 			$arguments = array(
 				'objectType' => $formObjectClass,
