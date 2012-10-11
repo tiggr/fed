@@ -111,6 +111,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('autostart', 'boolean', 'If TRUE, queue automatically starts uploading as soon as a file is added.', FALSE, FALSE);
 		$this->registerArgument('maxFileSize', 'string', 'Maxium allowed file size', FALSE, '10mb');
 		$this->registerArgument('chunkSize', 'string', 'Chunk size when uploading in chunks', FALSE, '1mb');
+		$this->registerArgument('actionName', 'string', 'Controller action to call to finish an uploaded file. Defaults to "upload".', FALSE, 'upload');
 		$this->registerArgument('uniqueNames', 'boolean', 'If TRUE, obfuscates and randomizes file names. Default behavior is to use TYPO3 unique filename features', FALSE, FALSE);
 		$this->registerArgument('resizeWidth', 'integer', 'If set, uses client side resizing of any added images width', FALSE);
 		$this->registerArgument('resizeHeight', 'integer', 'If set, uses client side resizing of any added images height', FALSE);
@@ -283,7 +284,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 				'propertyName' => $propertyName
 			);
 			$url = $this->controllerContext->getUriBuilder()
-				->uriFor('upload', $arguments, $controllerName, $extensionName, $pluginName);
+				->uriFor($this->arguments['actionName'], $arguments, $controllerName, $extensionName, $pluginName);
 			$url = '/' . $url; // Why, O why, must baseUrl not be respected in JS in browsers?
 		} else {
 			throw new Tx_Fluid_Exception('Multiupload ViewHelper requires either url argument or associated form object', 1312051527);
