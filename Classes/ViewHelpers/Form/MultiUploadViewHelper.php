@@ -112,6 +112,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('maxFileSize', 'string', 'Maxium allowed file size', FALSE, '10mb');
 		$this->registerArgument('chunkSize', 'string', 'Chunk size when uploading in chunks', FALSE, '1mb');
 		$this->registerArgument('actionName', 'string', 'Controller action to call to finish an uploaded file. Defaults to "upload".', FALSE, 'upload');
+		$this->registerArgument('pluginName', 'string', 'Force plugin name to use in generated upload URL. Defaults to current plugin name, if any.', FALSE, FALSE);
+		$this->registerArgument('noHiddenValueField', 'boolean', 'If TRUE, no hidden input field is created for storing uploaded filenames. You can use this if your uploaded files end up as ObjectStorage-references (which cannot be turned into strings anyway) or similar.', FALSE, FALSE);
 		$this->registerArgument('uniqueNames', 'boolean', 'If TRUE, obfuscates and randomizes file names. Default behavior is to use TYPO3 unique filename features', FALSE, FALSE);
 		$this->registerArgument('resizeWidth', 'integer', 'If set, uses client side resizing of any added images width', FALSE);
 		$this->registerArgument('resizeHeight', 'integer', 'If set, uses client side resizing of any added images height', FALSE);
@@ -138,9 +140,13 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->setErrorClassAttribute();
 		$this->registerFieldNameForFormTokenGeneration($name);
 		$html = array(
-			'<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" class="value-holder" />',
 			'<div id="' . $this->uniqueId . '" class="fed-plupload plupload_container"></div>',
 		);
+
+		# If we aren't told not to render the hidden value field, we'll do so now.
+		if ($this->arguments['noHiddenValueField'] === FALSE) {
+			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" class="value-holder" />';
+		}
 
 		# Add JS-block to HTML output if need be.
 		$html[] = $this->addScript();
@@ -277,7 +283,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		} else if ($formObject && $propertyName) {
 			$formObjectClass = get_class($formObject);
 			$controllerName = $this->controllerContext->getRequest()->getControllerName();
-			$pluginName = $this->controllerContext->getRequest()->getPluginName();
+			// Set pluginName dynamically: if found in arguments, it'll use the custom name instead.
+			$pluginName = ($this->arguments['pluginName'] !== FALSE) ? $this->arguments['pluginName'] : $this->controllerContext->getRequest()->getPluginName();
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 			$arguments = array(
 				'objectType' => $formObjectClass,
