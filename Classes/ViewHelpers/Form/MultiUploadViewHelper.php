@@ -122,6 +122,8 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('uploadfolder', 'string', 'If specified, uses this site relative path as target upload folder. If a form object exists and this argument is not present, TCA uploadfolder is used as defined in the named field definition');
 		$this->registerArgument('preinit', 'array', 'Array of preinit event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
 		$this->registerArgument('init', 'array', 'Array of init event listener methods - see plupload documentation for reference. The default event which sets the contents of the hidden field is always fired.', FALSE, array());
+		$this->registerArgument('initFunctionName', 'string', "If you want to use your own JS-initializer entirely, insert it's name here. It MUST be a jQuery function, as it's called using jQuery(objectName). Defaults to 'fileListEditor' which is a small module delivered by this extension.", FALSE, "fileListEditor");
+		$this->registerArgument('storedValue', 'mixed', "If you set this, it will be used instead of the 'actual' form element value. Supports arrays, CSVs and similar. You can subclass the entire viewhelper and override getStoredValue() if you need more flexibility.", FALSE, FALSE);
 		$this->registerArgument('header', 'boolean', 'If FALSE, suppresses the header which is normally added to the upload widget', FALSE, TRUE);
 		$this->registerArgument('headerTitle', 'string', 'Text for header title, if different from default');
 		$this->registerArgument('headerSubtitle', 'string', 'Text for header subtitle, if different from default');
@@ -135,7 +137,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	 */
 	public function render() {
 		$name = $this->getName();
-		$value = $this->getValue();
+		$value = $this->getStoredValue(FALSE);
 		$this->uniqueId = $this->arguments['id'] ? $this->arguments['id'] : uniqid('plupload');
 		$this->setErrorClassAttribute();
 		$this->registerFieldNameForFormTokenGeneration($name);
@@ -145,7 +147,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		# If we aren't told not to render the hidden value field, we'll do so now.
 		if ($this->arguments['noHiddenValueField'] === FALSE) {
-			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $value . '" class="value-holder" />';
+			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . implode(",", $value) . '" class="value-holder" />';
 		}
 
 		# Add JS-block to HTML output if need be.
@@ -162,24 +164,61 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		return $this->getEventsJson($this->arguments['preinit']);
 	}
 
+
+	/**
+	 * Get list of previously stored files for this uploader.
+	 * @param boolean $getFromPropertyValue If FALSE, uses $this->getValue(), otherwise uses $this->getPropertyValue().
+	 * @return array
+	 */
+	protected function getStoredValue($getFromPropertyValue = TRUE) {
+
+		$return = array();
+
+		# Get the data, either from the passed arguments or the internal functions.
+		if ($this->arguments['storedValue'] === FALSE) {
+			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
+		} else {
+			$data = $this->arguments['storedValue'];
+		}
+
+		if (is_string($data)) {
+
+			# It's just a string, so let's try to explode it and return the results.
+			$return = t3lib_div::trimExplode(",", $data, TRUE);
+
+		} elseif (is_array($data)) {
+
+			# Huh. An array. We'll assume it to be a single-dimension array, since everything else
+			# would just fuck up our day anyway, so let's return it and be on our merry.
+			return $data;
+
+		}
+
+		// TODO: handle object storages and repositories!
+
+		return array();
+
+	}
+
+
 	/**
 	 * Adds necessary scripts to header. However, if includeJSInBody is set, it will return the initialization javascript as a string.
 	 * @return string
 	 */
 	protected function addScript() {
 		$scriptPath = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/';
-		$pluploadPath = $scriptPath . 'com/plupload/js/';
-		$value = $this->getPropertyValue();
-		$value = trim($value, ',');
-		if (strlen($value) > 0) {
-			$existingFiles = explode(',', trim($this->getPropertyValue(), ','));
-		} else {
-			$existingFiles = array();
-		}
+
+		# Get existing files using a handy internal function.
+		$existingFiles = $this->getStoredValue();
+
 		$propertyName = $this->arguments['property'];
 		$formObject = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
-		$uploadFolder = $this->infoService->getUploadFolder($formObject, $propertyName);
 
+		# Set uploadfolder for later. We'll need it to determine file sizes of existing files.
+		$uploadFolder = ($this->arguments['uploadfolder'] === FALSE) ? $this->infoService->getUploadFolder($formObject, $propertyName) : $this->arguments['uploadfolder'];
+
+		# Add some resources.
+		$pluploadPath = $scriptPath . 'com/plupload/js/';
 		$this->documentHead->includeFiles(array(
 			$scriptPath . 'GearsInit.js',
 			$pluploadPath . 'plupload.full.js',
@@ -191,7 +230,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Stylesheet/MultiUpload.css'
 		));
 
-			// create JSON objects for each existing file
+		# create JSON objects for each existing file
 		foreach ($existingFiles as $k=>$file) {
 			$size = (string) intval(filesize(PATH_site . $uploadFolder . '/' . $file));
 			$existingFiles[$k] = array(
@@ -256,10 +295,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		}
 		$optionsJson .= '}';
 
+
 		$scriptBlock = "
 			var {$this->uniqueId} = null;
 			var {$this->uniqueId}options = {$optionsJson};
-			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').fileListEditor({$this->uniqueId}options); });";
+			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').{$this->arguments['initFunctionName']}( {$this->uniqueId}options ); });";
 
 		# Set headers OR return the script block if told to do so.
 		if ($this->arguments['insertJSInBody']) {
