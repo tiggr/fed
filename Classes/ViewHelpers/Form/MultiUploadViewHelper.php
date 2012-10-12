@@ -363,7 +363,12 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			);
 			$url = $this->controllerContext->getUriBuilder()
 				->uriFor($this->arguments['actionName'], $arguments, $controllerName, $extensionName, $pluginName);
-			$url = '/' . $url; // Why, O why, must baseUrl not be respected in JS in browsers?
+
+			# If URL isn't prefixed with protocol (http or https), add a slash to the beginning to make
+			# browsers what can't respects baseURL get to da choppah!
+			if (!preg_match("/^http(s{0,1})\:\/\//i", $url)) {
+				$url = '/' . $url;
+			}
 		} else {
 			throw new Tx_Fluid_Exception('Multiupload ViewHelper requires either url argument or associated form object', 1312051527);
 		}
