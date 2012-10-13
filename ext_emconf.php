@@ -41,8 +41,6 @@ $EM_CONF[$_EXTKEY] = array(
 		'conflicts' => array(
 		),
 		'suggests' => array(
-			'gridelements' => '',
-			'fluidcontent' => '',
 		),
 	),
 	'suggests' => array(
