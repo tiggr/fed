@@ -63,7 +63,8 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 		$this->registerArgument('limit', 'integer', 'Optional limit to the number of content elements to render');
 		$this->registerArgument('order', 'string', 'Optional sort field of content elements - RAND() supported', FALSE, 'sorting');
 		$this->registerArgument('sortDirection', 'string', 'Optional sort direction of content elements', FALSE, 'ASC');
-		$this->registerArgument('pageUid', 'integer', 'If set, gets content from this page');
+		$this->registerArgument('pageUid', 'integer', 'If set, selects only content from this page UID');
+		$this->registerArgument('contentUids', 'array', 'If used, replaces all conditions with an "uid IN (1,2,3)" style condition using the UID values from this array');
 		$this->registerArgument('slide', 'integer', 'Enables Content Sliding - amount of levels which shall get walked up the rootline. For infinite sliding (till the rootpage) set to -1)', FALSE, 0);
 		$this->registerArgument('slideCollect', 'integer', 'Enables collecting of Content Elements - amount of levels which shall get walked up the rootline. For infinite sliding (till the rootpage) set to -1 (lesser value for slide and slide.collect applies))', FALSE, 0);
 		$this->registerArgument('slideCollectReverse', 'boolean', 'Normally when collecting content elements the elements from the actual page get shown on the top and those from the parent pages below those. You can invert this behaviour (actual page elements at bottom) by setting this flag))', FALSE, 0);
@@ -107,14 +108,15 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 		$pid = $this->arguments['pageUid'] ? $this->arguments['pageUid'] : $GLOBALS['TSFE']->id;
 		$order = $this->arguments['order'] . ' ' . $this->arguments['sortDirection'];
 		$colPos = $this->arguments['column'];
+		$contentUids = $this->arguments['contentUids'];
 		$slide = $this->arguments['slide'] ? $this->arguments['slide'] : FALSE;
 		$slideCollect = $this->arguments['slideCollect'] ? $this->arguments['slideCollect'] : FALSE;
-		if($slideCollect !== FALSE){
+		if ($slideCollect !== FALSE) {
 			$slide = min($slide, $slideCollect);
 		}
 		$slideCollectReverse = $this->arguments['slideCollectReverse'];
 		$rootLine = NULL;
-		if($slide){
+		if ($slide) {
 			$pageSelect = new t3lib_pageSelect();
 			$rootLine = $pageSelect->getRootLine($pid);
 			if($slideCollectReverse){
@@ -131,7 +133,11 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 				}
 				$pid = $page['uid'];
 			}
-			$conditions = "pid = '" . $pid ."' AND colPos = '" . $colPos . "' AND (tx_flux_column = '' OR tx_flux_column IS NULL) " . $GLOBALS['TSFE']->cObj->enableFields('tt_content') . " AND (sys_language_uid IN (-1,0) OR (sys_language_uid = '" . $GLOBALS['TSFE']->sys_language_uid . "' AND l18n_parent = '0'))";
+			if (is_array($contentUids)) {
+				$conditions = 'uid IN (' . implode(',', $contentUids) . ')';
+			} else {
+				$conditions = "pid = '" . $pid ."' AND colPos = '" . $colPos . "' AND (tx_flux_column = '' OR tx_flux_column IS NULL) " . $GLOBALS['TSFE']->cObj->enableFields('tt_content') . " AND (sys_language_uid IN (-1,0) OR (sys_language_uid = '" . $GLOBALS['TSFE']->sys_language_uid . "' AND l18n_parent = '0'))";
+			}
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', 'tt_content', $conditions, 'uid', $order, $this->arguments['limit']);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$conf = array(
@@ -145,7 +151,7 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 			if (count($content) && !$slideCollect){
 				break;
 			}
-		} while($slide !== FALSE && --$slide !== -1);
+		} while ($slide !== FALSE && --$slide !== -1);
 
 		if ($loadRegister) {
 			$this->contentObject->cObjGetSingle('RESTORE_REGISTER', '');
