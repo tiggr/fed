@@ -2,7 +2,8 @@
 	jQuery.fn.formFieldGroup = function(options) {
 		var defaults = {
 			amount : 1,
-			maximum: 5
+			maximum: 5,
+			buffer: []
 		};
 		var options = jQuery.extend(defaults, options);
 
@@ -24,12 +25,18 @@
 				} else if (requestedAmount < children.length) {
 						// substract groups from DOM in reverse order, prepend to buffer
 					var toBeRemoved = children.length - requestedAmount;
+					var unShifteroony = [];
 					while (toBeRemoved > 0) {
 						var removedContent = children[children.length - toBeRemoved];
-						removedContent.remove();
-						options.buffer.push(removedContent);
+						unShifteroony.unshift(removedContent);
+						jQuery(removedContent).remove();
 						toBeRemoved--;
 					};
+					if (unShifteroony.length) {
+						jQuery.each( unShifteroony, function(i , v) {
+							options.buffer.unshift(v);
+						});
+					}
 				};
 			});
 		});
