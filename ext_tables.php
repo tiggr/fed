@@ -3,7 +3,9 @@ if (!defined ('TYPO3_MODE')){
 	die ('Access denied.');
 }
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']) {
+	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+}
 
 $loadBackendConfiguration = (TYPO3_MODE === 'BE' || t3lib_extMgm::isLoaded('feeditadvanced') || t3lib_extMgm::isLoaded('feedit'));
 
