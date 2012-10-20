@@ -63,6 +63,11 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	public function render() {
 		$content = "";
 		$context = $this->renderingContext;
+		if (method_exists($this, 'getRenderingContext') === TRUE) {
+			$context = $this->getRenderingContext();
+		} else {
+			$context = $this->renderingContext;
+		}
 		if ($context->getViewHelperVariableContainer()->exists('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchCaseValue')) {
 			$this->storeBackup($context);
 		}
