@@ -25,6 +25,8 @@
  * ************************************************************* */
 
 /**
+ * Page Configuration Provider
+ *
  * @package Fed
  * @subpackage Provider
  */
@@ -74,6 +76,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 
 	/**
 	 * @param Tx_Fed_Configuration_ConfigurationManager $configurationManager
+	 * @return void
 	 */
 	public function injectConfigurationManager(Tx_Fed_Configuration_ConfigurationManager $configurationManager) {
 		$this->configurationManager = $configurationManager;
@@ -81,6 +84,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 
 	/**
 	 * @param Tx_Fed_Service_Page $pageService
+	 * @return void
 	 */
 	public function injectPageService(Tx_Fed_Service_Page $pageService) {
 		$this->pageService = $pageService;
@@ -98,7 +102,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 			list ($extensionName, $action) = explode('->', $action);
 			$paths = $this->configurationManager->getPageConfiguration($extensionName);
 			$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
+		} elseif ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
 			$templatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
 		}
 		return $templatePathAndFilename;
@@ -119,7 +123,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 			list ($extensionName, $action) = explode('->', $action);
 			$paths = Tx_Flux_Utility_Path::translatePath((array) $this->configurationManager->getPageConfiguration($extensionName));
 			$templatePathAndFilename = $paths['templateRootPath'] . '/Page/' . $action . '.html';
-		} else if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
+		} elseif ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFallbackFluidPageTemplate']) {
 			$templatePathAndFilename = $this->pageService->getFallbackPageTemplatePathAndFilename();
 		} else {
 			return array();
@@ -229,6 +233,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 		if (count($treeChildrenWhichRequireUpdate) > 0) {
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('pages', "uid IN (" . implode(',', $treeChildrenWhichRequireUpdate) . ")", $overrideValues);
 		}
+		unset($reference);
 	}
 
 	/**
