@@ -67,14 +67,18 @@ class Tx_Fed_ViewHelpers_Page_MenuViewHelper extends Tx_Fed_ViewHelpers_Page_Abs
 		$this->templateVariableContainer->remove('rootLine');
 		if (strlen(trim($content)) === 0) {
 			$content = $this->autoRender($menu);
-			$this->tag->setContent($content);
-			$this->tag->forceClosingTag(TRUE);
-			$output = $this->tag->render();
+			if (strlen(trim($content)) === 0) {
+				$output = '';
+			} else {
+				$this->tag->setContent($content);
+				$this->tag->forceClosingTag(TRUE);
+				$output = $this->tag->render();
+			}
 		} else {
 			$output = $content;
 		}
 		if (count($backups) > 0) {
-			foreach ($backups as $var=>$value) {
+			foreach ($backups as $var => $value) {
 				$this->templateVariableContainer->add($var, $value);
 			}
 		}
