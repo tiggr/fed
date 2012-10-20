@@ -40,7 +40,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	/**
 	 * @var string
 	 */
-	protected $fieldName = '';
+	protected $fieldName = 'tx_fed_page_flexform';
 
 	/**
 	 * @var string
@@ -66,6 +66,11 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	 * @var Tx_Fed_Configuration_ConfigurationManager
 	 */
 	protected $configurationManager;
+
+	/**
+	 * @var integer
+	 */
+	protected $priority = 100;
 
 	/**
 	 * CONSTRUCTOR
@@ -269,7 +274,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 				// no manipulation necessary, record does not have a flexform
 			return;
 		}
-
+		unset($status, $reference);
 	}
 
 	/**

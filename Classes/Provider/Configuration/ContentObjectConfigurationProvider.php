@@ -38,7 +38,7 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	/**
 	 * @var string
 	 */
-	protected $fieldName = '';
+	protected $fieldName = 'pi_flexform';
 
 	/**
 	 * @var string
