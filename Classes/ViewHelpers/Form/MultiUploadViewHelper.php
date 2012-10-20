@@ -70,6 +70,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 	/**
 	 * @param Tx_Fed_Service_Domain $infoService
+	 * @return void
 	 */
 	public function injectInfoService(Tx_Fed_Service_Domain $infoService) {
 		$this->infoService = $infoService;
@@ -77,6 +78,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 	/**
 	 * @param Tx_Fed_Utility_DocumentHead $documentHead
+	 * @return void
 	 */
 	public function injectDocumentHead(Tx_Fed_Utility_DocumentHead $documentHead) {
 		$this->documentHead = $documentHead;
@@ -84,6 +86,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 	/**
 	 * @param Tx_Fed_Service_Json $jsonService
+	 * @return void
 	 */
 	public function injectJsonService(Tx_Fed_Service_Json $jsonService) {
 		$this->jsonService = $jsonService;
@@ -91,6 +94,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 	/**
 	 * @param Tx_Fluid_Core_ViewHelper_TagBuilder $tagBuilder Tag builder
+	 * @return void
 	 */
 	public function injectTagBuilder(Tx_Fluid_Core_ViewHelper_TagBuilder $tagBuilder) {
 		$this->tag = $tagBuilder;
@@ -100,7 +104,6 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	 * Initialize the arguments.
 	 *
 	 * @return void
-	 * @author Sebastian Kurfürst <sebastian@typo3.org>
 	 * @api
 	 */
 	public function initializeArguments() {
@@ -138,9 +141,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 	public function render() {
 		$name = $this->getName();
 
-		# Flatten stored values into a neat CSV-string
+			// Flatten stored values into a neat CSV-string
 		$value = $this->getStoredValue(FALSE);
-		if (is_array($value)) $fieldValue = $this->flattenFilelist($value);
+		if (is_array($value)) {
+			$fieldValue = $this->flattenFilelist($value);
+		}
 
 		$this->uniqueId = $this->arguments['id'] ? $this->arguments['id'] : uniqid('plupload');
 		$this->setErrorClassAttribute();
@@ -149,12 +154,13 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			'<div id="' . $this->uniqueId . '" class="fed-plupload plupload_container"></div>',
 		);
 
-		# If we aren't told not to render the hidden value field, we'll do so now.
+			// If we aren't told not to render the hidden value field, we'll do so now.
 		if ($this->arguments['noHiddenValueField'] === FALSE) {
-			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' . $name . '" value="' . $fieldValue . '" class="value-holder" />';
+			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' .
+				$name . '" value="' . $fieldValue . '" class="value-holder" />';
 		}
 
-		# Add JS-block to HTML output if need be.
+			// Add JS-block to HTML output if need be.
 		$html[] = $this->addScript();
 		$this->tag->addAttribute('id', '');
 		$this->tag->setContent(implode(LF, $html));
@@ -180,26 +186,26 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		$output = array();
 		if (is_array($filelist)) {
-			foreach($filelist as $file) {
+			foreach ($filelist as $file) {
 				$output[] = $file;
 			}
 		}
 
-		return implode(",", $output);
+		return implode(',', $output);
 
 	}
 
 
 	/**
 	 * Get list of previously stored files for this uploader.
-	 * @param boolean $getFromPropertyValue If FALSE, uses $this->getValue(), otherwise uses $this->getPropertyValue().
+	 * @param boolean $getFromPropertyValue If FALSE $this->getValue() otherwise $this->getPropertyValue()
 	 * @return array
 	 */
 	protected function getStoredValue($getFromPropertyValue = TRUE) {
 
 		$return = array();
 
-		# Get the data, either from the passed arguments or the internal functions.
+			// Get the data, either from the passed arguments or the internal functions.
 		if (!isset($this->arguments['storedValue'])) {
 			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
 		} else {
@@ -208,19 +214,20 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		if (is_string($data)) {
 
-			# It's just a string, so let's try to explode it and return the results.
-			$tempData = t3lib_div::trimExplode(",", $data, TRUE);
-			foreach($tempData as $tD) {
+				// It's just a string, so let's try to explode it and return the results.
+			$tempData = t3lib_div::trimExplode(',', $data, TRUE);
+			foreach ($tempData as $tD) {
 				$return[] = array(
-					"name" => $tD,
-					"uid" => FALSE
+					'name' => $tD,
+					'uid' => FALSE
 				);
 			}
 
 		} elseif (is_array($data)) {
 
-			# This is an array. We'll assume it has the proper data format (each entry MUST contain 'name'; 'uid' is
-			# optional), and just pass it along to the parser directly.
+				// This is an array. We'll assume it has the proper data format (each entry
+				// MUST contain 'name'; 'uid' is optional), and just pass it along to
+				// the parser directly.
 			return $data;
 
 		}
@@ -231,22 +238,24 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 
 	/**
-	 * Adds necessary scripts to header. However, if includeJSInBody is set, it will return the initialization javascript as a string.
+	 * Adds necessary scripts to header. However, if includeJSInBody is set,
+	 * it will return the initialization javascript as a string.
+	 *
 	 * @return string
 	 */
 	protected function addScript() {
 		$scriptPath = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/';
 
-		# Get existing files using a handy internal function.
+			// Get existing files using a handy internal function.
 		$existingFiles = $this->getStoredValue();
 
 		$propertyName = $this->arguments['property'];
 		$formObject = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
 
-		# Set uploadfolder for later. We'll need it to determine file sizes of existing files.
+			// Set uploadfolder for later. We'll need it to determine file sizes of existing files.
 		$uploadFolder = ($this->arguments['uploadfolder'] === FALSE) ? $this->infoService->getUploadFolder($formObject, $propertyName) : $this->arguments['uploadfolder'];
 
-		# Add some resources.
+			// Add some resources.
 		$pluploadPath = $scriptPath . 'com/plupload/js/';
 		$this->documentHead->includeFiles(array(
 			$scriptPath . 'GearsInit.js',
@@ -259,14 +268,14 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Stylesheet/MultiUpload.css'
 		));
 
-		$flashPath = "/" . $pluploadPath . "plupload.flash.swf";
+		$flashPath = '/' . $pluploadPath . 'plupload.flash.swf';
 
-		# create JSON objects for each existing file
-		foreach ($existingFiles as $k=>$fileData) {
+			// create JSON objects for each existing file
+		foreach ($existingFiles as $k => $fileData) {
 			$file = $fileData['name'];
 			$size = (string) intval(filesize(PATH_site . $uploadFolder . '/' . $file));
 			$existingFiles[$k] = array(
-				'id' => "f$k",
+				'id' => 'f' . $k,
 				'uid' => intval($fileData['uid']),
 				'name' => $file,
 				'size' => $size,
@@ -309,39 +318,39 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			)
 		);
 		$optionsJson = $this->jsonService->encode($options);
-		// remove last }
-		$optionsJson = substr($optionsJson,0, -1);
-		if(!empty($this->arguments['preinit'])) {
+			// remove last }
+		$optionsJson = substr($optionsJson, 0, -1);
+		if (!empty($this->arguments['preinit'])) {
 			$optionsJson .= ',"preinit":{';
 			$preInitHandler = array();
-			foreach($this->arguments['preinit'] as $preInitEvent => $preInitEventHandler) {
+			foreach ($this->arguments['preinit'] as $preInitEvent => $preInitEventHandler) {
 				$preInitHandler[] = $preInitEvent . ':' . $preInitEventHandler;
 			}
-			$optionsJson .= implode(',',$preInitHandler) . '}';
+			$optionsJson .= implode(',', $preInitHandler) . '}';
 		}
-		if(!empty($this->arguments['init'])) {
+		if (!empty($this->arguments['init'])) {
 			$optionsJson .= ',"init":{';
 			$initHandler = array();
-			foreach($this->arguments['init'] as $initEvent => $initEventHandler) {
+			foreach ($this->arguments['init'] as $initEvent => $initEventHandler) {
 				$initHandler[] = $initEvent . ':' . $initEventHandler;
 			}
-			$optionsJson .= implode(',',$initHandler) . '}';
+			$optionsJson .= implode(',', $initHandler) . '}';
 		}
 		$optionsJson .= '}';
 
+		$scriptBlock = '
+			var ' . $this->uniqueId . ' = null;
+			var ' . $this->uniqueId . 'options = ' . $optionsJson . ';
+			jQuery(document).ready(function() { ' . $this->uniqueId . ' = jQuery("#' . $this->uniqueId . '").' .
+				$this->arguments['initFunctionName'] . '( ' . $this->uniqueId . 'options ); });';
 
-		$scriptBlock = "
-			var {$this->uniqueId} = null;
-			var {$this->uniqueId}options = {$optionsJson};
-			jQuery(document).ready(function() { {$this->uniqueId} = jQuery('#{$this->uniqueId}').{$this->arguments['initFunctionName']}( {$this->uniqueId}options ); });";
-
-		# Set headers OR return the script block if told to do so.
+			// Set headers OR return the script block if told to do so.
 		if ($this->arguments['insertJSInBody']) {
-			return "<script type='text/javascript'>" . $scriptBlock . "</script>";
+			return '<script type="text/javascript">' . $scriptBlock . '</script>';
 		} else {
 			$this->documentHead->includeHeader($scriptBlock, 'js');
 		}
-		return "";
+		return '';
 	}
 
 	/**
@@ -354,10 +363,10 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$propertyName = $this->arguments['property'];
 		if ($this->arguments['url']) {
 			$url = $this->arguments['url'];
-		} else if ($formObject && $propertyName) {
+		} elseif ($formObject && $propertyName) {
 			$formObjectClass = get_class($formObject);
 			$controllerName = $this->controllerContext->getRequest()->getControllerName();
-			// Set pluginName dynamically: if found in arguments, it'll use the custom name instead.
+				// Set pluginName dynamically: if found in arguments, use that name instead.
 			$pluginName = (isset($this->arguments['pluginName'])) ? $this->arguments['pluginName'] : $this->controllerContext->getRequest()->getPluginName();
 			$extensionName = $this->controllerContext->getRequest()->getControllerExtensionName();
 			$arguments = array(
@@ -367,9 +376,9 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			$url = $this->controllerContext->getUriBuilder()
 				->uriFor($this->arguments['actionName'], $arguments, $controllerName, $extensionName, $pluginName);
 
-			# If URL isn't prefixed with protocol (http or https), add a slash to the beginning to make
-			# browsers what can't respects baseURL get to da choppah!
-			if (!preg_match("/^http(s{0,1})\:\/\//i", $url)) {
+				// If URL isn't prefixed with protocol (http or https), add a slash to the
+				// beginning to make browsers what can't respects baseURL get to da choppah!
+			if (!preg_match('/^http(s{0,1})\:\/\//i', $url)) {
 				$url = '/' . $url;
 			}
 		} else {
