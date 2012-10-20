@@ -276,6 +276,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 				$subMenu = $this->pageSelect->getMenu($page['uid']);
 				$subMenu = $this->parseMenu($subMenu, $rootLine);
 				$renderedSubMenu = $this->autoRender($subMenu, $level + 1);
+				$this->tag->setTagName($this->arguments['tagName']);
 				$this->tag->setContent($renderedSubMenu);
 				$this->tag->addAttribute('class', ($this->arguments['class'] ? $this->arguments['class'] . ' lvl-' : 'lvl-') . strval($level));
 				$html[] = $this->tag->render();

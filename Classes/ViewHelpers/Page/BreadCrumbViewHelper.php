@@ -61,6 +61,7 @@ class Tx_Fed_ViewHelpers_Page_BreadCrumbViewHelper extends Tx_Fed_ViewHelpers_Pa
 			if (strlen(trim($content)) === 0) {
 				$output = '';
 			} else {
+				$this->tag->setTagName($this->arguments['tagName']);
 				$this->tag->setContent($content);
 				$this->tag->forceClosingTag(TRUE);
 				$output = $this->tag->render();
