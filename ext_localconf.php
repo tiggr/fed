@@ -4,6 +4,7 @@ if (!defined ('TYPO3_MODE')) {
 }
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
+$loadBackendConfiguration = (TYPO3_MODE === 'BE' || t3lib_extMgm::isLoaded('feeditadvanced') || t3lib_extMgm::isLoaded('feedit'));
 
 Tx_Extbase_Utility_Extension::configurePlugin(
 	$_EXTKEY,
@@ -85,7 +86,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 }
 
 $fedWizardElements = array();
-if (TYPO3_MODE == 'BE') {
+if ($loadBackendConfiguration) {
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']
 	) {
@@ -150,3 +151,5 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCache
 }
 
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:fed/Classes/Backend/TCEMain.php:&Tx_Fed_Backend_TCEMain->clearCacheCommand';
+
+unset($loadBackendConfiguration);

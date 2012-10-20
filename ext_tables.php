@@ -5,6 +5,8 @@ if (!defined ('TYPO3_MODE')){
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup'] = unserialize($_EXTCONF);
 
+$loadBackendConfiguration = (TYPO3_MODE === 'BE' || t3lib_extMgm::isLoaded('feeditadvanced') || t3lib_extMgm::isLoaded('feedit'));
+
 t3lib_div::loadTCA('tt_content');
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']) {
@@ -57,7 +59,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 	);
 }
 
-if (TYPO3_MODE == 'BE') {
+if ($loadBackendConfiguration) {
 	$versionNumbers = explode('.', TYPO3_version);
 	if ($versionNumbers[0] >= 4 && $versionNumbers[1] >= 6) {
 		$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['Tx_Fed_Scheduler_Task'] = array(
@@ -95,9 +97,6 @@ if (TYPO3_MODE == 'BE') {
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 		t3lib_div::loadTCA('pages');
-		$before = '--div--;Page Template,tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform,--div--;LLL:EXT:cms/locallang_tca.xml:pages.tabs.options,';
-		$TCA['pages']['types'][1]['showitem'] = $before . $TCA['pages']['types'][1]['showitem'];
-		$TCA['pages']['types'][4]['showitem'] = $before . $TCA['pages']['types'][4]['showitem'];
 		t3lib_extMgm::addTCAcolumns('pages', array(
 			'tx_fed_page_controller_action' => Array (
 				'exclude' => 1,
@@ -123,6 +122,12 @@ if (TYPO3_MODE == 'BE') {
 				)
 			),
 		), 1);
+		t3lib_extMgm::addToAllTCAtypes(
+			'pages',
+			'tx_fed_page_controller_action,tx_fed_page_controller_action_sub,tx_fed_page_flexform',
+			'0,1,4',
+			'before:layout'
+		);
 	}
 
 	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'FED Fluid Extbase Development Framework');
@@ -176,7 +181,6 @@ if (TYPO3_MODE == 'BE') {
 		),
 	);
 
-
 	t3lib_extMgm::addTCAcolumns('tt_content', array(
 		'tx_fed_fcefile' => Array (
 			'exclude' => 1,
@@ -203,3 +207,4 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCache
 	}
 }
 
+unset($loadBackendConfiguration);
