@@ -85,7 +85,14 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		}
 		$this->pageSelect = new t3lib_pageSelect();
 		$this->pageSelect->init((boolean) $this->arguments['showHidden']);
-		$this->pageSelect->where_groupAccess = ' AND fe_group IN(\'\',' . implode(',', $groups) . ')';
+		$clauses = array();
+		foreach ($groups as $group) {
+			$clause = "fe_group = '" . $group . "' OR fe_group LIKE '" .
+				$group . ",%' OR fe_group LIKE '%," . $group . "' OR fe_group LIKE '%," . $group . ",%'";
+			array_push($clauses, $clause);
+		}
+		array_push($clauses, "fe_group = '' OR fe_group = '0'");
+		$this->pageSelect->where_groupAccess = ' AND (' . implode(' OR ', $clauses) .  ')';
 	}
 
 	/**
