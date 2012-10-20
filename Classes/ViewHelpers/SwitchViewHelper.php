@@ -39,10 +39,14 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	 */
 	private $childNodes = array();
 
+	/**
+	 * @var mixed
+	 */
 	private $backup;
 
 	/**
 	 * Initialize
+	 * @return void
 	 */
 	public function initializeArguments() {
 		$this->registerArgument('value', 'string', 'Variable on which to switch - string, integer or number', TRUE);
@@ -51,6 +55,7 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 
 	/**
 	 * @param array $childNodes
+	 * @return void
 	 */
 	public function setChildNodes(array $childNodes) {
 		$this->childNodes = $childNodes;
@@ -61,8 +66,7 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 	 * @return string
 	 */
 	public function render() {
-		$content = "";
-		$context = $this->renderingContext;
+		$content = '';
 		if (method_exists($this, 'getRenderingContext') === TRUE) {
 			$context = $this->getRenderingContext();
 		} else {
@@ -93,12 +97,15 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 		if ($this->arguments['as']) {
 			$this->templateVariableContainer->add($this->arguments['as'], $content);
 			return NULL;
-		} else {
-			return $content;
 		}
+		return $content;
 	}
 
-	protected function storeBackup($context) {
+	/**
+	 * @param Tx_Fluid_Core_Rendering_RenderingContextInterface $context
+	 * @return void
+	 */
+	protected function storeBackup(Tx_Fluid_Core_Rendering_RenderingContextInterface $context) {
 		$this->backup = array(
 			$context->getViewHelperVariableContainer()->get('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchCaseValue'),
 			$this->determineBooleanOf($context, 'switchBreakRequested'),
@@ -106,12 +113,21 @@ class Tx_Fed_ViewHelpers_SwitchViewHelper extends Tx_Fed_Core_ViewHelper_Abstrac
 		);
 	}
 
-	protected function restoreBackup($context) {
+	/**
+	 * @param Tx_Fluid_Core_Rendering_RenderingContextInterface $context
+	 * @return void
+	 */
+	protected function restoreBackup(Tx_Fluid_Core_Rendering_RenderingContextInterface $context) {
 		$context->getViewHelperVariableContainer()->add('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchCaseValue', $this->backup[0]);
 		$context->getViewHelperVariableContainer()->add('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchBreakRequested', $this->backup[1]);
 		$context->getViewHelperVariableContainer()->add('Tx_Fed_ViewHelpers_SwitchViewHelper', 'switchContinueUntilBreak', $this->backup[2]);
 	}
 
+	/**
+	 * @param Tx_Fluid_Core_Rendering_RenderingContextInterface $context
+	 * @param mixed $var
+	 * @return boolean
+	 */
 	protected function determineBooleanOf($context, $var) {
 		if ($context->getViewHelperVariableContainer()->exists('Tx_Fed_ViewHelpers_SwitchViewHelper', $var)) {
 			return $context->getViewHelperVariableContainer()->get('Tx_Fed_ViewHelpers_SwitchViewHelper', $var);
