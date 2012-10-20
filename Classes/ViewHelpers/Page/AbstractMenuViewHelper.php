@@ -74,6 +74,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 
 	/**
 	 * Initialize object
+	 * @return void
 	 */
 	public function initializeObject() {
 		if (is_array($GLOBALS['TSFE']->fe_user->user) === TRUE) {
@@ -221,9 +222,9 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$allowedDocumentTypes = $this->allowedDoktypeList();
 		foreach ($menu as $page) {
 			if ($page['hidden'] == 1) {
-
+				continue;
 			} elseif ($page['nav_hide'] == 1 && $this->arguments['showHidden'] < 1) {
-
+				continue;
 			} elseif (in_array($page['doktype'], $allowedDocumentTypes)) {
 				$page = $this->getMenuItemEntry($page, $rootLine);
 				$filtered[] = $page;
@@ -234,7 +235,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		}
 		if ($classLast) {
 			$length = count($filtered);
-			$filtered[$length-1]['class'] = trim($filtered[$length-1]['class'] . ' ' . $classLast);
+			$filtered[$length - 1]['class'] = trim($filtered[$length - 1]['class'] . ' ' . $classLast);
 		}
 		return $filtered;
 	}
@@ -246,7 +247,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * @param integer $level
 	 * @return string
 	 */
-	protected function autoRender($menu, $level=1) {
+	protected function autoRender($menu, $level = 1) {
 		$tagName = $this->arguments['tagNameChildren'];
 		$substElementUid = $this->arguments['substElementUid'];
 		$linkCurrent = (boolean) $this->arguments['linkCurrent'];
@@ -258,9 +259,9 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 				continue;
 			}
 			$class = trim($page['class']) != '' ? ' class="' . $page['class'] . '"' : '';
-			$elementID = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
+			$elementId = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
 			$target = $page['target']!='' ? ' target="'.$page['target'].'"' : '';
-			$html[] = '<' . $tagName . $elementID . $class .'>';
+			$html[] = '<' . $tagName . $elementId . $class .'>';
 			if ($page['current'] && $linkCurrent === FALSE) {
 				$html[] = $page['title'];
 			} elseif ($page['active'] && $linkActive === FALSE) {
