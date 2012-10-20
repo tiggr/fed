@@ -237,12 +237,15 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 				$filtered[] = $page;
 			}
 		}
-		if ($classFirst) {
-			$filtered[0]['class'] = trim($filtered[0]['class'] . ' ' . $classFirst);
-		}
-		if ($classLast) {
-			$length = count($filtered);
-			$filtered[$length - 1]['class'] = trim($filtered[$length - 1]['class'] . ' ' . $classLast);
+		if (isset($filtered[0])) {
+				// at least 1 page in menu
+			if ($classFirst) {
+				$filtered[0]['class'] = trim($filtered[0]['class'] . ' ' . $classFirst);
+			}
+			if ($classLast) {
+				$length = count($filtered);
+				$filtered[$length - 1]['class'] = trim($filtered[$length - 1]['class'] . ' ' . $classLast);
+			}
 		}
 		return $filtered;
 	}
