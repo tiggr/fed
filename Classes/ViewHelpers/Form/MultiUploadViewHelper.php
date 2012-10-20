@@ -267,6 +267,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			$scriptPath . 'FileListEditor.js',
 			t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Stylesheet/MultiUpload.css'
 		));
+		if (isset($this->arguments['lang'])) {
+			$this->documentHead->includeFiles(array(
+				$pluploadPath . 'i18n/' . $this->arguments['lang'] . '.js'
+			));
+		}
 
 		$flashPath = '/' . $pluploadPath . 'plupload.flash.swf';
 
