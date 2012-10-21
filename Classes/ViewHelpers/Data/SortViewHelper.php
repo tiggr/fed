@@ -41,6 +41,7 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 		$this->registerArgument('array', 'array', 'DEPRECATED: Optional; use to sort an array');
 		$this->registerArgument('objectStorage', 'Tx_Extbase_Persistence_ObjectStorage|Tx_Extbase_Persistence_LazyObjectStorage', 'DEPRECATED: Optional; use to sort an ObjectStorage');
 		$this->registerArgument('queryResult', 'Tx_Extbase_Persistence_QueryResult', 'DEPRECATED: Optional; use to sort a QueryResult');
+		$this->registerArgument('sortFlags', 'string', 'Constant name from PHP for SORT_FLAGS: SORT_REGULAR, SORT_STRING, SORT_NUMERIC, SORT_NATURAL, SORT_LOCALE_STRING or SORT_FLAG_CASE', FALSE, 'SORT_REGULAR');
 	}
 
 	/**
@@ -110,9 +111,9 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 			$sorted[$index] = $object;
 		}
 		if ($this->arguments['order'] === 'ASC') {
-			ksort($sorted);
+			ksort($sorted, constant($this->arguments['sortFlags']));
 		} else {
-			krsort($sorted);
+			krsort($sorted, constant($this->arguments['sortFlags']));
 		}
 		return $sorted;
 	}
@@ -142,9 +143,9 @@ class Tx_Fed_ViewHelpers_Data_SortViewHelper extends Tx_Fluid_Core_ViewHelper_Ab
 			$sorted[$index] = $item;
 		}
 		if ($this->arguments['order'] === 'ASC') {
-			ksort($sorted);
+			ksort($sorted, constant($this->arguments['sortFlags']));
 		} else {
-			krsort($sorted);
+			krsort($sorted, constant($this->arguments['sortFlags']));
 		}
 		$storage = $objectManager->get('Tx_Extbase_Persistence_ObjectStorage');
 		foreach ($sorted as $item) {
