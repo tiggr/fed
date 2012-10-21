@@ -58,6 +58,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 		$this->registerArgument('classCurrent', 'string', 'Optional class name to add to current link', FALSE, 'current');
 		$this->registerArgument('classHasSubpages', 'string', 'Optional class name to add to links which have subpages', FALSE, 'sub');
 		$this->registerArgument('useShortcutTarget', 'boolean', 'Optional param for using shortcut target instead of shortcut itself for current link', FALSE, FALSE);
+		$this->registerArgument('useShortcutData', 'boolean', 'If TRUE, fetches ALL data from the shortcut target before any additional processing takes place. Note that this overrides everything, including the UID, effectively substituting the shortcut for the target', FALSE, FALSE);
 		$this->registerArgument('classFirst', 'string', 'Optional class name for the first menu elment', FALSE, '');
 		$this->registerArgument('classLast', 'string', 'Optional class name for the last menu elment', FALSE, '');
 		$this->registerArgument('substElementUid', 'boolean', 'Optional parameter for wrapping the link with the uid of the page', FALSE, '');
@@ -270,8 +271,8 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 			}
 			$class = trim($page['class']) != '' ? ' class="' . $page['class'] . '"' : '';
 			$elementId = $substElementUid ? ' id="elem_' . $page['uid'] . '"' : '';
-			$target = $page['target']!='' ? ' target="'.$page['target'].'"' : '';
-			$html[] = '<' . $tagName . $elementId . $class .'>';
+			$target = $page['target'] != '' ? ' target="' . $page['target'] . '"' : '';
+			$html[] = '<' . $tagName . $elementId . $class . '>';
 			if ($page['current'] && $linkCurrent === FALSE) {
 				$html[] = $page['title'];
 			} elseif ($page['active'] && $linkActive === FALSE) {
