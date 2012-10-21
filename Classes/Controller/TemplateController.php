@@ -30,7 +30,7 @@
  * @package Fed
  * @subpackage Controller
  */
-class Tx_Fed_Controller_TemplateController extends Tx_Fed_MVC_Controller_AbstractController {
+class Tx_Fed_Controller_TemplateController extends Tx_Fed_MVC_Controller_AbstractController implements Tx_Fed_Routing_RoutableControllerInterface {
 
 	/**
 	 * @var string
