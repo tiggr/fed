@@ -31,16 +31,6 @@
 class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_AbstractSubstituteArray {
 
 	/**
-	 * @var t3lib_pageSelect
-	 */
-	protected $pageSelect;
-
-	/**
-	 * @var t3lib_TStemplate
-	 */
-	protected $template;
-
-	/**
 	 * @var array
 	 */
 	protected $extbaseUserFunctionIdentifiers = array('tx_extbase_core_bootstrap->run', 'tx_fed_core_bootstrap->run');
@@ -50,7 +40,7 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 	 */
 	public function __construct($existing = array()) {
 		parent::__construct($existing);
-		$this->initializeObject();
+		#$this->initializeObject();
 	}
 
 	/**
@@ -58,20 +48,33 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 	 * @return void
 	 */
 	public function initializeObject() {
-		$GLOBALS['TYPO3_DB'] = new t3lib_DB();
-		$GLOBALS['TYPO3_DB']->connectDB();
+		$GLOBALS['SIM_ACCESS_TIME'] = time() - 86400;
 		$GLOBALS['TT'] = new t3lib_timeTrack();
-		$this->pageSelect = new t3lib_pageSelect();
-		if (t3lib_div::_GET('id')) {
-			$pageUid = t3lib_div::_GET('id');
-		} else {
-			$pageUid = $this->pageSelect->getDomainStartPage($_SERVER['HTTP_HOST']);
-		}
-		$this->pageSelect->init(TRUE);
-		$this->template = new t3lib_TStemplate();
-		$this->template->start($this->pageSelect->getRootLine($pageUid));
-		$this->template->init();
-
+		$GLOBALS['TT']->start();
+		$GLOBALS['TYPO3_DB'] = new t3lib_DB();
+		$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe',
+			$GLOBALS['TYPO3_CONF_VARS'],
+			t3lib_div::_GP('id'),
+			t3lib_div::_GP('type'),
+			t3lib_div::_GP('no_cache'),
+			t3lib_div::_GP('cHash'),
+			t3lib_div::_GP('jumpurl'),
+			t3lib_div::_GP('MP'),
+			t3lib_div::_GP('RDCT')
+		);
+		$GLOBALS['TSFE']->sys_page->where_hid_del = ' AND 1=1 ';
+		$GLOBALS['TSFE']->sys_page->where_groupAccess = ' AND 1=1 ';
+		$GLOBALS['TSFE']->connectToDB();
+		$GLOBALS['TSFE']->initFEuser();
+		$GLOBALS['TSFE']->checkAlternativeIdMethods();
+		$GLOBALS['TSFE']->determineId();
+		$GLOBALS['TSFE']->clear_preview();
+		$GLOBALS['TSFE']->tmpl->forceTemplateParsing = 1;
+		$GLOBALS['SIM_ACCESS_TIME'] = time() - 86400;
+		$GLOBALS['TSFE']->initTemplate();
+		$GLOBALS['TSFE']->getFromCache();
+		$GLOBALS['TSFE']->getConfigArray();
+		//return;
 		$allContentOnPage = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('DISTINCT CType,list_type', 'tt_content', "pid = '" . $pageUid . "'");
 		$extensionsAndPluginNames = array();
 		foreach ($allContentOnPage as $contentRecord) {
@@ -85,6 +88,8 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 			array_push($extensionsAndPluginNames, $identity);
 		}
 		$definitions = $this->buildFixedPostVarSetsForExtensionsAndPluginNames($extensionsAndPluginNames);
+		#var_dump($definitions);
+		#exit();
 		unset($GLOBALS['TYPO3_DB'], $GLOBALS['TSFE'], $GLOBALS['TT']);
 	}
 
@@ -140,7 +145,7 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 	 * @return array|NULL
 	 */
 	protected function getSetupForRecord($contentRecord) {
-		$typoScriptDefinition = $this->template->setup['tt_content.'];
+		$typoScriptDefinition = $GLOBALS['TSFE']->tmpl->setup['tt_content.'];
 		if ($contentRecord['list_type'] && isset($typoScriptDefinition['list.']['20.'][$contentRecord['list_type'] . '.'])) {
 			$setup = $typoScriptDefinition['list.']['20.'][$contentRecord['list_type'] . '.'];
 		} elseif ($contentRecord['CType']) {
