@@ -267,26 +267,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			$chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
 			$filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
 
-			// The following code block is ye olde FED handler, which doesn't work for chunked uploads at all.
-			/*
-			$filename = preg_replace('/[^\w\._]+/', '', $filename);
-			if ($chunks < 2 && file_exists($targetDir . '/' . $filename)) {
-				$ext = strrpos($filename, '.');
-				$filenameA = substr($filename, 0, $ext);
-				$filenameB = substr($filename, $ext);
-				$count = 1;
-				while (file_exists($targetDir . '/' . $filenameA . '_' . $count . $filenameB)) {
-					$count++;
-				}
-				$filename = $filenameA . '_' . $count . $filenameB;
-			}
-			if (strpos($contentType, "multipart") !== FALSE) {
-				$newFilename = $this->fileService->move($sourceFilename, $targetDir . '/' . $filename);
-			} else {
-				$newFilename = $this->fileService->copyChunk($sourceFilename, $targetDir, $filename, $chunk);
-			}
-			*/
-
 			// What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
 
 			// Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
@@ -338,6 +318,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 					$in = fopen("php://input", "rb");
 
 					if ($in) {
+
 						while ($buff = fread($in, 4096)) {
 							fwrite($out, $buff);
 						}
@@ -354,6 +335,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			// END OF PLAGIARISM
 
 			// Check if file has been uploaded - in that case, send a response back.
+
 			if (!$chunks || $chunk == $chunks - 1) {
 
 				$newFilename = $this->fileService->move($tempFileComplete, $targetDir . '/' . $filename);
