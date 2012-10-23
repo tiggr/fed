@@ -264,6 +264,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			$chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
 			$chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
 			$filename = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
+
+			# The following code block is ye olde FED handler, which doesn't work for chunked uploads at all.
+			/*
 			$filename = preg_replace('/[^\w\._]+/', '', $filename);
 			if ($chunks < 2 && file_exists($targetDir . '/' . $filename)) {
 				$ext = strrpos($filename, '.');
@@ -280,10 +283,84 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			} else {
 				$newFilename = $this->fileService->copyChunk($sourceFilename, $targetDir, $filename, $chunk);
 			}
-			$response = array(
-				'name' => basename($newFilename)
-			);
-			echo $this->jsonService->getRpcResponse($response);
+			*/
+
+			# What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
+
+			# Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
+			$fileHandler  = t3lib_div::makeInstance("t3lib_basicFileFunctions");
+			$filename     = basename( $fileHandler->getUniqueName( $filename, $targetDir ) );
+
+			# Touch the filename. This ensures that if any other user initiates an upload with the same name while
+			# we're spewing chunks, we will not get a filename clash later on. Especially in the part-file. That
+			# would be bad.
+			touch($targetDir . "/" . $filename);
+
+			# Get a temporary filename for our upload
+			$tempFilename = $filename . ".part";
+			$tempFileComplete = $targetDir ."/" . $tempFilename;
+
+			##########################################################################################
+			# The following code block is lifted almost without change from the plUpload example
+			##########################################################################################
+			// Handle non multipart uploads - older WebKit versions didn't support multipart in HTML5
+			if (strpos($contentType, "multipart") !== FALSE) {
+				if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+					// Open temp file
+					$out = fopen($tempFileComplete, $chunk == 0 ? "wb" : "ab");
+					if ($out) {
+						// Read binary input stream and append it to temp file
+						$in = fopen($_FILES['file']['tmp_name'], "rb");
+
+						if ($in) {
+							while ($buff = fread($in, 4096))
+								fwrite($out, $buff);
+						} else
+							die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+						fclose($in);
+						fclose($out);
+						@unlink($_FILES['file']['tmp_name']);
+					} else
+						die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+				} else
+					die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+			} else {
+				// Open temp file
+				$out = fopen($tempFileComplete, $chunk == 0 ? "wb" : "ab");
+				if ($out) {
+					// Read binary input stream and append it to temp file
+					$in = fopen("php://input", "rb");
+
+					if ($in) {
+						while ($buff = fread($in, 4096))
+							fwrite($out, $buff);
+					} else
+						die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+
+					fclose($in);
+					fclose($out);
+				} else {
+					die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+				}
+			}
+			##########################################################################################
+			# END OF PLAGIARISM
+			##########################################################################################
+
+
+			# Check if file has been uploaded - in that case, send a response back.
+			if (!$chunks || $chunk == $chunks - 1) {
+
+				$newFilename = $this->fileService->move($tempFileComplete, $targetDir . '/' . $filename);
+
+				$response = array(
+					'name' => basename($newFilename)
+				);
+
+				echo $this->jsonService->getRpcResponse($response);
+			}
+
+
 		} catch (Exception $e) {
 			echo $this->jsonService->getRpcError($e);
 		}
