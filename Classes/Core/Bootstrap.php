@@ -1,26 +1,26 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Bootstrap wrapper for special JSON-only communication between AJAX Widgets and Extbase Controllers
@@ -29,7 +29,6 @@
  * @package Fed
  * @subpackage Core
  */
-
 class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 
 	/**
@@ -51,13 +50,13 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 	 */
 	public function run($content, $configuration) {
 		$this->initialize($configuration);
-		/** @var Tx_Fed_Service_Domain $infoService */
+		/** @var $infoService Tx_Fed_Service_Domain */
 		$this->infoService = $this->objectManager->get('Tx_Fed_Service_Domain');
-		/** @var Tx_Fed_Service_Json $jsonService */
+		/** @var $jsonService Tx_Fed_Service_Json */
 		$this->jsonService = $this->objectManager->get('Tx_Fed_Service_Json');
-		/** @var Tx_Extbase_MVC_RequestHandlerResolver $requestHandlerResolver */
+		/** @var $requestHandlerResolver Tx_Extbase_MVC_RequestHandlerResolver */
 		$requestHandlerResolver = $this->objectManager->get('Tx_Extbase_MVC_RequestHandlerResolver');
-		/** @var Tx_Extbase_MVC_RequestHandlerInterface $requestHandler  */
+		/** @var $requestHandler Tx_Extbase_MVC_RequestHandlerInterface */
 		$requestHandler = $requestHandlerResolver->resolveRequestHandler();
 		$response = $requestHandler->handleRequest();
 		if ($response === NULL) {
@@ -70,13 +69,13 @@ class Tx_Fed_Core_Bootstrap extends Tx_Extbase_Core_Bootstrap {
 		$object = $this->detectModelObject($content);
 		if (is_array($object) && !$testJSON) {
 			$data = $object;
-		} else if (is_array($testJSON)) {
-			foreach ($testJSON as $k=>$v) {
+		} elseif (is_array($testJSON)) {
+			foreach ($testJSON as $k => $v) {
 				$testJSON[$k] = $this->detectModelObject($v);
 			}
 			$data = $testJSON;
-		} else if (is_object($testJSON)) {
-			foreach ($testJSON as $k=>$v) {
+		} elseif (is_object($testJSON)) {
+			foreach ($testJSON as $k => $v) {
 				$testJSON->$k = $this->detectModelObject($v);
 			}
 			$data = $testJSON;

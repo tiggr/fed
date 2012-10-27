@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Provides injected services and methods for easier implementation in
@@ -186,7 +186,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @param string $key Optional key for referencing later through $GLOBALS['TSFE']->additionalHeaderData, defaults to md5 cheksum of tag
 	 * @deprecated
 	 */
-	public function includeHeader($code, $type=NULL, $key=NULL) {
+	public function includeHeader($code, $type=NULL, $key = NULL) {
 		$this->documentHead->includeHeader($code, $type, $key);
 	}
 
@@ -202,7 +202,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @param boolean $compress If true, files are compressed
 	 * @return string The MD5 checksum of files (which is also the additionalHeaderData array key if you $concat = TRUE)
 	 */
-	public function includeFiles(array $filenames, $cache=FALSE, $concat=FALSE, $compress=FALSE) {
+	public function includeFiles(array $filenames, $cache = FALSE, $concat = FALSE, $compress = FALSE) {
 		return $this->documentHead->includeFiles($filenames, $cache, $concat, $compress);
 	}
 
@@ -216,7 +216,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @param boolean $compress If true, files are compressed
 	 * @return void
 	 */
-	public function includeFile($filename, $cache=FALSE, $concat=FALSE, $compress=FALSE) {
+	public function includeFile($filename, $cache = FALSE, $concat = FALSE, $compress = FALSE) {
 		$this->documentHead->includeFile($filename, $cache, $concat, $compress);
 	}
 
@@ -231,7 +231,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	 * @return array
 	 * @api
 	 */
-	public function getFilenamesOfType($dir, $extension=NULL) {
+	public function getFilenamesOfType($dir, $extension = NULL) {
 		return $this->documentHead->getFilenamesOfType($dir, $extension);
 	}
 
@@ -241,6 +241,5 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	public function getRegisteredArguments() {
 		return $this->prepareArguments();
 	}
-
 
 }
