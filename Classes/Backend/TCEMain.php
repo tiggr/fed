@@ -1,5 +1,4 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
@@ -35,7 +34,6 @@ class Tx_Fed_Backend_TCEMain {
 	 */
 	protected $objectManager;
 
-
 	/**
 	 * @var Tx_Fed_Utility_DomainObjectInfo
 	 */
@@ -50,6 +48,8 @@ class Tx_Fed_Backend_TCEMain {
 	}
 
 	/**
+	 * Execute backend controller command
+	 *
 	 * @param string $table
 	 * @param string $action
 	 * @param array $record
@@ -57,7 +57,7 @@ class Tx_Fed_Backend_TCEMain {
 	 * @param array $arguments
 	 * @return array
 	 */
-	protected function executeBackendControllerCommand($table, $action, $record, $uid=NULL, $arguments=array()) {
+	protected function executeBackendControllerCommand($table, $action, $record, $uid = NULL, $arguments = array()) {
 		$objectType = $this->infoService->getObjectType($table);
 		try {
 			if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableBackendRecordController'] && $objectType) {

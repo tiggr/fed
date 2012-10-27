@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Configuration Manager subclass. Contains additional configuration fetching
@@ -39,7 +39,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @return array
 	 * @api
 	 */
-	public function getContentConfiguration($extensionName=NULL) {
+	public function getContentConfiguration($extensionName = NULL) {
 		return $this->getTypoScriptSubConfiguration($extensionName, 'fce', array('label'));
 	}
 
@@ -50,7 +50,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @return array
 	 * @api
 	 */
-	public function getPageConfiguration($extensionName=NULL) {
+	public function getPageConfiguration($extensionName = NULL) {
 		return $this->getTypoScriptSubConfiguration($extensionName, 'page');
 	}
 
@@ -64,7 +64,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @param array $dontTranslateMembers Array of members not to be translated by path
 	 * @return array
 	 */
-	protected function getTypoScriptSubConfiguration($extensionName, $memberName, $dontTranslateMembers=array()) {
+	protected function getTypoScriptSubConfiguration($extensionName, $memberName, $dontTranslateMembers = array()) {
 		$config = $this->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$config = $config['plugin.']['tx_fed.'][$memberName . '.'];
 		if (is_array($config) === FALSE) {
@@ -77,7 +77,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 		if (is_array($config) === FALSE) {
 			return array();
 		}
-		foreach ($config as $k=>$v) {
+		foreach ($config as $k => $v) {
 			if ($extensionName) {
 				if (in_array($k, $dontTranslateMembers) === FALSE) {
 					$config[$k] = Tx_Fed_Utility_Path::translatePath($v);
@@ -126,7 +126,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 	 * @return array
 	 * @api
 	 */
-	public function getAvailablePageTemplateFiles($format='html') {
+	public function getAvailablePageTemplateFiles($format = 'html') {
 		$typoScript = $this->getPageConfiguration();
 		$output = array();
 		if (is_array($typoScript) === FALSE) {
