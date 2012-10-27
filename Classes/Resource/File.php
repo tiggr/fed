@@ -60,7 +60,7 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	protected $extension;
 
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	protected $size;
 
@@ -92,7 +92,7 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	public function __construct($filename) {
 		if (file_exists($filename)) {
 			$this->setAbsolutePath($filename);
-		} else if (file_exists(PATH_site . $filename)) {
+		} elseif (file_exists(PATH_site . $filename)) {
 			$this->setAbsolutePath(PATH_site . $filename);
 		}
 	}
@@ -150,7 +150,7 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	 * @param string $path
 	 */
 	public function setPath($path) {
-		$this->path;
+		$this->path = $path;
 	}
 
 	/**
@@ -168,14 +168,14 @@ class Tx_Fed_Resource_File extends Tx_Fed_Resource_AbstractResource {
 	}
 
 	/**
-	 * @return int
+	 * @return integer
 	 */
 	public function getSize() {
 		return $this->size;
 	}
 
 	/**
-	 * @param int $size
+	 * @param integer $size
 	 */
 	public function setSize($size) {
 		$this->size = $size;

@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Exposes a model to ExtJS - generates a Model definition class file
@@ -32,6 +32,9 @@
  */
 class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 
+	/**
+	 * @var string
+	 */
 	public static $SPLIT_PATTERN_SHORTHANDSYNTAX = '/
 		(
 			{                                # Start of shorthand syntax
@@ -70,7 +73,7 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	protected $prefix = NULL;
 
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	protected $typeNum;
 
@@ -119,14 +122,14 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	}
 
 	/**
-	 * @param int $typeNum
+	 * @param integer $typeNum
 	 */
 	public function setTypeNum($typeNum) {
 		$this->typeNum = $typeNum;
 	}
 
 	/**
-	 * @return int
+	 * @return integer
 	 */
 	public function getTypeNum() {
 		return $this->typeNum;
@@ -138,7 +141,7 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 	 * @param string $template Optional absolute path of Fluid template file which renders the Model class Javascript
 	 * @return string
 	 */
-	public function generateModelClass($object, $properties=NULL, $template=NULL) {
+	public function generateModelClass($object, $properties = NULL, $template = NULL) {
 		$className = is_object($object) ? get_class($object) : $object;
 		$properties = $this->infoService->getPropertiesByAnnotation($object, 'ExtJS');
 		$view = $this->objectManager->get('Tx_Fluid_View_StandAloneView');
@@ -164,21 +167,32 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 		Tx_Fluid_Core_Parser_TemplateParser::$SPLIT_PATTERN_SHORTHANDSYNTAX = $shortTagSyntaxPatternBackup;
 		return $content;
 	}
-
+	/**
+	 * Resolve template file
+	 *
+	 * @param mixed $object
+	 * @return string
+	 */
 	protected function resolveTemplateFile($object) {
 		$default = t3lib_extMgm::extPath('fed', 'Resources/Private/Partials/DataSource/Model.js');
 		$partialPath = $this->infoService->getPartialTemplatePath($object);
-		$possibleFile = "{$partialPath}Model.js";
-		$possibleRootFile = "{$partialPath}../Model.js";
+		$possibleFile = $partialPath . 'Model.js';
+		$possibleRootFile = $partialPath . '../Model.js';
 		if (file_exists($possibleFile)) {
 			return $possibleFile;
-		} else if (is_file($possibleRootFile)) {
+		} elseif (is_file($possibleRootFile)) {
 			return $possibleRootFile;
 		} else {
 			return $default;
 		}
 	}
 
+	/**
+	 * Get extra store URI parameters
+	 *
+	 * @param mixed object
+	 * @return array
+	 */
 	protected function getExtraStoreUriParameters($object) {
 		$data = array(
 			$this->getRequestPrefix($object) => array(
@@ -190,6 +204,13 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 		return $data;
 	}
 
+	/**
+	 * Get store URI
+	 *
+	 * @param mixed $object
+	 * @param string $actionName
+	 * @return string The rendered URI
+	 */
 	protected function getStoreUri($object, $actionName) {
 		$uriBuilder = $this->objectManager->get('Tx_Extbase_MVC_Web_Routing_UriBuilder');
 		$uriBuilder->setTargetPageType($this->typeNum);
@@ -201,10 +222,17 @@ class Tx_Fed_ExtJS_ModelGenerator implements t3lib_Singleton {
 		return $uriBuilder->uriFor('rest', $controllerArguments, $controllerName, $extensionName, $pluginName);
 	}
 
+	/**
+	 * Get property definitions
+	 *
+	 * @param mixed $object
+	 * @param array $properties
+	 * @return array
+	 */
 	protected function getPropertyDefinitions($object, $properties) {
 		$types = $this->infoService->getPropertyTypes($object, $properties);
 		$tags = $this->infoService->getAllTagsByAnnotation($object, 'ExtJS');
-		foreach ($properties as $k=>$propertyName) {
+		foreach ($properties as $k => $propertyName) {
 			$def = array(
 				'name' => $propertyName,
 				'type' => $types[$propertyName],

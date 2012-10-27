@@ -1,6 +1,5 @@
 <?php
-
-/* * *************************************************************
+/*****************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Claus Due <claus@wildside.dk>, Wildside A/S
@@ -22,9 +21,12 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ *****************************************************************/
 
 /**
+ * Content object configuration provider
+ *
+ * @author Claus Due <claus@wildside.dk>, Wildside A/S
  * @package Fed
  * @subpackage Provider
  */
