@@ -1,7 +1,33 @@
 <?php
+/***************************************************************
+ *  Copyright notice
+ *
+ *  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
-
-
+/**
+ * Class for backend layouts
+ *
+ * @package	TYPO3
+ * @subpackage fed
+ */
 class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 
 	/**
@@ -108,7 +134,7 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 	 *
 	 * @param integer $id Starting page id when parsing he rootline
 	 * @param array $tcaItems The current set of colpos TCA items
-	 * @param t3lib_TCEForms $tceForms: A back reference to the TCEforms object which generated the item list
+	 * @param t3lib_TCEForms $tceForms A back reference to the TCEforms object which generated the item list
 	 * @return void
 	 */
 	public function postProcessColPosListItemsParsed(&$id, array &$tcaItems, t3lib_TCEForms &$tceForms) {
@@ -118,12 +144,11 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 	/**
 	 * Allows manipulation of the colPos selector option values
 	 *
-	 * @param	array		$params: Parameters for the selector
-	 * @return	void
+	 * @param array $params Parameters for the selector
+	 * @return void
 	 */
 	public function postProcessColPosProcFuncItems(array &$params) {
-		header("Content-type: text/plain");
-		var_dump($params);
+		header('Content-type: text/plain');
 		exit();
 	}
 

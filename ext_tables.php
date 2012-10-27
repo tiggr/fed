@@ -1,6 +1,6 @@
 <?php
-if (!defined ('TYPO3_MODE')){
-	die ('Access denied.');
+if (!defined('TYPO3_MODE')){
+	die('Access denied.');
 }
 
 if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']) {
@@ -40,11 +40,11 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 }
 
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']) {
-	$pluginSignature = str_replace('_','',$_EXTKEY) . '_template';
+	$pluginSignature = str_replace('_', '', $_EXTKEY) . '_template';
 	$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 	t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/Template.xml');
 
-	$pluginSignature = str_replace('_','',$_EXTKEY) . '_datasource';
+	$pluginSignature = str_replace('_', '', $_EXTKEY) . '_datasource';
 	$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 	t3lib_extMgm::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/DataSource.xml');
 
@@ -100,18 +100,18 @@ if ($loadBackendConfiguration) {
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 		t3lib_div::loadTCA('pages');
 		t3lib_extMgm::addTCAcolumns('pages', array(
-			'tx_fed_page_controller_action' => Array (
+			'tx_fed_page_controller_action' => array (
 				'exclude' => 1,
 				'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:pages.tx_fed_page_controller_action',
-				'config' => Array (
+				'config' => array (
 					'type' => 'user',
 					'userFunc' => 'Tx_Fed_Backend_PageLayoutSelector->renderField'
 				)
 			),
-			'tx_fed_page_controller_action_sub' => Array (
+			'tx_fed_page_controller_action_sub' => array (
 				'exclude' => 1,
 				'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:pages.tx_fed_page_controller_action_sub',
-				'config' => Array (
+				'config' => array (
 					'type' => 'user',
 					'userFunc' => 'Tx_Fed_Backend_PageLayoutSelector->renderField'
 				)
@@ -119,7 +119,7 @@ if ($loadBackendConfiguration) {
 			'tx_fed_page_flexform' => Array (
 				'exclude' => 1,
 				'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:pages.tx_fed_page_flexform',
-				'config' => Array (
+				'config' => array (
 					'type' => 'flex',
 				)
 			),
@@ -161,33 +161,33 @@ if ($loadBackendConfiguration) {
 	t3lib_extMgm::allowTableOnStandardPages('tx_fed_domain_model_datasource');
 	$TCA['tx_fed_domain_model_datasource'] = array(
 		'ctrl' => array(
-			'title'				=> 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:tx_fed_domain_model_datasource',
-			'label' 			=> 'name',
-			'tstamp' 			=> 'tstamp',
-			'crdate' 			=> 'crdate',
-			'dividers2tabs' => true,
-			'versioningWS' 		=> 2,
-			'versioning_followPages'	=> TRUE,
-			'origUid' 			=> 't3_origuid',
-			'languageField' 	=> 'sys_language_uid',
-			'transOrigPointerField' 	=> 'l10n_parent',
-			'transOrigDiffSourceField' 	=> 'l10n_diffsource',
-			'delete' 			=> 'deleted',
-			'enablecolumns' 	=> array(
+			'title' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:tx_fed_domain_model_datasource',
+			'label' => 'name',
+			'tstamp' => 'tstamp',
+			'crdate' => 'crdate',
+			'dividers2tabs' => TRUE,
+			'versioningWS' => 2,
+			'versioning_followPages' => TRUE,
+			'origUid' => 't3_origuid',
+			'languageField' => 'sys_language_uid',
+			'transOrigPointerField' => 'l10n_parent',
+			'transOrigDiffSourceField' => 'l10n_diffsource',
+			'delete' => 'deleted',
+			'enablecolumns' => array(
 				'disabled' => 'hidden',
 				'starttime' => 'starttime',
 				'endtime' => 'endtime',
-				),
+			),
 			'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'Configuration/TCA/DataSource.php',
-			'iconfile' 			=> t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_fed_domain_model_datasource.gif'
+			'iconfile' => t3lib_extMgm::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_fed_domain_model_datasource.gif'
 		),
 	);
 
 	t3lib_extMgm::addTCAcolumns('tt_content', array(
-		'tx_fed_fcefile' => Array (
+		'tx_fed_fcefile' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:fed/Resources/Private/Language/locallang_db.xml:tt_content.tx_fed_fcefile',
-			'config' => Array (
+			'config' => array (
 				'type' => 'user',
 				'userFunc' => 'Tx_Fed_Backend_FCESelector->renderField',
 			)
@@ -195,7 +195,7 @@ if ($loadBackendConfiguration) {
 	), 1);
 
 	Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_PageConfigurationProvider');
-	require_once t3lib_extMgm::extPath($_EXTKEY , 'Configuration/Wizard/FlexFormCodeEditor.php');
+	require_once t3lib_extMgm::extPath($_EXTKEY, 'Configuration/Wizard/FlexFormCodeEditor.php');
 
 }
 
