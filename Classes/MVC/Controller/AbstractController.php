@@ -266,29 +266,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			$chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
 			$chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
 			$filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
-<<<<<<< HEAD
-=======
-
-			// The following code block is ye olde FED handler, which doesn't work for chunked uploads at all.
-			/*
-			$filename = preg_replace('/[^\w\._]+/', '', $filename);
-			if ($chunks < 2 && file_exists($targetDir . '/' . $filename)) {
-				$ext = strrpos($filename, '.');
-				$filenameA = substr($filename, 0, $ext);
-				$filenameB = substr($filename, $ext);
-				$count = 1;
-				while (file_exists($targetDir . '/' . $filenameA . '_' . $count . $filenameB)) {
-					$count++;
-				}
-				$filename = $filenameA . '_' . $count . $filenameB;
-			}
-			if (strpos($contentType, "multipart") !== FALSE) {
-				$newFilename = $this->fileService->move($sourceFilename, $targetDir . '/' . $filename);
-			} else {
-				$newFilename = $this->fileService->copyChunk($sourceFilename, $targetDir, $filename, $chunk);
-			}
-			*/
->>>>>>> [CGL] Fix CGL issues
 
 			// What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
 
@@ -341,10 +318,6 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 					$in = fopen("php://input", "rb");
 
 					if ($in) {
-<<<<<<< HEAD
-
-=======
->>>>>>> [CGL] Fix CGL issues
 						while ($buff = fread($in, 4096)) {
 							fwrite($out, $buff);
 						}
@@ -358,15 +331,11 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 					die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 				}
 			}
+
 			// END OF PLAGIARISM
-<<<<<<< HEAD
 
 			// Check if file has been uploaded - in that case, send a response back.
 
-=======
-
-			// Check if file has been uploaded - in that case, send a response back.
->>>>>>> [CGL] Fix CGL issues
 			if (!$chunks || $chunk == $chunks - 1) {
 
 				$newFilename = $this->fileService->move($tempFileComplete, $targetDir . '/' . $filename);
@@ -469,11 +438,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	public function fetchRestObject() {
 		$thisClass = get_class($this);
 		$controllerName = $this->request->getArgument('controller');
-<<<<<<< HEAD
 		$className = 'Controller_' . $controllerName . 'Controller';
-=======
-		$className = 'Controller_' . $controllerName 'Controller';
->>>>>>> [CGL] Fix CGL issues
 		$objectClassname = str_replace($className, 'Domain_Model_', $thisClass) . $controllerName;
 		$object = $this->objectManager->get($objectClassname);
 		return $object;
