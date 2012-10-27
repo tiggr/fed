@@ -456,7 +456,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	public function fetchRestObject() {
 		$thisClass = get_class($this);
 		$controllerName = $this->request->getArgument('controller');
-		$className = 'Controller_' . $controllerName 'Controller';
+		$className = 'Controller_' . $controllerName . 'Controller';
 		$objectClassname = str_replace($className, 'Domain_Model_', $thisClass) . $controllerName;
 		$object = $this->objectManager->get($objectClassname);
 		return $object;
