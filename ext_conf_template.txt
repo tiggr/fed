@@ -11,6 +11,9 @@ enableFluidPageTemplateVariableInheritance = 0
   # cat=basic/enable; type=boolean; label=Fallback Fluid Page Template: Enable the fallback page template feature (when enabled you can set plugin.tx_fed.settings.defaults.templates.fallbackFluidPageTemplate to your own fallback template, defaults to FED's included demonstration template)
 enableFallbackFluidPageTemplate = 0
 
+  # cat=basic/enable; type=boolean; label=Automatic Routing: Requires Realurl installed to have any effect. Enable this option to have FED build automatic fixedPostVars and postVarSets for all Extbase plugins. Note: Will only be enabled for the first plugin instance on each page due to limitations in realurl - each page UID can only be mapped to one configuration and currently it is not possible to merge configurations due to not being able to anticipate which plugin routing configuration to select if multiple configurations are possible. A more detailed control over these routes - such as applying a specific route to a specific page - can be done through TypoScript.
+enableAutoRouting = 0
+
   # cat=basic/enable; type=boolean; label=Solr Features: Enable the Solr support features: Service, frontend plugin and Widget AJAX TypoScript configuration.
 enableSolrFeatures = 0
 
