@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Controller
@@ -120,13 +120,13 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 *
 	 * @param mixed $pids
 	 */
-	protected function clearPageCache($pids=NULL) {
+	protected function clearPageCache($pids = NULL) {
 		if ($pids === NULL) {
 			$pids = $GLOBALS['TSFE']->id;
 		}
 		if ($this->cacheService instanceof Tx_Extbase_Service_CacheService) {
 			$this->cacheService->clearPageCache($pids);
-		} else if (class_exists('Tx_Extbase_Utility_Cache')) {
+		} elseif (class_exists('Tx_Extbase_Utility_Cache')) {
 			Tx_Extbase_Utility_Cache::clearPageCache($pids);
 		}
 	}
@@ -138,7 +138,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @return array
 	 * @api
 	 */
-	public function getFlexForm($fallback=FALSE) {
+	public function getFlexForm($fallback = FALSE) {
 		if (!$fallback) {
 			$cObj = $this->configurationManager->getContentObject()->data;
 			$this->flexform->setContentObjectData($cObj);
@@ -168,10 +168,10 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * Circumvents request processing to output a JSON response directly.
 	 *
 	 * @param array $data Associative array of data to be validated
-	 * @param string $action
+	 * @param string $action Not used
 	 * @return string
 	 */
-	public function validateAction($data=array(), $action=NULL) {
+	public function validateAction($data = array(), $action = NULL) {
 		$errorArray = array();
 		$parameters = $this->reflectionService->getMethodParameters(get_class($this), $data['action'] . 'Action');
 		unset($data['action']);
@@ -215,12 +215,14 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	}
 
 	/**
+	 * Get error messages
+	 *
 	 * @param mixed $errors
 	 * @return array
 	 */
 	private function getErrorMessages($errors) {
 		$errorArray = array();
-		foreach ($errors as $name=>$error) {
+		foreach ($errors as $name => $error) {
 			if (is_array($error)) {
 				$propertyErrors = $error;
 			} else {
@@ -249,10 +251,10 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 */
 	public function uploadAction($objectType, $propertyName) {
 		try {
-			if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
-				$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
-			} else if (isset($_SERVER["CONTENT_TYPE"])) {
-				$contentType = $_SERVER["CONTENT_TYPE"];
+			if (isset($_SERVER['HTTP_CONTENT_TYPE'])) {
+				$contentType = $_SERVER['HTTP_CONTENT_TYPE'];
+			} elseif (isset($_SERVER['CONTENT_TYPE'])) {
+				$contentType = $_SERVER['CONTENT_TYPE'];
 			} else {
 				$contentType = NULL;
 			}
@@ -261,11 +263,11 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			if (is_file($sourceFilename) === FALSE) {
 				exit();
 			}
-			$chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
-			$chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
-			$filename = isset($_REQUEST["name"]) ? $_REQUEST["name"] : '';
+			$chunk = isset($_REQUEST['chunk']) ? $_REQUEST['chunk'] : 0;
+			$chunks = isset($_REQUEST['chunks']) ? $_REQUEST['chunks'] : 0;
+			$filename = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
 
-			# The following code block is ye olde FED handler, which doesn't work for chunked uploads at all.
+			// The following code block is ye olde FED handler, which doesn't work for chunked uploads at all.
 			/*
 			$filename = preg_replace('/[^\w\._]+/', '', $filename);
 			if ($chunks < 2 && file_exists($targetDir . '/' . $filename)) {
@@ -285,45 +287,49 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			}
 			*/
 
-			# What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
+			// What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
 
-			# Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
-			$fileHandler  = t3lib_div::makeInstance("t3lib_basicFileFunctions");
-			$filename     = basename( $fileHandler->getUniqueName( $filename, $targetDir ) );
+			// Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
+			$fileHandler = t3lib_div::makeInstance('t3lib_basicFileFunctions');
+			$filename = basename($fileHandler->getUniqueName($filename, $targetDir));
 
-			# Touch the filename. This ensures that if any other user initiates an upload with the same name while
-			# we're spewing chunks, we will not get a filename clash later on. Especially in the part-file. That
-			# would be bad.
-			touch($targetDir . "/" . $filename);
+			// Touch the filename. This ensures that if any other user initiates an upload with the same name while
+			// we're spewing chunks, we will not get a filename clash later on. Especially in the part-file. That
+			// would be bad.
+			touch($targetDir . '/' . $filename);
 
-			# Get a temporary filename for our upload
-			$tempFilename = $filename . ".part";
-			$tempFileComplete = $targetDir ."/" . $tempFilename;
+			// Get a temporary filename for our upload
+			$tempFilename = $filename . '.part';
+			$tempFileComplete = $targetDir . '/' . $tempFilename;
 
-			##########################################################################################
-			# The following code block is lifted almost without change from the plUpload example
-			##########################################################################################
+			// The following code block is lifted almost without change from the plUpload example
+
 			// Handle non multipart uploads - older WebKit versions didn't support multipart in HTML5
-			if (strpos($contentType, "multipart") !== FALSE) {
+			if (strpos($contentType, 'multipart') !== FALSE) {
 				if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
 					// Open temp file
-					$out = fopen($tempFileComplete, $chunk == 0 ? "wb" : "ab");
+					$out = fopen($tempFileComplete, $chunk == 0 ? 'wb' : 'ab');
 					if ($out) {
 						// Read binary input stream and append it to temp file
-						$in = fopen($_FILES['file']['tmp_name'], "rb");
+						$in = fopen($_FILES['file']['tmp_name'], 'rb');
 
 						if ($in) {
-							while ($buff = fread($in, 4096))
+							while ($buff = fread($in, 4096)) {
 								fwrite($out, $buff);
-						} else
+							}
+						} else {
 							die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+						}
+
 						fclose($in);
 						fclose($out);
 						@unlink($_FILES['file']['tmp_name']);
-					} else
+					} else {
 						die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
-				} else
+					}
+				} else {
 					die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+				}
 			} else {
 				// Open temp file
 				$out = fopen($tempFileComplete, $chunk == 0 ? "wb" : "ab");
@@ -332,10 +338,12 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 					$in = fopen("php://input", "rb");
 
 					if ($in) {
-						while ($buff = fread($in, 4096))
+						while ($buff = fread($in, 4096)) {
 							fwrite($out, $buff);
-					} else
+						}
+					} else {
 						die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+					}
 
 					fclose($in);
 					fclose($out);
@@ -343,12 +351,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 					die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 				}
 			}
-			##########################################################################################
-			# END OF PLAGIARISM
-			##########################################################################################
+			// END OF PLAGIARISM
 
-
-			# Check if file has been uploaded - in that case, send a response back.
+			// Check if file has been uploaded - in that case, send a response back.
 			if (!$chunks || $chunk == $chunks - 1) {
 
 				$newFilename = $this->fileService->move($tempFileComplete, $targetDir . '/' . $filename);
@@ -374,7 +379,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @return string
 	 * @api
 	 */
-	public function restAction($crudAction='read') {
+	public function restAction($crudAction = 'read') {
 		switch ($crudAction) {
 			case 'update': return $this->performRestUpdate();
 			case 'destroy': return $this->performRestDestroy();
@@ -394,7 +399,8 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 		$repository = $this->infoService->getRepositoryInstance($object);
 		$extensionName = $this->infoService->getExtensionName($object);
 		$storagePid = $this->getConfiguredStoragePid($extensionName);
-		unset($data['uid']); // do NOT allow creation of UID=0
+		// do NOT allow creation of UID=0
+		unset($data['uid']);
 		$object = $this->extJSService->mapDataFromExtJS($object, $data);
 		$object->setPid($storagePid);
 		$repository->add($object);
@@ -450,7 +456,8 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	public function fetchRestObject() {
 		$thisClass = get_class($this);
 		$controllerName = $this->request->getArgument('controller');
-		$objectClassname = str_replace("Controller_{$controllerName}Controller", 'Domain_Model_', $thisClass) . $controllerName;
+		$className = 'Controller_' . $controllerName 'Controller';
+		$objectClassname = str_replace($className, 'Domain_Model_', $thisClass) . $controllerName;
 		$object = $this->objectManager->get($objectClassname);
 		return $object;
 	}
@@ -461,13 +468,13 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @param string $body The request body to parse, empty for auto-fetch
 	 * @return array
 	 */
-	public function fetchRestBodyData($body=NULL) {
+	public function fetchRestBodyData($body = NULL) {
 		if ($body === NULL) {
-			$body = file_get_contents("php://input");
+			$body = file_get_contents('php://input');
 		}
 		$arr = array();
 		$data = $this->jsonService->decode($body);
-		foreach ($data as $k=>$v) {
+		foreach ($data as $k => $v) {
 			$arr[$k] = $v;
 		}
 		return $arr;
@@ -480,7 +487,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @return array
 	 * @api
 	 */
-	public function fetchRestBodyFields($body=NULL) {
+	public function fetchRestBodyFields($body = NULL) {
 		return array_keys($this->fetchRestBodyData($body));
 	}
 
@@ -490,9 +497,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	 * @param mixed $data Empty for NULL response
 	 * @return mixed
 	 */
-	public function formatRestResponseData($data=NULL) {
+	public function formatRestResponseData($data = NULL) {
 		if ($data === NULL) {
-			return "{}";
+			return '{}';
 		}
 		$responseData = $this->extJSService->exportDataToExtJS($data);
 		$response = $this->jsonService->encode($responseData);
@@ -502,7 +509,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	/**
 	 * Get the current configured storage PID for $extensionName
 	 * @param string $extensionName Optional extension name, empty for current extension name
-	 * @return int
+	 * @return integer
 	 */
 	public function getConfiguredStoragePid() {
 		$object = $this->fetchRestObject();
@@ -518,6 +525,5 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			return $GLOBALS['TSFE']->id;
 		}
 	}
-
 
 }

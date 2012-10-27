@@ -1,6 +1,5 @@
 <?php
-
-/* * *************************************************************
+/*****************************************************************
  *  Copyright notice
  *
  *  (c) 2012 Claus Due <claus@wildside.dk>, Wildside A/S
@@ -22,11 +21,12 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- * ************************************************************* */
+ *****************************************************************/
 
 /**
  * Page Configuration Provider
  *
+ * @author Claus Due <claus@wildside.dk>, Wildside A/S
  * @package Fed
  * @subpackage Provider
  */
@@ -292,7 +292,11 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	protected function getAllSubPageIdsWhichInheritConfiguration($pid, $selectedTemplate, $configurationString, $configuration) {
 		$subpages = array();
 		$clause = "pid = '" . $pid . "' AND (tx_fed_page_controller_action = '' OR tx_fed_page_controller_action = '" . $selectedTemplate . "')";
-		$subpagesWithSameOrNoController = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid,tx_fed_page_flexform,tx_fed_page_controller_action_sub', 'pages', $clause);
+		$subpagesWithSameOrNoController = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'uid,tx_fed_page_flexform,tx_fed_page_controller_action_sub',
+			'pages',
+			$clause
+		);
 		foreach ($subpagesWithSameOrNoController as $page) {
 			if ($page['tx_fed_page_flexform'] === $configurationString || empty($page['tx_fed_page_flexform']) === TRUE) {
 				array_push($subpages, $page['uid']);

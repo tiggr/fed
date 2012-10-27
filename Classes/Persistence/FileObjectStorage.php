@@ -168,7 +168,7 @@ class Tx_Fed_Persistence_FileObjectStorage extends SplObjectStorage {
 	 * @param string $possibleCsv
 	 * @param string $possibleAssociatedPropertyName
 	 */
-	public function __construct($possibleCsv=NULL, $possibleAssociatedPropertyName=NULL) {
+	public function __construct($possibleCsv = NULL, $possibleAssociatedPropertyName = NULL) {
 		$this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->infoService = $this->objectManager->get('Tx_Fed_Utility_DomainObjectInfo');
 		$this->fileService = $this->objectManager->get('Tx_Fed_Service_File');
