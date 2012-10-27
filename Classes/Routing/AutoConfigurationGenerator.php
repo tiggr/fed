@@ -1,96 +1,32 @@
 <?php
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2012 Claus Due, Wildside A/S <claus@wildside.dk>
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
-/**
- * FixedPostVar  Substitute Array
- *
- * @package Fed
- * @subpackage Routing
- */
-class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_AbstractSubstituteArray {
+class Tx_Fed_Routing_AutoConfigurationGenerator {
 
 	/**
-	 * @var array
+	 * @param array $config
+	 * @param string $extKey
 	 */
-	protected $extbaseUserFunctionIdentifiers = array('tx_extbase_core_bootstrap->run', 'tx_fed_core_bootstrap->run');
-
-	/**
-	 * @param array $existing
-	 */
-	public function __construct($existing = array()) {
-		parent::__construct($existing);
-		#$this->initializeObject();
-	}
-
-	/**
-	 * Initialize this object
-	 * @return void
-	 */
-	public function initializeObject() {
-		$GLOBALS['SIM_ACCESS_TIME'] = time() - 86400;
-		$GLOBALS['TT'] = new t3lib_timeTrack();
-		$GLOBALS['TT']->start();
-		$GLOBALS['TYPO3_DB'] = new t3lib_DB();
-		$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe',
-			$GLOBALS['TYPO3_CONF_VARS'],
-			t3lib_div::_GP('id'),
-			t3lib_div::_GP('type'),
-			t3lib_div::_GP('no_cache'),
-			t3lib_div::_GP('cHash'),
-			t3lib_div::_GP('jumpurl'),
-			t3lib_div::_GP('MP'),
-			t3lib_div::_GP('RDCT')
-		);
-		$GLOBALS['TSFE']->sys_page->where_hid_del = ' AND 1=1 ';
-		$GLOBALS['TSFE']->sys_page->where_groupAccess = ' AND 1=1 ';
-		$GLOBALS['TSFE']->connectToDB();
-		$GLOBALS['TSFE']->initFEuser();
-		$GLOBALS['TSFE']->checkAlternativeIdMethods();
-		$GLOBALS['TSFE']->determineId();
-		$GLOBALS['TSFE']->clear_preview();
-		$GLOBALS['TSFE']->tmpl->forceTemplateParsing = 1;
-		$GLOBALS['SIM_ACCESS_TIME'] = time() - 86400;
-		$GLOBALS['TSFE']->initTemplate();
-		$GLOBALS['TSFE']->getFromCache();
-		$GLOBALS['TSFE']->getConfigArray();
-		//return;
-		$allContentOnPage = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('DISTINCT CType,list_type', 'tt_content', "pid = '" . $pageUid . "'");
+	public function buildAutomaticRules(&$config, &$extKey) {
 		$extensionsAndPluginNames = array();
-		foreach ($allContentOnPage as $contentRecord) {
-			$setup = $this->getSetupForRecord($contentRecord);
-			if ($this->assertIsExtbasePlugin($contentRecord, $setup) == FALSE) {
-				continue;
+		foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'] as $extensionName => $extensionConfiguration) {
+			foreach ($extensionConfiguration['plugins'] as $pluginName => $pluginConfiguration) {
+				array_push($extensionsAndPluginNames, $extensionName . '->' . $pluginName);
+				unset($pluginConfiguration);
 			}
-			$extensionName = $this->getArrayValueRecursive($setup, 'extensionName');
-			$pluginName = $this->getArrayValueRecursive($setup, 'pluginName');
-			$identity = strtolower($extensionName) . '_' . strtolower($pluginName);
-			array_push($extensionsAndPluginNames, $identity);
+			unset($extensionConfiguration);
 		}
 		$definitions = $this->buildFixedPostVarSetsForExtensionsAndPluginNames($extensionsAndPluginNames);
+		#header("Content-type: text/plain");
 		#var_dump($definitions);
+		#var_dump($extensionsAndPluginNames);
+		#syslog(LOG_ERR, var_export($extensionsAndPluginNames, TRUE));
+		#syslog(LOG_ERR, var_export($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'], TRUE));
+		#syslog(LOG_ERR, 'test');
+		#syslog(LOG_ERR, var_export($definitions, TRUE));
 		#exit();
-		unset($GLOBALS['TYPO3_DB'], $GLOBALS['TSFE'], $GLOBALS['TT']);
+		$config['fixedPostVars']['_DEFAULT'] = $definitions;
+		#var_dump($config);
+		#exit();
+		return $config;
 	}
 
 	/**
@@ -105,18 +41,22 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 		foreach ($extensionsAndPluginNames as $extensionAndPluginName) {
 			list ($extensionName, $pluginName) = explode('->', $extensionAndPluginName);
 			$actions = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'][$extensionName]['plugins'][$pluginName]['controllers'];
-			foreach ($actions as $controllerName => $commaSeparatedActions) {
-				$actions = t3lib_div::trimExplode(',', $actions, TRUE);
-				foreach ($actions as $actionName) {
+			foreach ($actions as $controllerName => $controllerConfiguration) {
+				foreach ($controllerConfiguration['actions'] as $actionName) {
 					$identity = $extensionName . '_' . $pluginName . '_' . $controllerName . '_' . $actionName;
 					$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
 					$controllerClassReflection = new ReflectionClass($controllerClassName);
+					if (method_exists($controllerClassName, $actionName . 'Action') === FALSE) {
+						continue;
+					}
 					$methodReflection = $controllerClassReflection->getMethod($actionName . 'Action');
 					$arguments = $methodReflection->getParameters();
+					$urlPrefix = 'tx_' . strtolower(str_replace('_', '', $extensionName) . '_' . str_replace('_', '', $pluginName));
 					$fixedPostVarSets = array();
 					foreach ($arguments as $argumentReflection) {
-						array_push($fixedPostVarSets, $this->buildFixedPostVarSetForControllerActionArgument($argumentReflection, $actionName));
+						array_push($fixedPostVarSets, $this->buildFixedPostVarSetForControllerActionArgument($argumentReflection, $actionName, $urlPrefix));
 					}
+					#$pageUids = $this->getAllPAgeUidsWherePluginOccursFirstInColPosZero()
 					$definitions[$identity] = $fixedPostVarSets;
 				}
 			}
@@ -125,12 +65,13 @@ class Tx_Fed_Routing_FixedPostVarSubstituteArray extends Tx_Fed_Routing_Abstract
 	}
 
 	/**
-	 * @param ReflectionClass $controllerClassReflection
+	 * @param ReflectionParameter $argument
 	 * @param string $actionName
 	 * @param string $urlPrefix
 	 * @return array
 	 */
-	protected function buildFixedPostVarSetForControllerActionArgument(ReflectionParameter $controllerClassReflection, $actionName, $urlPrefix) {
+	protected function buildFixedPostVarSetForControllerActionArgument(ReflectionParameter $argument, $actionName, $urlPrefix) {
+		$argumentName = $argument->getName();
 		$definition = array(
 			'GETvar' => $urlPrefix . '[' . $argumentName . ']',
 		);
