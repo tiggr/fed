@@ -10,7 +10,6 @@ class Tx_Fed_Routing_RoutingAnnotation {
 	 * @var string
 	 */
 	private $noMatchRulePattern = '/NoMatch\((\'bypass\'|\'null\'|NULL)\)/';
-	#private $noMatchRulePattern = '/NoMatch[(](a-zA-Z\\\')[)+]/';
 
 	/**
 	 * @param string $matchedPattern
@@ -54,7 +53,7 @@ class Tx_Fed_Routing_RoutingAnnotation {
 			}
 			return $value;
 		}
-		return NULL;
+		return 'bypass';
 	}
 
 }
