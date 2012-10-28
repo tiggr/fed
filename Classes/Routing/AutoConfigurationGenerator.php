@@ -101,6 +101,9 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						continue;
 					}
 					$methodReflection = $controllerClassReflection->getMethod($actionName . 'Action');
+					if ($this->assertIsRoutable($methodReflection) === FALSE) {
+						continue;
+					}
 					$arguments = $methodReflection->getParameters();
 					if (count($arguments) === 0) {
 						continue;
@@ -123,6 +126,40 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			}
 		}
 		return $definitions;
+	}
+
+	/**
+	 * @param ReflectionMethod $methodReflection
+	 * @return boolean
+	 */
+	protected function assertIsRoutable(ReflectionMethod $methodReflection) {
+		$annotations = $this->getRoutingAnnotations($methodReflection);
+		foreach ($annotations as $annotation) {
+			if ($annotation->assertRoutingDisabled() === TRUE) {
+				return FALSE;
+			}
+		}
+		return TRUE;
+	}
+
+	/**
+	 * @param ReflectionMethod $methodReflection
+	 * @return Tx_Fed_Routing_RoutingAnnotation[]
+	 */
+	protected function getRoutingAnnotations(ReflectionMethod $methodReflection) {
+		$pattern = '/@route[\s]+(.[^\n]+)[\n]{1,1}/';
+		$matches = array();
+		$annotations = array();
+		preg_match_all($pattern, $methodReflection->getDocComment(), $matches);
+		array_shift($matches);
+		$annotationLines = array_shift($matches);
+		foreach ($annotationLines as $matchedPattern) {
+			/** @var $annotation Tx_Fed_Routing_RoutingAnnotation */
+			$annotation = $this->objectManager->create('Tx_Fed_Routing_RoutingAnnotation');
+			$annotation->setMatchedPattern($matchedPattern);
+			array_push($annotations, $annotation);
+		}
+		return $annotations;
 	}
 
 	/**
