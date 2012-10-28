@@ -156,9 +156,6 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						continue;
 					}
 					$arguments = $methodReflection->getParameters();
-					#if (count($arguments) === 0) {
-					#	continue;
-					#}
 					$definitions[$identity] = array(
 						$this->buildFixedPostVarsForController($urlPrefix, $controllerClassAnnotations),
 						$this->buildFixedPostVarsForControllerAction($urlPrefix, $annotations),
