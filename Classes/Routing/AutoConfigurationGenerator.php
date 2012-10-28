@@ -93,15 +93,20 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			$pluginSignature = $pluginSignatures[$extensionAndPluginName];
 			$urlPrefix = 'tx_' . $pluginSignature;
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'][$extensionName]['plugins'][$pluginName]['controllers'] as $controllerName => $controllerConfiguration) {
+				$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
+				$controllerClassReflection = new ReflectionClass($controllerClassName);
+				$annotations = $this->getRoutingAnnotations($controllerClassReflection->getDocComment());
+				if ($this->assertIsRoutable($annotations) === FALSE) {
+					continue;
+				}
 				foreach ($controllerConfiguration['actions'] as $actionName) {
 					$identity = $pluginSignature . '_' . $controllerName . '_' . $actionName;
-					$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
-					$controllerClassReflection = new ReflectionClass($controllerClassName);
 					if (method_exists($controllerClassName, $actionName . 'Action') === FALSE) {
 						continue;
 					}
 					$methodReflection = $controllerClassReflection->getMethod($actionName . 'Action');
-					if ($this->assertIsRoutable($methodReflection) === FALSE) {
+					$annotations = $this->getRoutingAnnotations($methodReflection->getDocComment());
+					if ($this->assertIsRoutable($annotations) === FALSE) {
 						continue;
 					}
 					$arguments = $methodReflection->getParameters();
@@ -129,11 +134,10 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	}
 
 	/**
-	 * @param ReflectionMethod $methodReflection
+	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
 	 * @return boolean
 	 */
-	protected function assertIsRoutable(ReflectionMethod $methodReflection) {
-		$annotations = $this->getRoutingAnnotations($methodReflection);
+	protected function assertIsRoutable(array $annotations) {
 		foreach ($annotations as $annotation) {
 			if ($annotation->assertRoutingDisabled() === TRUE) {
 				return FALSE;
@@ -143,14 +147,14 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	}
 
 	/**
-	 * @param ReflectionMethod $methodReflection
+	 * @param string $docComment
 	 * @return Tx_Fed_Routing_RoutingAnnotation[]
 	 */
-	protected function getRoutingAnnotations(ReflectionMethod $methodReflection) {
+	protected function getRoutingAnnotations($docComment) {
 		$pattern = '/@route[\s]+(.[^\n]+)[\n]{1,1}/';
 		$matches = array();
 		$annotations = array();
-		preg_match_all($pattern, $methodReflection->getDocComment(), $matches);
+		preg_match_all($pattern, $docComment, $matches);
 		array_shift($matches);
 		$annotationLines = array_shift($matches);
 		foreach ($annotationLines as $matchedPattern) {
