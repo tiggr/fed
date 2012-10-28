@@ -28,6 +28,7 @@
  *
  * @package Fed
  * @subpackage Controller
+ * @route off
  */
 class Tx_Fed_Controller_PageController extends Tx_Fed_MVC_Controller_AbstractController {
 
