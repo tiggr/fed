@@ -71,8 +71,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 					$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
 					$controllerClassReflection = new ReflectionClass($controllerClassName);
 					$controllerClassAnnotations = $this->getRoutingAnnotations($controllerClassReflection->getDocComment());
-					if ($this->assertIsRoutable($controllerClassAnnotations) === TRUE) {
-						$routable = TRUE;
+					if ($this->assertIsRoutable($controllerClassAnnotations) === FALSE && $routable === FALSE) {
 						break;
 					}
 					foreach ($controllerConfiguration['actions'] as $actionName) {
@@ -88,8 +87,10 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						}
 					}
 				}
-				array_push($extensionsAndPluginNames, $extensionName . '->' . $pluginName);
-				unset($pluginConfiguration);
+				if ($routable === TRUE) {
+					array_push($extensionsAndPluginNames, $extensionName . '->' . $pluginName);
+					unset($pluginConfiguration);
+				}
 			}
 			unset($extensionConfiguration);
 		}
@@ -97,6 +98,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			$params['config']['fixedPostVars'] = array();
 		}
 		$definitions = $this->buildFixedPostVarsForExtensionsAndPluginNames($extensionsAndPluginNames);
+
 			// note: foreach-style mapping because array_merge would re-index the numeric
 			// indices which are page UIDs - so this would not suit the purpose of mapping
 		foreach ($definitions as $pidOrName => $definitionOrMappingTarget) {
@@ -154,9 +156,9 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						continue;
 					}
 					$arguments = $methodReflection->getParameters();
-					if (count($arguments) === 0) {
-						continue;
-					}
+					#if (count($arguments) === 0) {
+					#	continue;
+					#}
 					$definitions[$identity] = array(
 						$this->buildFixedPostVarsForController($urlPrefix, $controllerClassAnnotations),
 						$this->buildFixedPostVarsForControllerAction($urlPrefix, $annotations),
@@ -196,12 +198,13 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	 * Assert the noMatch rule for this set of annotations. Last one has precedense.
 	 *
 	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
+	 * @param string|NULL $argumentName
 	 * @return string|NULL
 	 */
-	protected function assertNoMatchRule(array $annotations) {
+	protected function assertNoMatchRule(array $annotations, $argumentName = NULL) {
 		$rule = NULL;
 		foreach ($annotations as $annotation) {
-			if ($annotation->getNoMatchRule() !== NULL) {
+			if ($annotation->getNoMatchRule() !== NULL && $annotation->assertAppliesToVariable($argumentName)) {
 				$rule = $annotation->getNoMatchRule();
 			}
 		}
@@ -241,7 +244,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	 */
 	protected function getAllPAgeUidsWithPluginSignatureInColPosZeroTop($extensionName, $pluginName, $controllerName, $actionName, $registeredExtbasePluginSignatures) {
 		$pluginSignature = strtolower(str_replace('_', '', $extensionName) . '_' . str_replace('_', '', $pluginName));
-		$clause = "t.deleted = '0' AND t.hidden = '0' AND t.starttime <= '" . time() . "' AND (t.endtime >= '" . time() . "' OR t.endtime = '0') AND t.colPos = '0' AND p.deleted = '0' AND p.uid = t.pid";
+		$clause = "t.deleted = '0' AND t.hidden = '0' AND t.starttime <= '" . time() . "' AND (t.endtime >= '" . time() . "' OR t.endtime = '0') AND p.deleted = '0' AND p.uid = t.pid";
 		$orderedPageSignatures = array();
 		$contentRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('t.pid, t.CType, t.list_type, t.pi_flexform', 'tt_content t, pages p', $clause, 'p.pid, t.sorting DESC');
 		$pageUids = array();
@@ -262,7 +265,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			} else {
 				$decoded = NULL;
 			}
-			if (isset($decoded['switchableControllerActions'])) {
+			if (isset($decoded['switchableControllerActions']) && strpos($decoded['switchableControllerActions'], '->') !== FALSE) {
 				list ($contentRecordController, $contentRecordControllerAction) = explode('->', $decoded['switchableControllerActions']);
 			} else {
 				reset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'][$extensionName]['plugins'][$pluginName]['controllers']);
@@ -316,23 +319,23 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	 */
 	protected function buildFixedPostVarsForControllerActionArgument(ReflectionParameter $argument, $actionName, $urlPrefix) {
 		$argumentName = $argument->getName();
+		$annotations = $this->getRoutingAnnotations($argument->getDeclaringFunction()->getDocComment());
 		$definition = array(
 			'GETvar' => $urlPrefix . '[' . $argumentName . ']',
 		);
-		if ($argument->allowsNull()) {
-			$definition['noMatch'] = 'null';
-		}
+		$noMatchRule = $this->assertNoMatchRule($annotations, $argumentName);
+		$definition['noMatch'] = $noMatchRule;
+
 		$docComment = $argument->getDeclaringFunction()->getDocComment();
 		$matches = array();
 		preg_match('/@param[\s]+([a-zA-Z_0-9\\^\s]+)[\s]+\$' . $argumentName . '/', $docComment, $matches);
 		$argumentDataType = trim($matches[1]);
 		if (in_array($argumentDataType, $this->excludedArgumentTypes) === TRUE) {
 			return NULL;
-		} elseif (class_exists($argumentDataType) && in_array('Tx_Extbase_DomainObject_DomainObjectInterface', class_implements($argumentDataType))) {
+		}
+		if (class_exists($argumentDataType) && in_array('Tx_Extbase_DomainObject_DomainObjectInterface', class_implements($argumentDataType))) {
 			$tableName = strtolower($argumentDataType);
 			if (isset($this->currentTableConfigurationArray[$tableName]) === TRUE) {
-					// Note: unsetting here since we otherwise would not transform the argument using lookup
-				unset($definition['noMatch']);
 				$_EXTKEY = t3lib_div::camelCaseToLowerCaseUnderscored($this->currentExtensionName);
 				$TCA[$tableName] = $this->currentTableConfigurationArray;
 				$extensionConfigurationFile = t3lib_extMgm::extPath($_EXTKEY, 'ext_tables.php');
@@ -355,6 +358,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 					)
 				);
 			}
+			#var_dump($definition['noMatch']);
 		}
 		return $definition;
 	}

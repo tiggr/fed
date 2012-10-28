@@ -12,6 +12,11 @@ class Tx_Fed_Routing_RoutingAnnotation {
 	private $noMatchRulePattern = '/NoMatch\((\'bypass\'|\'null\'|NULL)\)/';
 
 	/**
+	 * @var array
+	 */
+	private $disabledIdentifiers = array('off', 'Off', '0', 'FALSE', 'false', 'no', 'No');
+
+	/**
 	 * @param string $matchedPattern
 	 * @return void
 	 */
@@ -32,8 +37,7 @@ class Tx_Fed_Routing_RoutingAnnotation {
 	 * @return boolean
 	 */
 	public function assertRoutingDisabled() {
-		$disabledIdentifiers = array('off', 'Off', '0', 'FALSE', 'false', 'no', 'No');
-		return in_array($this->matchedPattern, $disabledIdentifiers);
+		return in_array($this->matchedPattern, $this->disabledIdentifiers);
 	}
 
 	/**
