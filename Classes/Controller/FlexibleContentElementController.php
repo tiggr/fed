@@ -34,6 +34,8 @@ class Tx_Fed_Controller_FlexibleContentElementController extends Tx_Fed_MVC_Cont
 	/**
 	 * Show template as defined in flexform
 	 * @return string
+	 * @route off
+	 * @route demo
 	 */
 	public function renderAction() {
 		/** @var $view Tx_Flux_MVC_View_ExposedTemplateView */
