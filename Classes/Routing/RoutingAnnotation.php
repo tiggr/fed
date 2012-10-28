@@ -41,6 +41,17 @@ class Tx_Fed_Routing_RoutingAnnotation {
 	}
 
 	/**
+	 * @param string $variableName
+	 * @return boolean
+	 */
+	public function assertAppliesToVariable($variableName) {
+		if ($variableName === NULL) {
+			return (strpos($this->matchedPattern, '$') === FALSE);
+		}
+		return (strpos($this->matchedPattern, '$' . $variableName) !== FALSE);
+	}
+
+	/**
 	 * Get: rule applied when no route segment match is made.
 	 * Returns either 'bypass' or 'null' or NULL; a NULL value
 	 * means no noMatch rule should be applied.
