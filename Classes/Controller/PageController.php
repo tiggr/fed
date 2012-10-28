@@ -106,6 +106,7 @@ class Tx_Fed_Controller_PageController extends Tx_Fed_MVC_Controller_AbstractCon
 
 	/**
 	 * @return string
+	 * @route off
 	 */
 	public function renderAction() {
 		$this->view->setControllerContext($this->controllerContext);
