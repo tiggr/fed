@@ -37,6 +37,25 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	}
 
 	/**
+	 * Builds automatic rules for every Extbase plugin's controllers
+	 * in relation to the pages on which the plugins are inserted.
+	 *
+	 * Does this by looping through all configured Extbase plugins and
+	 * checking those against the tt_content records currently active
+	 * and prioritizes those records so that only the topmost active
+	 * (depending on routing configuration) plugin on any one page is
+	 * able to receive the default request arguments. This is done in
+	 * order to prevent colissions.
+	 *
+	 * However, it is still possible to switch controllers in the rule
+	 * that is build for your particular Controller - this only requires
+	 * that you add this annotation to each Controller which should be
+	 * able to include the "controller" and "action" arguments as segments
+	 * in the nice URLs: @route NoMatch(NULL). This annotation is set
+	 * on the class itself when it applies to the "controller" and
+	 * "action" arguments; if it applies to a controller action argument
+	 * then it must be placed in the parent method's annotations.
+	 *
 	 * @param array $params
 	 * @param object $reference
 	 */
@@ -44,6 +63,31 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 		$extensionsAndPluginNames = array();
 		foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'] as $extensionName => $extensionConfiguration) {
 			foreach ($extensionConfiguration['plugins'] as $pluginName => $pluginConfiguration) {
+				$routable = FALSE;
+				foreach ($pluginConfiguration['controllers'] as $controllerName => $controllerConfiguration) {
+					if ($routable === TRUE) {
+						break;
+					}
+					$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
+					$controllerClassReflection = new ReflectionClass($controllerClassName);
+					$controllerClassAnnotations = $this->getRoutingAnnotations($controllerClassReflection->getDocComment());
+					if ($this->assertIsRoutable($controllerClassAnnotations) === TRUE) {
+						$routable = TRUE;
+						break;
+					}
+					foreach ($controllerConfiguration['actions'] as $actionName) {
+						$identity = $pluginSignature . '_' . $controllerName . '_' . $actionName;
+						if (method_exists($controllerClassName, $actionName . 'Action') === FALSE) {
+							continue;
+						}
+						$methodReflection = $controllerClassReflection->getMethod($actionName . 'Action');
+						$methodAnnotations = $this->getRoutingAnnotations($methodReflection->getDocComment());
+						if ($this->assertIsRoutable($methodAnnotations) === TRUE) {
+							$routable = TRUE;
+							break;
+						}
+					}
+				}
 				array_push($extensionsAndPluginNames, $extensionName . '->' . $pluginName);
 				unset($pluginConfiguration);
 			}
@@ -95,15 +139,15 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'][$extensionName]['plugins'][$pluginName]['controllers'] as $controllerName => $controllerConfiguration) {
 				$controllerClassName = 'Tx_' . $extensionName . '_Controller_' . $controllerName . 'Controller';
 				$controllerClassReflection = new ReflectionClass($controllerClassName);
-				$annotations = $this->getRoutingAnnotations($controllerClassReflection->getDocComment());
-				if ($this->assertIsRoutable($annotations) === FALSE) {
+				$controllerClassAnnotations = $this->getRoutingAnnotations($controllerClassReflection->getDocComment());
+				if ($this->assertIsRoutable($controllerClassAnnotations) === FALSE) {
 					continue;
 				}
 				foreach ($controllerConfiguration['actions'] as $actionName) {
-					$identity = $pluginSignature . '_' . $controllerName . '_' . $actionName;
 					if (method_exists($controllerClassName, $actionName . 'Action') === FALSE) {
 						continue;
 					}
+					$identity = $pluginSignature . '_' . $controllerName . '_' . $actionName;
 					$methodReflection = $controllerClassReflection->getMethod($actionName . 'Action');
 					$annotations = $this->getRoutingAnnotations($methodReflection->getDocComment());
 					if ($this->assertIsRoutable($annotations) === FALSE) {
@@ -114,8 +158,8 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						continue;
 					}
 					$definitions[$identity] = array(
-						$this->buildFixedPostVarsForController($urlPrefix),
-						$this->buildFixedPostVarsForControllerAction($urlPrefix),
+						$this->buildFixedPostVarsForControllerAction($urlPrefix, $annotations),
+						$this->buildFixedPostVarsForController($urlPrefix, $controllerClassAnnotations),
 					);
 					foreach ($arguments as $argumentReflection) {
 						$segment = $this->buildFixedPostVarsForControllerActionArgument($argumentReflection, $actionName, $urlPrefix);
@@ -134,6 +178,8 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	}
 
 	/**
+	 * Assert wether this any one of this set of annotations disables routing.
+	 *
 	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
 	 * @return boolean
 	 */
@@ -144,6 +190,22 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			}
 		}
 		return TRUE;
+	}
+
+	/**
+	 * Assert the noMatch rule for this set of annotations. Last one has precedense.
+	 *
+	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
+	 * @return string|NULL
+	 */
+	protected function assertNoMatchRule(array $annotations) {
+		$rule = NULL;
+		foreach ($annotations as $annotation) {
+			if ($annotation->getNoMatchRule() !== NULL) {
+				$rule = $annotation->getNoMatchRule();
+			}
+		}
+		return $rule;
 	}
 
 	/**
@@ -216,25 +278,33 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 
 	/**
 	 * @param string $urlPrefix
+	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
 	 * @return array
 	 */
-	protected function buildFixedPostVarsForController($urlPrefix) {
+	protected function buildFixedPostVarsForController($urlPrefix, $annotations) {
 		$definition = array(
 			'GETvar' => $urlPrefix . '[controller]',
-			'noMatch' => 'bypass'
 		);
+		$noMatchRule = $this->assertNoMatchRule($annotations);
+		if ($noMatchRule !== NULL) {
+			$definition['noMatch'] = $noMatchRule;
+		}
 		return $definition;
 	}
 
 	/**
 	 * @param string $urlPrefix
+	 * @param Tx_Fed_Routing_RoutingAnnotation[] $annotations
 	 * @return array
 	 */
-	protected function buildFixedPostVarsForControllerAction($urlPrefix) {
+	protected function buildFixedPostVarsForControllerAction($urlPrefix, $annotations) {
 		$definition = array(
 			'GETvar' => $urlPrefix . '[action]',
-			'noMatch' => 'bypass'
 		);
+		$noMatchRule = $this->assertNoMatchRule($annotations);
+		if ($noMatchRule !== NULL) {
+			$definition['noMatch'] = $noMatchRule;
+		}
 		return $definition;
 	}
 
