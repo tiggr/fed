@@ -158,8 +158,8 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						continue;
 					}
 					$definitions[$identity] = array(
-						$this->buildFixedPostVarsForControllerAction($urlPrefix, $annotations),
 						$this->buildFixedPostVarsForController($urlPrefix, $controllerClassAnnotations),
+						$this->buildFixedPostVarsForControllerAction($urlPrefix, $annotations),
 					);
 					foreach ($arguments as $argumentReflection) {
 						$segment = $this->buildFixedPostVarsForControllerActionArgument($argumentReflection, $actionName, $urlPrefix);
