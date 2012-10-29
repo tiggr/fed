@@ -49,6 +49,8 @@ class Tx_Fed_Routing_SegmentValueProcessor {
 		$stringConvertPattern = isset($parameters['stringConvertPattern']) ? $parameters['stringConvertPattern'] : '/([^a-z0-9\-]{1,})+/i';
 		$stringConvertReplacement = isset($parameters['stringConvertReplacement']) ? $parameters['stringConvertReplacement'] : '-';
 		$string = preg_replace($stringConvertPattern, $stringConvertReplacement, $string);
+		$string = strtolower($string);
+		$string = trim($string, '-');
 		return $string;
 	}
 
