@@ -75,7 +75,6 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 						break;
 					}
 					foreach ($controllerConfiguration['actions'] as $actionName) {
-						$identity = $pluginSignature . '_' . $controllerName . '_' . $actionName;
 						if (method_exists($controllerClassName, $actionName . 'Action') === FALSE) {
 							continue;
 						}
