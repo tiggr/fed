@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Recursion Service
@@ -42,17 +42,17 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 	private $_exceptionMessage = 'Recursion problem occurred';
 
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	private $_level = 0;
 
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	private $_maxLevel = 16;
 
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	private $_maxEncounters = 1;
 
@@ -104,7 +104,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 	/**
 	 * Get the maximum allowed number of encounters
-	 * @return int
+	 * @return integer
 	 * @api
 	 */
 	public function getMaxEncounters() {
@@ -113,7 +113,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 	/**
 	 * Set the maximum allowed recursion level
-	 * @param int $level
+	 * @param integer $level
 	 * @api
 	 */
 	public function setMaxLevel($level) {
@@ -122,7 +122,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 	/**
 	 * Get the maximum allowed recursion level
-	 * @return int
+	 * @return integer
 	 * @api
 	 */
 	public function getMaxLevel() {
@@ -131,7 +131,7 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 
 	/**
 	 * Get the current recursion level
-	 * @return int
+	 * @return integer
 	 * @api
 	 */
 	public function getLevel() {
@@ -184,11 +184,11 @@ class Tx_Fed_Service_Recursion implements t3lib_Singleton {
 		$maxEnc = $this->getMaxEncounters();
 		$message = $this->getExceptionMessage();
 		if ($this->failsOnLevel()) {
-			$msg = "{$message} at level {$level} with message: {$exitMsg}";
+			$msg = $message . ' at level '. $level . ' with message: ' . $exitMsg;
 			throw new Exception($msg);
 		}
 		if ($this->failsOnMaxEncounters()) {
-			$msg = "{$message} at encounter {$maxEnc} of {$maxEnc} allowed with message: {$exitMsg}";
+			$msg = $message . ' at encounter ' . $maxEnc . ' of ' . $maxEnc . ' allowed with message: ' . $exitMsg;
 			$this->throwException($msg);
 		}
 		return TRUE;

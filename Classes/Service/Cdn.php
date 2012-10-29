@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * CDN implementation service. Provides easy methods for including header
@@ -93,23 +93,23 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * of jQueryUI, if specified, determines the version of the theme) or it
 	 * can be a relative URL (from PATH_site) to your own template file
 	 *
-	 * @param mixed $jQueryVersion Specify as either "1", "1.8" or "1.8.2" - for the loose versions you always get the latest release
+	 * @param string $jQueryVersion Specify as either "1", "1.8" or "1.8.2" - for the loose versions you always get the latest release
 	 * @param mixed $jQueryUIVersion Specify as either "1", "1.8" or "1.8.2" - for the loose versions you always get the latest release
 	 * @param mixed $jQueryUITheme If NULL/FALSE excludes theme
 	 * @param boolean $compatibility If TRUE puts jQuery into compatibility mode. Ignored if $return === TRUE
 	 * @return void
 	 * @api
 	 */
-	public function includeJQuery($jQueryVersion='1', $jQueryUIVersion=FALSE, $jQueryUITheme=FALSE, $compatibility=FALSE) {
+	public function includeJQuery($jQueryVersion = '1', $jQueryUIVersion = FALSE, $jQueryUITheme = FALSE, $compatibility = FALSE) {
 		$file = $this->buildPackageUri('jquery', $jQueryVersion, 'jquery.min.js');
-		#$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, TRUE, FALSE, TRUE);
+
 		$this->documentHead->includeFile($file);
-		#die($file);
+
 		if ($jQueryUIVersion) {
-			$this->includeJQueryUI($jQueryUIVersion, $return);
+			$this->includeJQueryUI($jQueryUIVersion);
 		}
 		if ($jQueryUITheme) {
-			$this->includeJQueryUITheme($jQueryUITheme, $return);
+			$this->includeJQueryUITheme($jQueryUITheme);
 		}
 		if ($compatibility) {
 			$this->includeJQueryNoConflict();
@@ -120,12 +120,10 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * Inserts a script tag loading the specified $jQueryUIVersion - or returns
 	 * the URL if $return === TRUE
 	 * @param string $jQueryUIVersion
-	 * @param boolean $return If TRUE returns only the URL
 	 * @api
 	 */
-	public function includeJQueryUI($jQueryUIVersion=NULL) {
+	public function includeJQueryUI($jQueryUIVersion = NULL) {
 		$file = $this->buildPackageUri('jqueryui', $jQueryUIVersion, 'jquery-ui.min.js');
-		#$this->pageRenderer->addJsFile($file, 'text/javascript', FALSE, FALSE, FALSE, TRUE);
 		$this->documentHead->includeFile($file);
 	}
 
@@ -134,8 +132,7 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * @param string $jQueryUITheme URI/URL/name of theme to load
 	 * @api
 	 */
-	public function includeJQueryUITheme($jQueryUITheme=NULL) {
-		#$this->pageRenderer->addCssFile($jQueryUITheme, 'stylesheet', 'all', 'JQuery Theme CSS', TRUE, TRUE, FALSE, FALSE);
+	public function includeJQueryUITheme($jQueryUITheme = NULL) {
 		$this->documentHead->includeFile($jQueryUITheme);
 	}
 
@@ -146,7 +143,6 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 */
 	public function includeJQueryNoConflict() {
 		$script = 'jQuery.noConflict();';
-		#$this->pageRenderer->addJsInlineCode('jquery-compat', $script, FALSE);
 		$this->documentHead->includeHeader($script, 'js');
 	}
 
@@ -159,7 +155,7 @@ class Tx_Fed_Service_Cdn implements t3lib_Singleton {
 	 * @return string
 	 * @api
 	 */
-	public function buildPackageUri($package='jquery', $version=NULL, $file='jquery.min.js') {
+	public function buildPackageUri($package = 'jquery', $version = NULL, $file = 'jquery.min.js') {
 		$uri = $this->patternUrlJQuery;
 		if ($version == NULL) {
 			$uri = str_replace('@version/', '', $uri);

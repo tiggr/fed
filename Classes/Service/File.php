@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * File service
@@ -78,7 +78,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	 * @return boolean
 	 * @api
 	 */
-	public function autoUpload(Tx_Extbase_DomainObject_DomainObjectInterface &$domainObject, $propertyName=NULL, $basePath=NULL) {
+	public function autoUpload(Tx_Extbase_DomainObject_DomainObjectInterface &$domainObject, $propertyName = NULL, $basePath = NULL) {
 		if ($propertyName === NULL) {
 			$propertyNames = $this->infoService->getPropertiesByAnnotation($domainObject, 'file', TRUE, FALSE);
 			foreach ($propertyNames as $propertyName) {
@@ -120,7 +120,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	 * @return Tx_Fed_Persistence_FileObjectStorage
 	 * @api
 	 */
-	public function getUploadedFiles(Tx_Extbase_DomainObject_DomainObjectInterface &$domainObject, $propertyName, $objectType=NULL) {
+	public function getUploadedFiles(Tx_Extbase_DomainObject_DomainObjectInterface &$domainObject, $propertyName, $objectType = NULL) {
 		if ($objectType === NULL) {
 			$objectType = 'Tx_Fed_Resource_File';
 		}
@@ -138,7 +138,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 			}
 		}
 		$numFiles = count($postFiles);
-		for ($i=0; $i<$numFiles; $i++) {
+		for ($i = 0; $i < $numFiles; $i++) {
 			$filename = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['tmp_name'], $propertyName . '.' . $i);
 			$targetFilename = Tx_Extbase_Reflection_ObjectAccess::getProperty($_FILES[$namespace]['name'], $propertyName . '.' . $i);
 			if($targetFilename && $targetFilename != '') {
@@ -202,7 +202,7 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 			foreach ($sourceFile as $childFile) {
 				$this->copy($childFile, $pathinfo['dirname']);
 			}
-		} else if ($sourceFile instanceof Tx_Fed_Resource_File) {
+		} elseif ($sourceFile instanceof Tx_Fed_Resource_File) {
 			$sourceFilename = $sourceFile->getAbsolutePath();
 		} else {
 			$sourceFilename = $sourceFile;
@@ -236,9 +236,9 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 				$this->unlink($filename->getAbsolutePath());
 			}
 			return TRUE;
-		} else if ($fileOrFileObjectStorage instanceof Tx_Fed_Resource_File) {
+		} elseif ($fileOrFileObjectStorage instanceof Tx_Fed_Resource_File) {
 			$this->unlink($fileOrFileObjectStorage->getAbsolutePath());
-		} else if (is_file($fileOrFileObjectStorage) === FALSE) {
+		} elseif (is_file($fileOrFileObjectStorage) === FALSE) {
 			$fileOrFileObjectStorage = PATH_site . $fileOrFileObjectStorage;
 			$this->unlink($fileOrFileObjectStorage);
 		} else {
@@ -258,12 +258,12 @@ class Tx_Fed_Service_File implements t3lib_Singleton {
 	 * @param integer $chunk If doing chunked read/write uses append mode if $chunk > 0
 	 * @return array
 	 */
-	public function getFileCopyPointers($sourceFileName, $targetDir, $filename, $chunk=0) {
+	public function getFileCopyPointers($sourceFileName, $targetDir, $filename, $chunk = 0) {
 		$in = fopen($sourceFileName, "rb");
 		$out = fopen($targetDir . '/' . $filename, $chunk == 0 ? "wb" : "ab");
 		if ($out === FALSE) {
 			throw new Exception('Failed to open output stream', 102);
-		} else if ($in === FALSE) {
+		} elseif ($in === FALSE) {
 			throw new Exception('Failed to open input stream', 101);
 		}
 		return array($in, $out);

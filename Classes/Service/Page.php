@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Page Service
@@ -31,7 +31,6 @@
  *
  * @package Fed
  * @subpackage Service
- * @version
  */
 class Tx_Fed_Service_Page implements t3lib_Singleton {
 
@@ -94,7 +93,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	public function getContentElementsByColumnName(Tx_Fed_Domain_Model_Page $page, $columnName) {
 		$columns = $this->getColumnConfiguration($page);
 		$pid = $page->getUid();
-		foreach ($columns as $columnPosition=>$column) {
+		foreach ($columns as $columnPosition => $column) {
 			if ($column['name'] == $columnName) {
 				return $this->contentElementRepository->findAllByPidAndColPos($pid, $columnPosition);
 			}
@@ -136,7 +135,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 		$pageSelect = new t3lib_pageSelect();
 		$rootLine = $pageSelect->getRootLine($pageUid);
 		$rootLine = array_values($rootLine);
-		foreach ($rootLine as $index=>$row) {
+		foreach ($rootLine as $index => $row) {
 			if ($index == 0 && strpos($row['tx_fed_page_controller_action'], '->')) {
 				return $row;
 			} elseif ($index > 0 && strpos($row['tx_fed_page_controller_action_sub'], '->')) {
@@ -153,7 +152,7 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 * @param boolean $translatePath If FALSE, does not translate the TypoScript path
 	 * @return string
 	 */
-	public function getFallbackPageTemplatePathAndFilename($translatePath=TRUE) {
+	public function getFallbackPageTemplatePathAndFilename($translatePath = TRUE) {
 		$settings = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'fed', 'API');
 		$fallbackTemplatePathAndFilename = $settings['defaults.']['templates.']['fallbackFluidPageTemplate'];
 		if ($translatePath === TRUE) {

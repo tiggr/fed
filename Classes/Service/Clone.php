@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Copies a DomainObject with treatment of relationship properties according to
@@ -100,7 +100,7 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 				$originalValue = $object->$getter();
 				if ($copyMethod == 'reference') {
 					$copiedValue = $this->copyAsReference($originalValue);
-				} else if ($copyMethod == 'clone') {
+				} elseif ($copyMethod == 'clone') {
 					$copiedValue = $this->copyAsClone($originalValue);
 				}
 				if ($copiedValue != NULL) {
@@ -128,10 +128,10 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 				$newStorage->attach($item);
 			}
 			return $newStorage;
-		} else if ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
+		} elseif ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 			// 1:1 mapping as reference; return object itself
 			return $value;
-		} else if (is_object($value)) {
+		} elseif (is_object($value)) {
 			// fallback case for class copying - value objects and such
 			return $value;
 		} else {
@@ -156,11 +156,11 @@ class Tx_Fed_Service_Clone implements t3lib_Singleton {
 				$newStorage->attach($newItem);
 			}
 			return $newStorage;
-		} else if ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
+		} elseif ($value instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 			// DomainObject; copy and return
-			/** @var Tx_Extbase_DomainObject_DomainObjectInterface $value */
+			/** @var $value Tx_Extbase_DomainObject_DomainObjectInterface */
 			return $this->copy($value);
-		} else if (is_object($value)) {
+		} elseif (is_object($value)) {
 			// fallback case for class copying - value objects and such
 			return clone $value;
 		} else {
