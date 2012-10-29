@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * DomainObjectInfo utility. Reads various meta-information about DomainObject
@@ -113,7 +113,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @return array
 	 * @api
 	 */
-	public function getPropertiesByAnnotation($object, $annotation, $value=TRUE, $addUid=TRUE) {
+	public function getPropertiesByAnnotation($object, $annotation, $value = TRUE, $addUid = TRUE) {
 		$propertyNames = array();
 		$className = is_object($object) ? get_class($object) : $object;
 		$this->recursionHandler->in();
@@ -243,7 +243,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 			return $viewConfig['partialRootPath'] . $controllerName . '/';
 		} else {
 			$resourcePath = $this->getResourcePath($object);
-			return "{$resourcePath}Private/Partials/{$controllerName}/";
+			return $resourcePath . 'Private/Partials/' . $controllerName . '/';
 		}
 	}
 
@@ -294,7 +294,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @return boolean
 	 * @api
 	 */
-	public function hasAnnotation($className, $propertyName, $annotation, $value=TRUE) {
+	public function hasAnnotation($className, $propertyName, $annotation, $value = TRUE) {
 		$className = is_object($className) ? get_class($className) : $className;
 		$tags = $this->reflectionService->getPropertyTagsValues($className, $propertyName);
 		$annotationValues = $tags[$annotation];
@@ -323,7 +323,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @return array
 	 * @api
 	 */
-	public function getPropertyTypes($object, array $propertyNames=NULL) {
+	public function getPropertyTypes($object, array $propertyNames = NULL) {
 		$className = is_object($object) ? get_class($object) : $object;
 		$types = array();
 		$properties = $this->reflectionService->getClassPropertyNames($className);
@@ -403,10 +403,10 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @return array
 	 * @api
 	 */
-	public function getValuesByAnnotation($object, $annotation='json', $value=TRUE, $addUid=TRUE) {
+	public function getValuesByAnnotation($object, $annotation = 'json', $value = TRUE, $addUid = TRUE) {
 		if (is_array($object)) {
 			$array = array();
-			foreach ($object as $k=>$v) {
+			foreach ($object as $k => $v) {
 				$array[$k] = $this->getValuesByAnnotation($v, $annotation, $value, $addUid);
 			}
 			return $array;
@@ -437,9 +437,9 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 						$array[$k] = $this->getValuesByAnnotation($v, $annotation, $value, $addUid);
 					}
 					$returnValue = $array;
-				} else if ($returnValue instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
+				} elseif ($returnValue instanceof Tx_Extbase_DomainObject_DomainObjectInterface) {
 					$returnValue = $this->getValuesByAnnotation($returnValue, $annotation, $value, $addUid);
-				} else if ($returnValue instanceof DateTime) {
+				} elseif ($returnValue instanceof DateTime) {
 					$returnValue = $returnValue->format('r');
 				}
 				$return[$propertyName] = $returnValue;
@@ -520,7 +520,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 */
 	public function convertLowerCaseUnderscoredToLowerCamelCase($subject) {
 		if (is_array($subject)) {
-			foreach ($subject as $k=>$value) {
+			foreach ($subject as $k => $value) {
 				$subject[$k] = $this->convertLowerCaseUnderscoredToLowerCamelCase($value);
 			}
 		} else {
@@ -537,7 +537,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 */
 	public function convertCamelCaseToLowerCaseUnderscored($subject) {
 		if (is_array($subject)) {
-			foreach ($subject as $k=>$value) {
+			foreach ($subject as $k => $value) {
 				$subject[$k] = $this->convertCamelCaseToLowerCaseUnderscored($value);
 			}
 		} else {
@@ -555,7 +555,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 	 * @return mixed
 	 * @api
 	 */
-	public function getUploadFolder($object, $propertyName=NULL) {
+	public function getUploadFolder($object, $propertyName = NULL) {
 		if (is_object($object) === FALSE) {
 			$className = $object;
 			$object = $this->objectManager->get($className);
