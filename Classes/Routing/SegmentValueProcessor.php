@@ -28,16 +28,14 @@ class Tx_Fed_Routing_SegmentValueProcessor {
 	 */
 	public function translateSegmentValue(&$params, tx_realurl &$reference) {
 		$value = $params['value'];
-		if (empty($value) === TRUE) {
-			return NULL;
-		}
 		$parameters = $params['setup']['parameters'];
 		$direction = isset($params['origValue']) ? 'decode' : 'encode';
 		$conversionMethodName = $direction . $parameters['conversionMethod'];
 		if (method_exists($this, $conversionMethodName) === FALSE) {
 			throw new Tx_Fed_Routing_RoutingException('Invalid conversion method: ' . $parameters['conversionMethod']);
 		}
-		return call_user_func_array(array($this, $conversionMethodName), array($value, $parameters));
+		$translatedValue = call_user_func_array(array($this, $conversionMethodName), array($value, $parameters));
+		return $translatedValue;
 	}
 
 	/**
@@ -57,13 +55,20 @@ class Tx_Fed_Routing_SegmentValueProcessor {
 	/**
 	 * @param integer $uid
 	 * @param array $parameters
-	 * @mixed
+	 * @return mixed
 	 */
 	protected function encodeModel($uid, $parameters) {
 		$uid = intval($uid);
+		if ($uid < 1) {
+			return NULL;
+		}
 		$tableName = $parameters['tableName'];
 		$className = $parameters['className'];
-		$labelField = $GLOBALS['TCA'][$tableName]['ctrl']['label'];
+		$labelField = $parameters['labelField'];
+		$cachedAlias = $this->getAliasFromTableNameAndLabelFieldCache($tableName, $labelField, $uid);
+		if ($cachedAlias !== NULL) {
+			return $cachedAlias;
+		}
 		$repositoryClassName = str_replace('_Domain_Model_', '_Domain_Repository_', $className) . 'Repository';
 		if (class_exists($repositoryClassName) === FALSE) {
 			throw new Tx_Fed_Routing_RoutingException('Class ' . $className . ' does not appear to have a Repository; this is required. '
@@ -75,8 +80,10 @@ class Tx_Fed_Routing_SegmentValueProcessor {
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 		$query->matching($query->equals('uid', $uid));
 		$object = $query->execute()->getFirst();
-		if (!$object) {
+		if (!$object && $parameters['noMatch'] !== 'bypass') {
 			throw new Tx_Fed_Routing_RoutingException('Unable to fetch ' . $className . ':' . $uid . ' from ' . $repositoryClassName, 1351541402);
+		} elseif (!$object) {
+			return NULL;
 		}
 		$propertyName = t3lib_div::underscoredToLowerCamelCase($labelField);
 		$propertyValue = Tx_Extbase_Reflection_ObjectAccess::getProperty($object, $propertyName);
@@ -97,8 +104,31 @@ class Tx_Fed_Routing_SegmentValueProcessor {
 	 */
 	protected function decodeModel($identity, $parameters) {
 		$tableName = $parameters['tableName'];
-		$labelField = $GLOBALS['TCA'][$tableName]['ctrl']['label'];
-		return $this->getModelUidFromAliasCache($identity, $tableName, $labelField);
+		$labelField = $parameters['labelField'];
+		if (ctype_digit($identity)) {
+			return $identity;
+		}
+		$decodedValue = $this->getModelUidFromAliasCache($identity, $tableName, $labelField);
+		if (!$parameters['optional'] && $decodedValue === NULL) {
+			throw new Tx_Fed_Routing_RoutingException('Unable to translate a non-optional argument. The identity that was attempted converted was "'
+				. $identity . '" and the settings which were insufficient to load an object were: ' . var_export($parameters, TRUE), 1351629172);
+		}
+		return $decodedValue;
+	}
+
+	/**
+	 * @param string $tableName
+	 * @param string $labelField
+	 * @param integer $uid
+	 * @return string
+	 */
+	protected function getAliasFromTableNameAndLabelFieldCache($tableName, $labelField, $uid) {
+		$clause = "tablename = '" . $tableName . "' AND field_alias = '" . $labelField . "' AND value_id = '" . $uid . "'";
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('value_alias', 'tx_realurl_uniqalias', $clause);
+		if (is_array($rows) && isset($rows[0])) {
+			return $rows[0]['value_alias'];
+		}
+		return NULL;
 	}
 
 	/**

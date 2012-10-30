@@ -14,19 +14,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	/**
 	 * @var array
 	 */
-	protected $currentTableConfigurationArray = array();
-
-	/**
-	 * @var string
-	 */
-	protected $currentExtensionName = 'Fed';
-
-	/**
-	 * @var array
-	 */
-	protected $excludedArgumentTypes = array(
-		'array'
-	);
+	private static $tableSetupCache = array();
 
 	/**
 	 * CONSTRUCTOR
@@ -61,6 +49,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 	 */
 	public function buildAutomaticRules($params, $reference) {
 		$extensionsAndPluginNames = array();
+		$configuration = $params['config'];
 		foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'] as $extensionName => $extensionConfiguration) {
 			foreach ($extensionConfiguration['plugins'] as $pluginName => $pluginConfiguration) {
 				$routable = FALSE;
@@ -93,18 +82,21 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 			}
 			unset($extensionConfiguration);
 		}
-		if (isset($params['config']['fixedPostVars']) === FALSE || is_array($params['config']['fixedPostVars']) === FALSE) {
-			$params['config']['fixedPostVars'] = array();
+
+		$configuration['fileName']['defaultToHTMLsuffixOnPrev'] = 1;
+		if (isset($configuration['fixedPostVars']) === FALSE || is_array($configuration['fixedPostVars']) === FALSE) {
+			$configuration['fixedPostVars'] = array();
 		}
 		$definitions = $this->buildFixedPostVarsForExtensionsAndPluginNames($extensionsAndPluginNames);
 
 			// note: foreach-style mapping because array_merge would re-index the numeric
 			// indices which are page UIDs - so this would not suit the purpose of mapping
 		foreach ($definitions as $pidOrName => $definitionOrMappingTarget) {
-			$params['config']['fixedPostVars'][$pidOrName] = $definitionOrMappingTarget;
+			$configuration['fixedPostVars'][$pidOrName] = $definitionOrMappingTarget;
 		}
+
 		unset($reference);
-		return $params['config'];
+		return $configuration;
 	}
 
 	/**
@@ -126,15 +118,7 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 		foreach ($extensionsAndPluginNames as $extensionAndPluginName) {
 			list ($extensionName, $pluginName) = explode('->', $extensionAndPluginName);
 			$this->currentExtensionName = $extensionName;
-				// Note: these next lines loads a copy of the TCA temporarily
-			$_EXTKEY = t3lib_div::camelCaseToLowerCaseUnderscored($extensionName);
-			$extensionTableConfigurationArrayDefinitionFile = t3lib_extMgm::extPath(strtolower($_EXTKEY), 'ext_tables.php');
-			if (file_exists($extensionTableConfigurationArrayDefinitionFile)) {
-				eval('?>' . file_get_contents($extensionTableConfigurationArrayDefinitionFile));
-				$this->currentTableConfigurationArray = $TCA;
-			} else {
-				$this->currentTableConfigurationArray = array();
-			}
+
 			$pluginSignature = $pluginSignatures[$extensionAndPluginName];
 			$urlPrefix = 'tx_' . $pluginSignature;
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['extbase']['extensions'][$extensionName]['plugins'][$pluginName]['controllers'] as $controllerName => $controllerConfiguration) {
@@ -325,35 +309,33 @@ class Tx_Fed_Routing_AutoConfigurationGenerator {
 		$matches = array();
 		preg_match('/@param[\s]+([a-zA-Z_0-9\\^\s]+)[\s]+\$' . $argumentName . '/', $docComment, $matches);
 		$argumentDataType = trim($matches[1]);
-		/*
-		if (in_array($argumentDataType, $this->excludedArgumentTypes) === TRUE) {
-			return NULL;
-		}
-		$recognizedDataTypes = array('boolean', 'string', 'integer', 'float', '');
-		if (in_array($argumentDataType, $recognizedDataTypes) === TRUE) {
-			return $definition;
-		} elseif (class_exists($argumentDataType) === FALSE) {
-			throw new Tx_Fed_Routing_RoutingException('The class requested in the type for ' . $argumentName . ' (type is ' . $argumentDataType . ') could not be loaded / does not exist', 1351533910);
-		} elseif (in_array('Tx_Extbase_DomainObject_DomainObjectInterface', class_implements($argumentDataType)) === FALSE) {
-			throw new Tx_Fed_Routing_RoutingException('The class ' . $argumentDataType . ' does not implement Tx_Extbase_DomainObject_DomainObjectInterface - not a Domain Object?', 1351533986);
-		}
-		*/
 		$tableName = strtolower($argumentDataType);
 		switch ($argumentDataType) {
 			case '': $conversionMethod = Tx_Fed_Routing_SegmentValueProcessor::CONVERT_NULL; break;
 			case 'DateTime': $conversionMethod = Tx_Fed_Routing_SegmentValueProcessor::CONVERT_DATETIME; break;
 			default: $conversionMethod = Tx_Fed_Routing_SegmentValueProcessor::CONVERT_MODEL; break;
 		}
-
+		if (isset(self::$tableSetupCache[$tableName]) === TRUE) {
+			$TCA = self::$tableSetupCache[$tableName];
+		} else {
+			$_EXTKEY = t3lib_div::camelCaseToLowerCaseUnderscored($this->currentExtensionName);
+			$extensionConfigurationFile = t3lib_extMgm::extPath($_EXTKEY, 'ext_tables.php');
+			if (file_exists($extensionConfigurationFile)) {
+				eval('?>' . file_get_contents($extensionConfigurationFile));
+			}
+		}
 		$definition['userFunc'] = 'Tx_Fed_Routing_SegmentValueProcessor->translateSegmentValue';
 		$definition['parameters'] = array(
 			'conversionMethod' => $conversionMethod,
 			'className' => $argumentDataType,
-			'tableName' => $tableName
+			'tableName' => $tableName,
+			'labelField' => $TCA[$tableName]['ctrl']['label']
 		);
 		if ($noMatchRule !== NULL) {
 			$definition['parameters']['noMatch'] = $noMatchRule;
-			unset($definition['noMatch']);
+		}
+		if ($argument->isDefaultValueAvailable()) {
+			$definition['optional'] = $definition['parameters']['optional'] = TRUE;
 		}
 		return $definition;
 	}
