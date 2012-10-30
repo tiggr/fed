@@ -1,29 +1,30 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2011 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
+ * Data source parser
  *
  * @author Claus Due, Wildside A/S
  * @package Fed
@@ -66,7 +67,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 	 * @api
 	 */
 	public function parseDataSources(array $sources) {
-		foreach ($sources as $k=>$v) {
+		foreach ($sources as $k => $v) {
 			$sources[$k] = $this->parseDataSource($v);
 		}
 		return $sources;
@@ -98,9 +99,9 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 		$probeFunction = $source->getFunc();
 		if ($probeFunction) {
 			$data = $this->fetchDataByFunction($probeFunction);
-		} else if ($probeQuery) {
+		} elseif ($probeQuery) {
 			$data = $this->fetchDataByQuery($probeQuery);
-		} else if ($probeUrl) {
+		} elseif ($probeUrl) {
 			$probeUrlMethod = $source->getUrlMethod();
 			$data = $this->fetchDataByUrl($probeUrl, $probeUrlMethod);
 		} else {
@@ -128,6 +129,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 
 	/**
 	 * Fetch data by $url and $method
+	 *
 	 * @param string $url
 	 * @param string $method
 	 * @return array
@@ -152,6 +154,7 @@ class Tx_Fed_Utility_DataSourceParser implements t3lib_Singleton {
 
 	/**
 	 * Fetch data by $function call
+	 *
 	 * @param string $function
 	 * @return array
 	 */

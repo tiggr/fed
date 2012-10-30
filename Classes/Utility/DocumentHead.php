@@ -1,27 +1,27 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
-*
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2010 Claus Due <claus@wildside.dk>, Wildside A/S
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
  * Allows advanced access to the DOM <head> content while rendering
@@ -109,7 +109,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param array $attributes Attributes of tag
 	 * @deprecated
 	 */
-	public function includeHeader($code, $type=NULL, $key=NULL, $index=-1, $attributes=NULL) {
+	public function includeHeader($code, $type = NULL, $key = NULL, $index = -1, $attributes = NULL) {
 		if ($key === NULL) {
 			$key = md5($code);
 		}
@@ -119,7 +119,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 			} else {
 				$GLOBALS['TSFE']->additionalHeaderData[md5($key)] = t3lib_div::wrapJS($code);
 			}
-		} else if ($type == 'css') {
+		} elseif ($type == 'css') {
 			if ($this->isCached()) {
 				$this->pageRenderer->addCssInlineBlock($key, $code, FALSE, $index == 0);
 			} else {
@@ -138,14 +138,14 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return string
 	 * @deprecated
 	 */
-	public function wrap($code=NULL, $file=NULL, $type=NULL, $attributes=NULL) {
+	public function wrap($code = NULL, $file = NULL, $type = NULL, $attributes = NULL) {
 		if ($type == self::TYPE_JAVASCRIPT) {
 			if ($file) {
 				return '<script type="text/javascript" src="' . $file . '"></script>';
 			} else {
 				return '<script type="text/javascript">' . $code . '</script>';
 			}
-		} else if ($type == self::TYPE_STYLESHEET) {
+		} elseif ($type == self::TYPE_STYLESHEET) {
 			$media = $attributes['media'] ? 'media="' . $attributes['media'] . '"' : '';
 			if ($file) {
 				return '<link rel="stylesheet" type="text/css" href="' . $file . '" ' . $media . '/>';
@@ -166,8 +166,8 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return string Contents or filename if $saveToFile was specified
 	 * @deprecated
 	 */
-	public function concatenateFiles(array $files, $saveToFile=FALSE, $extension=self::TYPE_JAVASCRIPT) {
-		$contents = "";
+	public function concatenateFiles(array $files, $saveToFile = FALSE, $extension = self::TYPE_JAVASCRIPT) {
+		$contents = '';
 		foreach ($files as $file) {
 			$contents .= file_get_contents(PATH_site . $file);
 			$contents .= "\n";
@@ -188,10 +188,10 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return string
 	 * @deprecated
 	 */
-	public function saveContentToTempFile($contents, $uniqid=NULL, $extension=NULL) {
+	public function saveContentToTempFile($contents, $uniqid = NULL, $extension = NULL) {
 		$uniqid = $uniqid === NULL ? uniqid('u') : $uniqid;
 		$extension = $extension === NULL ? 'txt' : $extension;
-		$tempFilePath = "typo3temp/{$uniqid}.{$extension}";
+		$tempFilePath = 'typo3temp/' . $uniqid . '.' . $extension;
 		$tempFile = PATH_site . $tempFilePath;
 		file_put_contents($tempFile, $contents);
 		return $tempFilePath;
@@ -209,7 +209,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return string The MD5 checksum of files (which is also the additionalHeaderData array key if you $concat = TRUE)
 	 * @deprecated
 	 */
-	public function includeFiles(array $filenames, $cache=FALSE, $concat=FALSE, $compress=FALSE, $index=-1, $attributes=NULL) {
+	public function includeFiles(array $filenames, $cache = FALSE, $concat = FALSE, $compress = FALSE, $index = -1, $attributes = NULL) {
 		$pathinfo = pathinfo($filename);
 		$type = $pathinfo['extension'];
 		if ($type !== 'css' && $type !== 'js') {
@@ -242,7 +242,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return void
 	 * @deprecated
 	 */
-	public function includeFile($filename, $cache=FALSE, $concat=FALSE, $compress=FALSE, $index=-1, $attributes=NULL) {
+	public function includeFile($filename, $cache = FALSE, $concat = FALSE, $compress = FALSE, $index = -1, $attributes = NULL) {
 		$pathinfo = pathinfo($filename);
 		$type = $pathinfo['extension'];
 		if ($pathinfo['filename'] === '*') {
@@ -261,7 +261,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 			} else {
 				$GLOBALS['TSFE']->additionalHeaderData[md5($filename)] = '<script type="text/javascript" src="' . $filename . '"></script>';
 			}
-		} else if ($type == 'css') {
+		} elseif ($type == 'css') {
 			if ($this->isCached()) {
 				$this->pageRenderer->addCssFile($filename, 'stylesheet', ($attributes['media'] ? $attributes['media'] : 'all'), '', $compress, $index == 0);
 			} else {
@@ -280,7 +280,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @param array $attributes Attributes of tag
 	 * @deprecated
 	 */
-	public function includeFileAt($filename, $index=0, $attributes=NULL) {
+	public function includeFileAt($filename, $index = 0, $attributes = NULL) {
 		return $this->includeFile($filename, FALSE, FALSE, FALSE, $index, $attributes);
 	}
 
@@ -295,7 +295,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	 * @return array
 	 * @deprecated
 	 */
-	public function getFilenamesOfType($dir, $extension=NULL) {
+	public function getFilenamesOfType($dir, $extension = NULL) {
 		$relative = $dir;
 		if (substr($dir, 0, 1) != '/') {
 			$dir = PATH_site . $dir;
@@ -305,10 +305,10 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 			$pathinfo = pathinfo($dir.$file);
 			if (is_dir($dir.$file)) {
 				unset($files[$k]);
-			} else if ($extension && $pathinfo['extension'] != $extension) {
+			} elseif ($extension && $pathinfo['extension'] != $extension) {
 				unset($files[$k]);
 			} else {
-				$files[$k] = "{$relative}/{$file}";
+				$files[$k] = $relative . '/' . $file;
 			}
 		}
 		sort($files);
@@ -318,7 +318,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	/**
 	 * Check client browser
 	 *
-	 * @param array $browser
+	 * @param array $code Not used
 	 * @return boolean
 	 */
 	public function pack($code) {
