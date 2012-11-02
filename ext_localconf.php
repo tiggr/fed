@@ -56,10 +56,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugin
 	);
 }
 
-if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableAutoRouting']) {
-	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconfgen.php']['extensionConfiguration']['fed'] = 'Tx_Fed_Routing_AutoConfigurationGenerator->buildAutomaticRules';
-}
-
 if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
 	if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['disableAutomaticTypoScriptInclusion']) {
 		t3lib_extMgm::addTypoScriptSetup('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:fed/Configuration/TypoScript/Page/setup.txt">');
