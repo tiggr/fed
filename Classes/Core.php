@@ -59,12 +59,19 @@ abstract class Tx_Fed_Core {
 		$template->init();
 		/** @var t3lib_pageSelect $sys_page */
 		$sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
-		$rootLine = $sys_page->getRootLine(intval(t3lib_div::_GP('id')));
+		$pageUid = intval(t3lib_div::_GP('id'));
+		if ($pageUid < 1) {
+			return FALSE;
+		}
+		$rootLine = $sys_page->getRootLine($pageUid);
 		$template->runThroughTemplates($rootLine);
 		$template->generateConfig();
 		$allTemplatePaths = $template->setup['plugin.']['tx_fed.']['fce.'];
 		$allTemplatePaths = Tx_Fed_Utility_Path::translatePath($allTemplatePaths);
 		if (is_array($allTemplatePaths) === FALSE) {
+			return FALSE;
+		}
+		if (is_array($GLOBALS['TCA']) === FALSE) {
 			return FALSE;
 		}
 		unset($GLOBALS['TYPO3_DB']);
