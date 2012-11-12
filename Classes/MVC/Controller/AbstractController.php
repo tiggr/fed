@@ -271,7 +271,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 
 			// Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
 			$fileHandler = t3lib_div::makeInstance('t3lib_basicFileFunctions');
-			$filename = basename($fileHandler->getUniqueName($filename, $targetDir));
+			if (file_exists($targetDir . $filename) && filesize($targetDir . $filename) > 0) {
+				$filename = basename($fileHandler->getUniqueName($filename, $targetDir));
+			}
 
 			// Touch the filename. This ensures that if any other user initiates an upload with the same name while
 			// we're spewing chunks, we will not get a filename clash later on. Especially in the part-file. That
