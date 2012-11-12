@@ -75,6 +75,12 @@ abstract class Tx_Fed_Core {
 			return FALSE;
 		}
 		unset($GLOBALS['TYPO3_DB']);
+		$wizardTabs = array(
+			'fed' => array(
+				'title' => 'Fluid Content Elements',
+				'elements' => array()
+			)
+		);
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$key = trim($key, '.');
 			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
@@ -86,6 +92,7 @@ abstract class Tx_Fed_Core {
 					$matches = array();
 					$pattern = '/<flux\:flexform[^\.]([^>]+)/';
 					preg_match_all($pattern, $templateContents, $matches);
+					$tabId = 'fed';
 					foreach (explode('" ', trim($matches[1][0], '"')) as $valueStringPair) {
 						list ($name, $value) = explode('="', trim($valueStringPair, '"'));
 						$contentConfiguration[$name] = $value;
@@ -93,29 +100,45 @@ abstract class Tx_Fed_Core {
 					if ($contentConfiguration['enabled'] === 'FALSE') {
 						continue;
 					}
+					if (isset($contentConfiguration['wizardTab'])) {
+						$tabId = self::sanitizeString($contentConfiguration['wizardTab']);
+						$wizardTabs[$tabId]['title'] = $contentConfiguration['wizardTab'];
+					}
 					$id = md5($templateFilename);
-					$pageTsConfig .= '
-						mod.wizards.newContentElement.wizardItems.fed.elements.' . $id . ' {
-							icon = ' . ($contentConfiguration['icon'] ? $contentConfiguration['icon'] : '../' . t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Icons/Plugin.png') . '
-							title = ' . $contentConfiguration['label'] . '
-							description = ' . $contentConfiguration['description'] . '
+					$pageTsConfig .= sprintf('
+						mod.wizards.newContentElement.wizardItems.%s.elements.' . $id . ' {
+							icon = %s
+							title = %s
+							description = %s
 							tt_content_defValues {
 								CType = fed_fce
-								tx_fed_fcefile = ' . $key . ':' . $fileRelPath . '
+								tx_fed_fcefile = %s
 							}
 						}
-					';
-					array_push($fedWizardElements, $id);
+						',
+						$tabId,
+						($contentConfiguration['icon'] ? $contentConfiguration['icon'] : '../' . t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Icons/Plugin.png') ,
+						$contentConfiguration['label'],
+						$contentConfiguration['description'],
+						$key . ':' . $fileRelPath
+					);
+					$wizardTabs[$tabId]['elements'][] = $id;
 				}
 			}
 		}
-		$pageTsConfig .= '
-			mod.wizards.newContentElement.wizardItems.fed {
-				header = Fluid Content Elements
-				show = ' . implode(',', $fedWizardElements) . '
-				position = 0
-			}';
-
+		foreach ($wizardTabs as $tabId => $tab) {
+			$pageTsConfig .= sprintf('
+				mod.wizards.newContentElement.wizardItems.%s {
+					header = %s
+					show = %s
+					position = 0
+				}
+				',
+				$tabId,
+				$tab['title'],
+				implode(',', $tab['elements'])
+			);
+		}
 		t3lib_div::writeFile(PATH_site . self::CACHED_CONTENT_ELEMENTS_FILE, $pageTsConfig);
 		self::performShutdown();
 		return $pageTsConfig;
@@ -157,6 +180,12 @@ abstract class Tx_Fed_Core {
 			$GLOBALS['SIM_ACCESS_TIME'],
 			$GLOBALS['TYPO3_DB']
 		);
+	}
+
+	protected static function sanitizeString($string) {
+		$pattern = '/([^a-z0-9\-]){1,}/i';
+		$string = preg_replace($pattern, '-', $string);
+		return trim($string, '-');
 	}
 
 }
