@@ -101,7 +101,7 @@ abstract class Tx_Fed_Core {
 						$tabId = self::sanitizeString($contentConfiguration['wizardTab']);
 						$wizardTabs[$tabId]['title'] = $contentConfiguration['wizardTab'];
 					}
-					$id = $key . '_' . preg_replace('/\./' , '', $fileRelPath);
+					$id = $key . '_' . preg_replace('/[\.\/]/' , '', $fileRelPath);
 					$pageTsConfig .= sprintf('
 						mod.wizards.newContentElement.wizardItems.%s.elements.%s {
 							icon = %s
