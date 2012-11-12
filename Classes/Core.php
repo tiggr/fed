@@ -104,9 +104,9 @@ abstract class Tx_Fed_Core {
 						$tabId = self::sanitizeString($contentConfiguration['wizardTab']);
 						$wizardTabs[$tabId]['title'] = $contentConfiguration['wizardTab'];
 					}
-					$id = md5($templateFilename);
+					$id = $key . '_' . preg_replace('/\./' , '', $fileRelPath);
 					$pageTsConfig .= sprintf('
-						mod.wizards.newContentElement.wizardItems.%s.elements.' . $id . ' {
+						mod.wizards.newContentElement.wizardItems.%s.elements.%s {
 							icon = %s
 							title = %s
 							description = %s
@@ -117,6 +117,7 @@ abstract class Tx_Fed_Core {
 						}
 						',
 						$tabId,
+						$id,
 						($contentConfiguration['icon'] ? $contentConfiguration['icon'] : '../' . t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Icons/Plugin.png') ,
 						$contentConfiguration['label'],
 						$contentConfiguration['description'],
