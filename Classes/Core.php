@@ -71,9 +71,6 @@ abstract class Tx_Fed_Core {
 		if (is_array($allTemplatePaths) === FALSE) {
 			return FALSE;
 		}
-		if (is_array($GLOBALS['TCA']) === FALSE) {
-			return FALSE;
-		}
 		unset($GLOBALS['TYPO3_DB']);
 		$wizardTabs = array(
 			'fed' => array(
