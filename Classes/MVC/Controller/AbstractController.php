@@ -270,7 +270,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 			// What follows is my (Anders Gissel) take on the subject, using some Frankenweenie code to make chunking work.
 
 			// Use t3lib_basicFileFunctions to get a unique filename, in case we actually need it.
+			/** @var $fileHandler t3lib_basicFileFunctions */
 			$fileHandler = t3lib_div::makeInstance('t3lib_basicFileFunctions');
+			$filename = $fileHandler->cleanFileName($filename);
 			if (file_exists($targetDir . $filename) && filesize($targetDir . $filename) > 0) {
 				$filename = basename($fileHandler->getUniqueName($filename, $targetDir));
 			}
