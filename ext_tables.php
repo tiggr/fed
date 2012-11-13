@@ -130,6 +130,7 @@ if ($loadBackendConfiguration) {
 			'0,1,4',
 			'before:layout'
 		);
+		Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_PageConfigurationProvider');
 	}
 
 	t3lib_extMgm::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'FED Fluid Extbase Development Framework');
@@ -194,7 +195,6 @@ if ($loadBackendConfiguration) {
 		),
 	), 1);
 
-	Tx_Flux_Core::registerConfigurationProvider('Tx_Fed_Provider_Configuration_PageConfigurationProvider');
 	require_once t3lib_extMgm::extPath($_EXTKEY, 'Configuration/Wizard/FlexFormCodeEditor.php');
 
 }
@@ -204,7 +204,7 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCache
 		try {
 			$GLOBALS['typo3CacheManager']->getCache('extbase_object')->getBackend()->setDefaultLifetime(86400);
 		} catch (Exception $e) {
-				// adjusting the caching lifetime this way only works on 4.6 currently
+				// adjusting the caching lifetime this way only works on 4.6+ currently
 		}
 	}
 }
