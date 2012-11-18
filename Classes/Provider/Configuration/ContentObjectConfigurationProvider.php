@@ -89,15 +89,14 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 	 * @return array
 	 */
 	public function getTemplateVariables(array $row) {
-		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FlexForm');
 		$templatePathAndFilename = $row['tx_fed_fcefile'];
 		$filename = array_pop(explode(':', $templatePathAndFilename));
 		$paths = $this->getTemplatePaths($row);
 		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
 		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
-		$flexFormUtility->setContentObjectData($row);
-		$flexform = $flexFormUtility->getAll();
+		$this->flexFormService->setContentObjectData($row);
+		$flexform = $this->flexFormService->getAll();
 		$view->assignMultiple($flexform);
 		$view->assignMultiple($this->flexFormService->setContentObjectData($row)->getAll());
 		try {
