@@ -165,7 +165,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 				$this->templateVariableContainer->add($this->arguments['iteration'], $iteration);
 			}
 			$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'iteration', $iteration);
-			if ($i < $amount) {
+			if ($i <= ($minimum == 0 ? $amount - 1 : $amount)) {
 				array_push($content, $this->renderChildren());
 			} else {
 				array_push($buffer, $this->renderChildren());
