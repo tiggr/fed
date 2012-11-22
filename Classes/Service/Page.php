@@ -132,6 +132,9 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 * @api
 	 */
 	public function getPageTemplateConfiguration($pageUid) {
+		if ($pageUid < 1) {
+			return NULL;
+		}
 		$pageSelect = new t3lib_pageSelect();
 		$rootLine = $pageSelect->getRootLine($pageUid);
 		$rootLine = array_values($rootLine);
@@ -173,6 +176,9 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	 * @api
 	 */
 	public function getPageFlexFormSource($pageUid) {
+		if ($pageUid < 1) {
+			return NULL;
+		}
 		$pageSelect = new t3lib_pageSelect();
 		$rootLine = $pageSelect->getRootLine($pageUid);
 		foreach ($rootLine as $row) {
