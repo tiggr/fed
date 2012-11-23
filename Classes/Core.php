@@ -36,6 +36,9 @@ abstract class Tx_Fed_Core {
 	 * @return void
 	 */
 	static function loadRegisteredFluidContentElementTypoScript() {
+		if (is_array($GLOBALS['TCA']) === FALSE) {
+			return NULL;
+		}
 		$pageTsConfig = self::retrieveCachedConfiguration();
 		if ($pageTsConfig === FALSE) {
 			$pageTsConfig = self::writeCachedConfiguration();
