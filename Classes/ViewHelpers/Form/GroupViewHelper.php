@@ -130,6 +130,9 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 		$amount = $this->arguments['amount'];
 		$maximum = $this->arguments['maximum'];
 		$minimum = $this->arguments['minimum'];
+		if ($amount < $minimum) {
+			$amount = $minimum;
+		}
 		$fieldNamePrefix = $this->getName();
 		$hasFormObject = $this->viewHelperVariableContainer->exists('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
 		if (!$this->isObjectAccessorMode() || !$hasFormObject) {
@@ -165,7 +168,7 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 				$this->templateVariableContainer->add($this->arguments['iteration'], $iteration);
 			}
 			$this->viewHelperVariableContainer->addOrUpdate('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'iteration', $iteration);
-			if ($i <= ($minimum == 0 ? $amount - 1 : $amount)) {
+			if ($i <= $amount) {
 				array_push($content, $this->renderChildren());
 			} else {
 				array_push($buffer, $this->renderChildren());
