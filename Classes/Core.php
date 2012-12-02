@@ -50,6 +50,10 @@ abstract class Tx_Fed_Core {
 	 * @return string|boolean
 	 */
 	protected static function writeCachedConfiguration() {
+		$pageUid = intval(t3lib_div::_GP('id'));
+		if ($pageUid < 1) {
+			return FALSE;
+		}
 		self::performWarmup();
 		$fedWizardElements = array();
 		$pageTsConfig = '';
@@ -59,10 +63,6 @@ abstract class Tx_Fed_Core {
 		$template->init();
 		/** @var t3lib_pageSelect $sys_page */
 		$sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
-		$pageUid = intval(t3lib_div::_GP('id'));
-		if ($pageUid < 1) {
-			return FALSE;
-		}
 		$rootLine = $sys_page->getRootLine($pageUid);
 		$template->runThroughTemplates($rootLine);
 		$template->generateConfig();
