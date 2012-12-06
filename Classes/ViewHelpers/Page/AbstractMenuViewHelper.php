@@ -184,7 +184,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * @return array
 	 */
 	protected function getMenuItemEntry($page, $rootLine) {
-		$getLL = t3lib_div::_GP('L');
+		$getLL = $GLOBALS['TSFE']->sys_language_uid;
 		$pageUid = $page['uid'];
 		$doktype = $page['doktype'];
 		if ($getLL){
