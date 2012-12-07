@@ -219,9 +219,11 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 		}
 		$pageSelect = new t3lib_pageSelect();
 		$page = $pageSelect->getPage($pageUid);
+		$page = $this->getWorkspacePage($page);
 		while ($page['uid'] != 0 && empty($page['tx_fed_page_flexform'])) {
 			$page = $this->getWorkspaceParentPage($page);
-			$workspacePage = $this->getWorkspaceOverlay($page);
+			$workspacePage = NULL;
+			$workspacePage = $this->getWorkspacePage($page);
 			if ($workspacePage) {
 				$page = $workspacePage;
 			}
@@ -233,3 +235,4 @@ class Tx_Fed_Service_Page implements t3lib_Singleton {
 	}
 
 }
+
