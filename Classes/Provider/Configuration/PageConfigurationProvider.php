@@ -121,7 +121,11 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
 		/** @var Tx_Flux_Service_FlexForm $flexFormUtility */
 		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FlexForm');
-		$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
+		try {
+			$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
+		} catch (Exception $error) {
+			return array();
+		}
 		$flexform = $flexFormUtility->getAll();
 		if ($configuration['tx_fed_page_controller_action']) {
 			$action = $configuration['tx_fed_page_controller_action'];
