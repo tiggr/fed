@@ -94,7 +94,9 @@ if ($loadBackendConfiguration) {
 	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.frames;frames,
 	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,
 	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.visibility;visibility,
-	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.access;access,
+	--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.extended,
+	--palette--;LLL:EXT:cms/locallang_ttc.xml:palette.extended;extended
 	 ';
 
 	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFluidPageTemplates']) {
