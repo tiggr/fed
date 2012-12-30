@@ -72,12 +72,7 @@ abstract class Tx_Fed_Core {
 			return FALSE;
 		}
 		unset($GLOBALS['TYPO3_DB']);
-		$wizardTabs = array(
-			'fed' => array(
-				'title' => 'Fluid Content Elements',
-				'elements' => array()
-			)
-		);
+		$wizardTabs = array();
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$key = trim($key, '.');
 			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
