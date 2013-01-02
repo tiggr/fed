@@ -167,7 +167,6 @@ abstract class Tx_Fed_Core {
 	 */
 	protected static function performShutdown() {
 		unset(
-			$GLOBALS['EXEC_TIME'],
 			$GLOBALS['SIM_EXEC_TIME'],
 			$GLOBALS['ACCESS_TIME'],
 			$GLOBALS['SIM_ACCESS_TIME'],
