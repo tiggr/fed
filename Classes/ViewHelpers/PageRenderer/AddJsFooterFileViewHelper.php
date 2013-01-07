@@ -58,7 +58,7 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterFileViewHelper extends Tx_Fed_V
 			);
 		} else {
 			// additionalFooterData only possible in USER
-			$GLOBALS['TSFE']->additionalHeaderData[md5($file)] = '<script type="text/javascript" src="' . $file . '"></script>';
+			$GLOBALS['TSFE']->additionalFooterData[md5($file)] = '<script type="text/javascript" src="' . $file . '"></script>';
 		}
 	}
 
