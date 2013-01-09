@@ -36,6 +36,9 @@ abstract class Tx_Fed_Core {
 	 * @return void
 	 */
 	static function loadRegisteredFluidContentElementTypoScript() {
+		if (t3lib_extMgm::isLoaded('fluidcontent')) {
+			return FALSE;
+		}
 		$pageTsConfig = self::retrieveCachedConfiguration();
 		if ($pageTsConfig === FALSE) {
 			$pageTsConfig = self::writeCachedConfiguration();
