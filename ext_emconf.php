@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Fluid Extbase Development Framework',
-	'description' => 'Fluid/Extbase integrations for TYPO3 enabling Fluid page templating, Fluid content elements and Extbase CommandController commands as Scheduler tasks. Contains hundreds of ViewHelpers and Widgets. Web site: http://fedext.net',
+	'description' => 'Fluid/Extbase integrations for TYPO3. Obsolete - replaced by EXT:vhs, EXT:fluidcontent, EXT:fluidpages and EXT:tool which can be combined as needed. Web site: http://fedext.net',
 	'category' => 'misc',
 	'author' => 'Claus Due',
 	'author_email' => 'claus@wildside.dk',
