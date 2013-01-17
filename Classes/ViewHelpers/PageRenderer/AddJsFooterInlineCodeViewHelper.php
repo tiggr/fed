@@ -58,8 +58,8 @@ class Tx_Fed_ViewHelpers_PageRenderer_AddJsFooterInlineCodeViewHelper extends Tx
 				$this->arguments['forceOnTop']
 			);
 		} else {
-			// additionalFooterData not possible in USER_INT
-			$GLOBALS['TSFE']->additionalHeaderData[md5($name)] = t3lib_div::wrapJS($block);
+			// additionalFooterData not possible in USER_INT. Not needed in TYPO3 6.0
+			$GLOBALS['TSFE']->additionalFooterData[md5($name)] = t3lib_div::wrapJS($block);
 		}
 	}
 
