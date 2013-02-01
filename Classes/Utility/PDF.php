@@ -38,7 +38,7 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 	public function run() {
 		$post = $_POST['tx_fed_pdf'];
 		$data = $post['data'];
-		$arguments = unserialize(base64_decode($post['arguments']));
+		$arguments = $post['arguments'];
 
 		$filename = $arguments['filename'] ?: 'file.pdf';
 
@@ -97,11 +97,11 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 		// Converts relative paths in arguments for wkhtmltopdf to absolute using PATH_Site
 		$cliArguments = $arguments['cliArguments'] ? : '';
 		$cliArguments = preg_replace(':(user-style-sheet) ([^/]):', '$1 ' . PATH_site . '$2', $cliArguments);
+		$cliArguments = escapeshellarg($cliArguments);
 
-		$cmd = $arguments['wkhtmltopdf'] ?: 'wkhtmltopdf';
-		$cmd .= ' ' . $cliArguments;
-		$cmd .= " \"{$url}\"";
-		$cmd .= " - ";
+		$cmd = 'wkhtmltopdf ' . $cliArguments;
+		$cmd .= ' ' . escapeshellarg($url);
+		$cmd .= ' - ';
 
 		return $cmd;
 	}
