@@ -56,7 +56,7 @@
 			};
 			tableHeader.attr('id', options.editorId);
 			tableHeader.find('.plupload_filelist_header').append('<td class="plupload_cell plupload_file_delete"></td>');
-			jQuery(this).find('.remove').live('click', function() {
+			jQuery(this).find('.remove').bind('click', function() {
 				var row = jQuery(this).parents('tr:first');
 				var filename = row.find('.plupload_file_name span').html().trim();
 				if (filename.length < 1) {
