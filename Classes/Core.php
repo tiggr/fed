@@ -36,6 +36,9 @@ abstract class Tx_Fed_Core {
 	 * @return void
 	 */
 	static function loadRegisteredFluidContentElementTypoScript() {
+		if (t3lib_extMgm::isLoaded('fluidcontent')) {
+			return FALSE;
+		}
 		$pageTsConfig = self::retrieveCachedConfiguration();
 		if ($pageTsConfig === FALSE) {
 			$pageTsConfig = self::writeCachedConfiguration();
@@ -50,6 +53,10 @@ abstract class Tx_Fed_Core {
 	 * @return string|boolean
 	 */
 	protected static function writeCachedConfiguration() {
+		$pageUid = intval(t3lib_div::_GP('id'));
+		if ($pageUid < 1) {
+			return FALSE;
+		}
 		self::performWarmup();
 		$fedWizardElements = array();
 		$pageTsConfig = '';
@@ -59,10 +66,6 @@ abstract class Tx_Fed_Core {
 		$template->init();
 		/** @var t3lib_pageSelect $sys_page */
 		$sys_page = t3lib_div::makeInstance("t3lib_pageSelect");
-		$pageUid = intval(t3lib_div::_GP('id'));
-		if ($pageUid < 1) {
-			return FALSE;
-		}
 		$rootLine = $sys_page->getRootLine($pageUid);
 		$template->runThroughTemplates($rootLine);
 		$template->generateConfig();
@@ -72,12 +75,7 @@ abstract class Tx_Fed_Core {
 			return FALSE;
 		}
 		unset($GLOBALS['TYPO3_DB']);
-		$wizardTabs = array(
-			'fed' => array(
-				'title' => 'Fluid Content Elements',
-				'elements' => array()
-			)
-		);
+		$wizardTabs = array();
 		foreach ($allTemplatePaths as $key => $templatePathSet) {
 			$key = trim($key, '.');
 			$files = Tx_Fed_Utility_Path::getFiles($templatePathSet['templateRootPath'], TRUE);
@@ -172,7 +170,6 @@ abstract class Tx_Fed_Core {
 	 */
 	protected static function performShutdown() {
 		unset(
-			$GLOBALS['EXEC_TIME'],
 			$GLOBALS['SIM_EXEC_TIME'],
 			$GLOBALS['ACCESS_TIME'],
 			$GLOBALS['SIM_ACCESS_TIME'],

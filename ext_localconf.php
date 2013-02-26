@@ -84,13 +84,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
 }
 
 if ($loadBackendConfiguration) {
-	if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableSolrFeatures']
-	|| $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['enableFrontendPlugins']
-	) {
-		array_push($fedWizardElements, 'template');
-		array_push($fedWizardElements, 'datasource');
-		array_push($fedWizardElements, 'solr');
-	}
 
 	Tx_Fed_Core::loadRegisteredFluidContentElementTypoScript();
 
@@ -145,6 +138,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']['increaseExtbaseCache
 	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_extbase_reflection']['options']['defaultLifetime'] = 86400;
 }
 
-$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:fed/Classes/Backend/TCEMain.php:&Tx_Fed_Backend_TCEMain->clearCacheCommand';
+#$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:fed/Classes/Backend/TCEMain.php:&Tx_Fed_Backend_TCEMain->clearCacheCommand';
 
 unset($loadBackendConfiguration);

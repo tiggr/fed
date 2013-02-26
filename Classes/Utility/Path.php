@@ -58,6 +58,9 @@ class Tx_Fed_Utility_Path implements t3lib_Singleton {
 	 * @return array
 	 */
 	public static function getFiles($basePath, $recursive = FALSE, $appendBasePath = NULL) {
+		if (empty($basePath) === TRUE) {
+			throw new Exception('Attempt to getFiles on an empty path, Tx_Fed_Utility_Path::getFiles', 1357765429);
+		}
 		$files = scandir($basePath . $appendBasePath);
 		$addFiles = array();
 		foreach ($files as $file) {

@@ -55,10 +55,11 @@ class Tx_Fed_ViewHelpers_Form_Group_CountSelectorViewHelper extends Tx_Fluid_Cor
 	 */
 	public function render() {
 		$amount = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'amount');
+		$minimum = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'minimum');
 		$maximum = $this->viewHelperVariableContainer->get('Tx_Fed_ViewHelpers_Form_GroupViewHelper', 'maximum');
 		$options = array();
-		$num = 0;
-		while ($num < $maximum) {
+		$num = $minimum;
+		while ($num <= $maximum) {
 			$label = $num == 0 ? $this->arguments['labelZero'] : $num;
 			$selected = $num == $amount ? ' selected="selected"' : '';
 			$options[] = '<option value="' . $num . '"' . $selected . '>' . $label . '</option>' . LF;

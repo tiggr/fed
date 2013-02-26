@@ -184,7 +184,7 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 	 * @return array
 	 */
 	protected function getMenuItemEntry($page, $rootLine) {
-		$getLL = t3lib_div::_GP('L');
+		$getLL = $GLOBALS['TSFE']->sys_language_uid;
 		$pageUid = $page['uid'];
 		$doktype = $page['doktype'];
 		if ($getLL){
@@ -232,6 +232,10 @@ abstract class Tx_Fed_ViewHelpers_Page_AbstractMenuViewHelper extends Tx_Fed_Cor
 			if ($page['hidden'] == 1) {
 				continue;
 			} elseif ($page['nav_hide'] == 1 && $this->arguments['showHidden'] < 1) {
+				continue;
+			} elseif (TRUE === isset($page['tx_realurl_exclude']) && $page['tx_realurl_exclude'] == 1 && $this->arguments['resolveExclude'] == 1) {
+				continue;
+			} elseif (TRUE === isset($page['tx_cooluri_exclude']) && $page['tx_cooluri_exclude'] == 1 && $this->arguments['resolveExclude'] == 1) {
 				continue;
 			} elseif ($page['l18n_cfg'] == 1 && $GLOBALS['TSFE']->sys_language_uid == 0) {
 				continue;

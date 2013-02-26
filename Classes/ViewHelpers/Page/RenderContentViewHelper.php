@@ -105,7 +105,12 @@ class Tx_Fed_ViewHelpers_Page_RenderContentViewHelper extends Tx_Fed_Core_ViewHe
 			$this->contentObject->cObjGetSingle('LOAD_REGISTER', $this->arguments['loadRegister']);
 			$loadRegister = TRUE;
 		}
-		$pid = $this->arguments['pageUid'] ? $this->arguments['pageUid'] : $GLOBALS['TSFE']->id;
+		$pid = $GLOBALS['TSFE']->id;
+		if (isset($this->arguments['pageUid']) === TRUE) {
+			$pid = $this->arguments['pageUid'];
+		} elseif ($GLOBALS['TSFE']->page['content_from_pid']) {
+			$pid = $GLOBALS['TSFE']->page['content_from_pid'];
+		}
 		$order = $this->arguments['order'] . ' ' . $this->arguments['sortDirection'];
 		$colPos = $this->arguments['column'];
 		$contentUids = $this->arguments['contentUids'];
