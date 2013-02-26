@@ -27,7 +27,7 @@
 					var toBeRemoved = children.length - requestedAmount;
 					var unShifteroony = [];
 					while (toBeRemoved > 0) {
-						var removedContent = children[children.length - toBeRemoved];
+						var removedContent = jQuery(children[children.length - toBeRemoved]);
 						unShifteroony.unshift(removedContent);
 						jQuery(removedContent).remove();
 						toBeRemoved--;
