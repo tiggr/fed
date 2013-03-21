@@ -56,24 +56,24 @@
 			};
 			tableHeader.attr('id', options.editorId);
 			tableHeader.find('.plupload_filelist_header').append('<td class="plupload_cell plupload_file_delete"></td>');
-			jQuery(this).find('.remove').bind('click', function() {
-				var row = jQuery(this).parents('tr:first');
-				var filename = row.find('.plupload_file_name span').html().trim();
-				if (filename.length < 1) {
-					return false;
-				};
-				var files = [];
-				for (var i=0; i<options.files.length; i++) {
-					if (options.files[i].name != filename) {
-						files.push(options.files[i]);
-					};
-				};
-				options.files = files;
-				row.fadeOut(250);
-				updateField();
-			});
 			uploader.bind('FileUploaded', function(up, file, info) {
 				addFile(up, file, info);
+				element.find('.remove').bind('click', function() {
+					var row = jQuery(this).parents('tr:first');
+					var filename = row.find('.plupload_file_name span').html().trim();
+					if (filename.length < 1) {
+						return false;
+					};
+					var files = [];
+					for (var i=0; i<options.files.length; i++) {
+						if (options.files[i].name != filename) {
+							files.push(options.files[i]);
+						};
+					};
+					options.files = files;
+					row.fadeOut(250);
+					updateField();
+				});
 			});
 		});
 	};
