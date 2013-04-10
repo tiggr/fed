@@ -131,6 +131,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('headerTitle', 'string', 'Text for header title, if different from default');
 		$this->registerArgument('headerSubtitle', 'string', 'Text for header subtitle, if different from default');
 		$this->registerArgument('insertJSInBody', 'boolean', 'If TRUE, the associated Javascript is added to the body output of the page instead of the headers. This can come in handy for asynchronous loading of the object, although you will then need to include all the libraries and styling manually.', FALSE, FALSE);
+		$this->registerArgument('maxItems', 'integer', 'If set above zero, no more files than this amount can be added', FALSE, 0);
 	}
 
 	/**
@@ -316,6 +317,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			'header_title' => $this->arguments['headerTitle'],
 			'header_subtitle' => $this->arguments['headerSubtitle'],
 			'resize' => $resize,
+			'max_items' => $this->arguments['maxItems'],
 			'buttons' => array(
 				'browse' => in_array('browse', $buttons),
 				'start' => in_array('start', $buttons),
