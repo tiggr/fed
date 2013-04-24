@@ -208,7 +208,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$return = array();
 
 			// Get the data, either from the passed arguments or the internal functions.
-		if (!isset($this->arguments['storedValue'])) {
+		if (!$this->arguments['storedValue']) {
 			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
 		} else {
 			$data = $this->arguments['storedValue'];
