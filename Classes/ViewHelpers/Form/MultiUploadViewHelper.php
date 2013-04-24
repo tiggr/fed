@@ -234,8 +234,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		}
 
-		return array();
-
+		return $return;
 	}
 
 
