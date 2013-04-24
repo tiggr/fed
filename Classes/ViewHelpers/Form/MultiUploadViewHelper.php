@@ -157,7 +157,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		);
 
 			// If we aren't told not to render the hidden value field, we'll do so now.
-		if ($this->arguments['noHiddenValueField'] === FALSE) {
+		if ((boolean) $this->arguments['noHiddenValueField'] === FALSE) {
 			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' .
 				$name . '" value="' . $fieldValue . '" class="value-holder" />';
 		}
