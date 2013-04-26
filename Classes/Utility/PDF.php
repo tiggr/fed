@@ -62,7 +62,7 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 	 *
 	 * @param string $data either URL or HTML source
 	 * @param array $arguments
-	 * @return type
+	 * @return string
 	 */
 	private function grabPDF($data, array $arguments) {
 
