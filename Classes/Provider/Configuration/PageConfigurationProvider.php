@@ -119,7 +119,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	 */
 	public function getTemplateVariables(array $row) {
 		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
-		/** @var Tx_Flux_Service_FlexForm $flexFormUtility */
+		/** @var Tx_Flux_Service_FluxService $flexFormUtility */
 		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FlexForm');
 		try {
 			$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
@@ -138,8 +138,8 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 			return array();
 		}
 
-		/** @var Tx_Flux_MVC_View_ExposedStandaloneView $view */
-		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
+		/** @var Tx_Flux_MVC_View_ExposedTemplateView $view */
+		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedTemplateView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
 		$view->assignMultiple($flexform);
 		$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');

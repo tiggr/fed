@@ -47,7 +47,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	protected $extJSService;
 
 	/**
-	 * @var Tx_Flux_Service_FlexForm
+	 * @var Tx_Flux_Service_FluxService
 	 */
 	protected $flexform;
 
@@ -88,9 +88,9 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 	}
 
 	/**
-	 * @param Tx_Flux_Service_FlexForm $flexform
+	 * @param Tx_Flux_Service_FluxService $flexform
 	 */
-	public function injectFlexFormService(Tx_Flux_Service_FlexForm $flexform) {
+	public function injectFlexFormService(Tx_Flux_Service_FluxService $flexform) {
 		$this->flexform = $flexform;
 	}
 
@@ -127,7 +127,7 @@ abstract class Tx_Fed_MVC_Controller_AbstractController extends Tx_Extbase_MVC_C
 		if ($this->cacheService instanceof Tx_Extbase_Service_CacheService) {
 			$this->cacheService->clearPageCache($pids);
 		} elseif (class_exists('Tx_Extbase_Utility_Cache')) {
-			Tx_Extbase_Utility_Cache::clearPageCache($pids);
+			call_user_func_array(array('Tx_Extbase_Utility_Cache', 'clearPageCache'), array(($pids)));
 		}
 	}
 

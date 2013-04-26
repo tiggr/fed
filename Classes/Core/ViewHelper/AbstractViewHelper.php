@@ -53,7 +53,7 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	protected $extJSService;
 
 	/**
-	 * @var Tx_Flux_Service_FlexForm
+	 * @var Tx_Flux_Service_FluxService
 	 */
 	protected $flexform;
 
@@ -107,9 +107,9 @@ abstract class Tx_Fed_Core_ViewHelper_AbstractViewHelper extends Tx_Fluid_Core_V
 	}
 
 	/**
-	 * @param Tx_Flux_Service_FlexForm $flexform
+	 * @param Tx_Flux_Service_FluxService $flexform
 	 */
-	public function injectFlexFormService(Tx_Flux_Service_FlexForm $flexform) {
+	public function injectFlexFormService(Tx_Flux_Service_FluxService $flexform) {
 		$this->flexform = $flexform;
 	}
 

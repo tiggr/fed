@@ -42,7 +42,7 @@ class Tx_Fed_Backend_FCESelector {
 	protected $configurationManager;
 
 	/**
-	 * @var Tx_Flux_Service_FlexForm
+	 * @var Tx_Flux_Service_FluxService
 	 */
 	protected $flexform;
 

@@ -41,9 +41,9 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 	protected $pageService;
 
 	/**
-	 * @var Tx_Flux_Service_Grid
+	 * @var Tx_Flux_Service_FluxService
 	 */
-	protected $gridService;
+	protected $configurationService;
 
 	/**
 	 * @var Tx_Fed_Configuration_ConfigurationManager
@@ -56,7 +56,7 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 	public function __construct() {
 		$this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->pageService = $this->objectManager->get('Tx_Fed_Service_Page');
-		$this->gridService = $this->objectManager->get('Tx_Flux_Service_Grid');
+		$this->configurationService = $this->objectManager->get('Tx_Flux_Service_FluxService');
 		$this->configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 	}
 
@@ -73,7 +73,7 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 		list ($extensionName, $action) = explode('->', $record['tx_fed_page_controller_action']);
 		$paths = $this->configurationManager->getPageConfiguration($extensionName);
 		$templatePathAndFileName = $paths['templateRootPath'] . 'Page/' . $action . '.html';
-		$grid = $this->gridService->getGridFromTemplateFile($templatePathAndFileName, $variables, 'Configuration', $paths);
+		$grid = $this->configurationService->getGridFromTemplateFile($templatePathAndFileName, $variables, 'Configuration', $paths);
 		if (is_array($grid) === FALSE) {
 				// no grid is defined; we use the "raw" BE layout as a default behavior
 			return;

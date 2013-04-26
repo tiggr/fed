@@ -95,10 +95,10 @@ class Tx_Fed_Provider_Configuration_ContentObjectConfigurationProvider extends T
 		$templatePathAndFilename = Tx_Fed_Utility_Path::translatePath($paths['templateRootPath'] . $filename);
 		$view = $this->objectManager->get('Tx_Flux_MVC_View_ExposedStandaloneView');
 		$view->setTemplatePathAndFilename($templatePathAndFilename);
-		$this->flexFormService->setContentObjectData($row);
-		$flexform = $this->flexFormService->getAll();
+		$this->configurationService->setContentObjectData($row);
+		$flexform = $this->configurationService->getAll();
 		$view->assignMultiple($flexform);
-		$view->assignMultiple($this->flexFormService->setContentObjectData($row)->getAll());
+		$view->assignMultiple($this->configurationService->setContentObjectData($row)->getAll());
 		try {
 			$stored = $view->getStoredVariable('Tx_Flux_ViewHelpers_FlexformViewHelper', 'storage', 'Configuration');
 			$stored['sheets'] = array();
