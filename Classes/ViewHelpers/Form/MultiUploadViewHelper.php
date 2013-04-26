@@ -143,9 +143,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$name = $this->getName();
 
 			// Flatten stored values into a neat CSV-string
-		$value = $this->getStoredValue(FALSE);
+		$value = $this->getStoredValue(TRUE);
 		if (is_array($value)) {
 			$fieldValue = $this->flattenFilelist($value);
+		} else {
+			$fieldValue = $value;
 		}
 
 		$this->uniqueId = $this->arguments['id'] ? $this->arguments['id'] : uniqid('plupload');
@@ -156,7 +158,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		);
 
 			// If we aren't told not to render the hidden value field, we'll do so now.
-		if ($this->arguments['noHiddenValueField'] === FALSE) {
+		if ((boolean) $this->arguments['noHiddenValueField'] === FALSE) {
 			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' .
 				$name . '" value="' . $fieldValue . '" class="value-holder" />';
 		}
@@ -190,10 +192,10 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			foreach ($filelist as $file) {
 				$output[] = $file;
 			}
+			return implode(',', $output);
 		}
 
-		return implode(',', $output);
-
+		return $filelist;
 	}
 
 
@@ -207,7 +209,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$return = array();
 
 			// Get the data, either from the passed arguments or the internal functions.
-		if (!isset($this->arguments['storedValue'])) {
+		if (!$this->arguments['storedValue']) {
 			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
 		} else {
 			$data = $this->arguments['storedValue'];
@@ -233,8 +235,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		}
 
-		return array();
-
+		return $return;
 	}
 
 
