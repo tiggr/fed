@@ -120,7 +120,7 @@ class Tx_Fed_Provider_Configuration_PageConfigurationProvider extends Tx_Flux_Pr
 	public function getTemplateVariables(array $row) {
 		$configuration = $this->pageService->getPageTemplateConfiguration($row['uid']);
 		/** @var Tx_Flux_Service_FluxService $flexFormUtility */
-		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FlexForm');
+		$flexFormUtility = $this->objectManager->get('Tx_Flux_Service_FluxService');
 		try {
 			$flexFormUtility->setContentObjectData($row['tx_fed_page_flexform']);
 		} catch (Exception $error) {
