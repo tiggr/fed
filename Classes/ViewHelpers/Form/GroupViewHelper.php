@@ -71,6 +71,11 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	 * @var string
 	 */
 	protected $tagName = 'fieldset';
+	
+	/**
+	 * @var string
+	 */
+	protected $formViewHelperClassName = 'Tx_Fluid_ViewHelpers_FormViewHelper';
 
 	/**
 	 * @param Tx_Fluid_Core_ViewHelper_TagBuilder $tagBuilder Tag builder
@@ -111,6 +116,9 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 	 * Initialize
 	 */
 	public function initializeArguments() {
+		if (6 <= substr(TYPO3_version, 0, 1)) {
+			$this->formViewHelperClassName = 'TYPO3\\CMS\\Fluid\\ViewHelpers\\FormViewHelper';
+		}
 		parent::initializeArguments();
 		$this->registerUniversalTagAttributes();
 		$this->registerArgument('amount', 'integer', 'Number of field groups to render', TRUE);
@@ -134,11 +142,11 @@ class Tx_Fed_ViewHelpers_Form_GroupViewHelper extends Tx_Fluid_ViewHelpers_Form_
 			$amount = $minimum;
 		}
 		$fieldNamePrefix = $this->getName();
-		$hasFormObject = $this->viewHelperVariableContainer->exists('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
+		$hasFormObject = $this->viewHelperVariableContainer->exists($this->formViewHelperClassName, 'formObject');
 		if (!$this->isObjectAccessorMode() || !$hasFormObject) {
 			throw new Exception('Form/GroupViewHelper requires associated form object', 1323351482);
 		}
-		$formObject = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
+		$formObject = $this->viewHelperVariableContainer->get($this->formViewHelperClassName, 'formObject');
 		$complexObjectType = $this->infoService->getPropertyType($formObject, $property);
 		$objectType = $this->infoService->parseObjectStorageAnnotation($complexObjectType);
 		$objectInstance = $this->objectManager->get($objectType);
@@ -220,7 +228,7 @@ JS;
 	protected function createFormFieldNames($properties, $iteration) {
 		$propertyName = $this->arguments['property'];
 		$fieldNames = array();
-		$formObject = $this->viewHelperVariableContainer->get('Tx_Fluid_ViewHelpers_FormViewHelper', 'formObject');
+		$formObject = $this->viewHelperVariableContainer->get($this->formViewHelperClassName, 'formObject');
 		if ($formObject) {
 			$relationValue = Tx_Extbase_Reflection_ObjectAccess::getProperty($formObject, $propertyName);
 			if ($relationValue) {
