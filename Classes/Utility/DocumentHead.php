@@ -41,7 +41,7 @@ class Tx_Fed_Utility_DocumentHead implements t3lib_Singleton {
 	protected $configurationManager;
 
 	/**
-	 * @var Tx_Extbase_Object_Manager
+	 * @var Tx_Extbase_Object_ObjectManagerInterface
 	 */
 	protected $objectManager;
 

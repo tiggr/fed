@@ -42,7 +42,7 @@ class Tx_Fed_Backend_FCESelector {
 	protected $configurationManager;
 
 	/**
-	 * @var Tx_Flux_Service_FlexForm
+	 * @var Tx_Flux_Service_FluxService
 	 */
 	protected $flexform;
 
@@ -52,7 +52,7 @@ class Tx_Fed_Backend_FCESelector {
 	public function __construct() {
 		$this->objectManager = t3lib_div::makeInstance('Tx_Extbase_Object_ObjectManager');
 		$this->configurationManager = $this->objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
-		$this->flexform = $this->objectManager->get('Tx_Flux_Service_FlexForm');
+		$this->flexform = $this->objectManager->get('Tx_Flux_Service_FluxService');
 	}
 
 	/**

@@ -131,6 +131,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$this->registerArgument('headerTitle', 'string', 'Text for header title, if different from default');
 		$this->registerArgument('headerSubtitle', 'string', 'Text for header subtitle, if different from default');
 		$this->registerArgument('insertJSInBody', 'boolean', 'If TRUE, the associated Javascript is added to the body output of the page instead of the headers. This can come in handy for asynchronous loading of the object, although you will then need to include all the libraries and styling manually.', FALSE, FALSE);
+		$this->registerArgument('maxItems', 'integer', 'If set above zero, no more files than this amount can be added', FALSE, 0);
 	}
 
 	/**
@@ -142,9 +143,11 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$name = $this->getName();
 
 			// Flatten stored values into a neat CSV-string
-		$value = $this->getStoredValue(FALSE);
+		$value = $this->getStoredValue(TRUE);
 		if (is_array($value)) {
 			$fieldValue = $this->flattenFilelist($value);
+		} else {
+			$fieldValue = $value;
 		}
 
 		$this->uniqueId = $this->arguments['id'] ? $this->arguments['id'] : uniqid('plupload');
@@ -155,7 +158,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		);
 
 			// If we aren't told not to render the hidden value field, we'll do so now.
-		if ($this->arguments['noHiddenValueField'] === FALSE) {
+		if ((boolean) $this->arguments['noHiddenValueField'] === FALSE) {
 			$html[] = '<input id="' . $this->uniqueId . '-field" type="hidden" name="' .
 				$name . '" value="' . $fieldValue . '" class="value-holder" />';
 		}
@@ -189,10 +192,10 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			foreach ($filelist as $file) {
 				$output[] = $file;
 			}
+			return implode(',', $output);
 		}
 
-		return implode(',', $output);
-
+		return $filelist;
 	}
 
 
@@ -206,10 +209,10 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 		$return = array();
 
 			// Get the data, either from the passed arguments or the internal functions.
-		if (!isset($this->arguments['storedValue'])) {
-			$data = ($getFromPropertyValue) ? $this->getPropertyValue() : $this->getValue();
-		} else {
+		if (FALSE === empty($this->arguments['storedValue'])) {
 			$data = $this->arguments['storedValue'];
+		} else {
+			$data = TRUE === $getFromPropertyValue ? $this->getPropertyValue() : $this->getValue();
 		}
 
 		if (is_string($data)) {
@@ -232,8 +235,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 
 		}
 
-		return array();
-
+		return $return;
 	}
 
 
@@ -316,6 +318,7 @@ class Tx_Fed_ViewHelpers_Form_MultiUploadViewHelper extends Tx_Fluid_ViewHelpers
 			'header_title' => $this->arguments['headerTitle'],
 			'header_subtitle' => $this->arguments['headerSubtitle'],
 			'resize' => $resize,
+			'max_items' => $this->arguments['maxItems'],
 			'buttons' => array(
 				'browse' => in_array('browse', $buttons),
 				'start' => in_array('start', $buttons),

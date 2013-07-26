@@ -38,6 +38,10 @@
 					options.files.push(file);
 				};
 				updateField();
+				tableHeader.find('.remove').bind('click', function() {
+					var row = jQuery(this).parents('tr:first');
+					removeFile(row, options);
+				});
 			};
 			var updateField = function() {
 				var i;
@@ -56,8 +60,7 @@
 			};
 			tableHeader.attr('id', options.editorId);
 			tableHeader.find('.plupload_filelist_header').append('<td class="plupload_cell plupload_file_delete"></td>');
-			jQuery(this).find('.remove').bind('click', function() {
-				var row = jQuery(this).parents('tr:first');
+			var removeFile = function(row, options) {
 				var filename = row.find('.plupload_file_name span').html().trim();
 				if (filename.length < 1) {
 					return false;
@@ -71,9 +74,26 @@
 				options.files = files;
 				row.fadeOut(250);
 				updateField();
-			});
+			};
 			uploader.bind('FileUploaded', function(up, file, info) {
+				var maxItems = parseInt(options.max_items);
+				var fieldValue = field.val();
+				var currentFileCount = fieldValue.indexOf(',') > 0 ? fieldValue.split(',').length : (fieldValue.length > 0 ? 1 : 0);
 				addFile(up, file, info);
+				if (maxItems == 0) {
+					return;
+				};
+				fieldValue = field.val();
+				currentFileCount = fieldValue.indexOf(',') > 0 ? fieldValue.split(',').length : (fieldValue.length > 0 ? 1 : 0);
+				if (currentFileCount > maxItems) {
+					var row = jQuery(jQuery('.plupload_file')[0]);
+					row.remove();
+					removeFile(row, options);
+				};
+			});
+			jQuery(this).find('.remove').bind('click', function() {
+				var row = jQuery(this).parents('tr:first');
+				removeFile(row, options);
 			});
 		});
 	};
