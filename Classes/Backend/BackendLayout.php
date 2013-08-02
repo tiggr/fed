@@ -73,7 +73,7 @@ class Tx_Fed_Backend_BackendLayout implements tx_cms_BackendLayoutHook {
 		list ($extensionName, $action) = explode('->', $record['tx_fed_page_controller_action']);
 		$paths = $this->configurationManager->getPageConfiguration($extensionName);
 		$templatePathAndFileName = $paths['templateRootPath'] . 'Page/' . $action . '.html';
-		$grid = $this->configurationService->getGridFromTemplateFile($templatePathAndFileName, $variables, 'Configuration', $paths);
+		$grid = $this->configurationService->getGridFromTemplateFile($templatePathAndFileName, 'Configuration', 'grid', $paths, $extensionName, $variables);
 		if (is_array($grid) === FALSE) {
 				// no grid is defined; we use the "raw" BE layout as a default behavior
 			return;

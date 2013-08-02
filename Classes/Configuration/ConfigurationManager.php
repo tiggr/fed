@@ -70,7 +70,7 @@ class Tx_Fed_Configuration_ConfigurationManager extends Tx_Extbase_Configuration
 		if (is_array($config) === FALSE) {
 			return array();
 		}
-		$config = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($config);
+		$config = t3lib_div::removeDotsFromTS($config);
 		if ($extensionName) {
 			$config = $config[$extensionName];
 		}

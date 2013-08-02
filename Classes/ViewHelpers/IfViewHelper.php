@@ -162,7 +162,7 @@ class Tx_Fed_ViewHelpers_IfViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractC
 		$configurationManager = $objectManager->get('Tx_Fed_Configuration_ConfigurationManager');
 		$typoscript = $configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$settings = $typoscript['plugin.']['tx_fed.'];
-		$settings = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($settings);
+		$settings = t3lib_div::removeDotsFromTS($settings);
 		$allowedFunctions = explode(',', $settings['fluid']['allowedFunctions']);
 		$languageConstructs = explode(',', $settings['fluid']['disallowedConstructs']);
 		$functions = get_defined_functions();
