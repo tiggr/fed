@@ -40,6 +40,9 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 		$data = $post['data'];
 		$arguments = $post['arguments'];
 
+		# Not secure at all but necessary for the rest of the script. Check @line 106 where arguments are hard-coded.
+		$arguments = unserialize(base64_decode($post['arguments']));
+
 		$filename = $arguments['filename'] ?: 'file.pdf';
 
 		$pdf = $this->grabPDF($data, $arguments);
@@ -98,6 +101,9 @@ class Tx_Fed_Utility_PDF implements t3lib_Singleton {
 		$cliArguments = $arguments['cliArguments'] ? : '';
 		$cliArguments = preg_replace(':(user-style-sheet) ([^/]):', '$1 ' . PATH_site . '$2', $cliArguments);
 		$cliArguments = escapeshellarg($cliArguments);
+
+		# Avoid security hole by hard-coding arguments.
+		$cliArguments = "--username fee --password eef --footer-font-size 6 --footer-left 'WHO / UNICEF JMP - www.wssinfo.org' --footer-right 'Page [page] of [toPage]' --javascript-delay 5000 --user-style-sheet typo3conf/ext/speciality/Resources/Public/css/pdf.css";
 
 		$cmd = 'wkhtmltopdf ' . $cliArguments;
 		$cmd .= ' ' . escapeshellarg($url);
