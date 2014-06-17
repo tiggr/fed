@@ -381,7 +381,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 		$extensionName = $this->getExtensionName($object);
 		$extensionName = strtolower($extensionName);
 		if (is_array($setup['plugin.']['tx_' . $extensionName . '.'])) {
-			$extensionConfiguration = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_' . $extensionName . '.']);
+			$extensionConfiguration = Tx_Fed_Utility_Array::convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_' . $extensionName . '.']);
 		} else {
 			$extensionConfiguration = NULL;
 		}
@@ -503,7 +503,7 @@ class Tx_Fed_Service_Domain implements t3lib_Singleton {
 		$typoscript = $this->configurationManager->getConfiguration(Tx_Extbase_Configuration_ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT);
 		$configuration = $typoscript['config.']['tx_extbase.']['persistence.']['classes.'];
 		if (is_array($configuration)) {
-			$configuration = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($configuration);
+			$configuration = Tx_Fed_Utility_Array::convertTypoScriptArrayToPlainArray($configuration);
 			foreach ($configuration as $objectType=>$definition) {
 				if ($definition['tableName'] === $table) {
 					return $objectType;

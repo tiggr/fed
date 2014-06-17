@@ -60,7 +60,7 @@ class Tx_Fed_ViewHelpers_SolrViewHelper extends Tx_Fed_Core_ViewHelper_AbstractJ
 	public function render() {
 		$jsFile = t3lib_extMgm::siteRelPath('fed') . 'Resources/Public/Javascript/SolrService.js';
 		$tsAll  = $this->configurationManager->getTypoScriptSetup();
-		$tsAll = Tx_Flux_Utility_Array::convertTypoScriptArrayToPlainArray($tsAll);
+		$tsAll = Tx_Fed_Utility_Array::convertTypoScriptArrayToPlainArray($tsAll);
 		$json = $this->jsonService->encode($tsAll['plugin']['tx_solr']);
 		$script = "jQuery(document).ready(function() { FED.SOLR.setConfig({$json}); });";
 		$this->includeFile($jsFile);
