@@ -8,6 +8,8 @@ if (!$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fed']['setup']) {
 }
 
 $loadBackendConfiguration = (TYPO3_MODE === 'BE' || t3lib_extMgm::isLoaded('feeditadvanced') || t3lib_extMgm::isLoaded('feedit'));
+// @TODO dschoene disabled due to issues w/ newer versions of fedext stack
+$loadBackendConfiguration = FALSE;
 
 t3lib_div::loadTCA('tt_content');
 
